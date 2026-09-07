@@ -1,0 +1,99 @@
+tech_name: GraphQL
+
+common_vulns:
+  - vuln_name: Introspection Enabled in Production
+    description: >
+      GraphQL introspection allows full schema discovery including types, fields,
+      mutations, and queries. Enabled in production it provides attackers a complete
+      map of the attack surface.
+    indicators:
+      - "__schema"
+      - "__type"
+      - "introspectionResponse"
+    test_idea: >
+      Send {"query":"{__schema{types{name fields{name}}}}"}. If the response
+      includes the full schema, map all mutations and hidden fields for further testing.
+
+  - vuln_name: GraphQL Batching Attack (Rate Limit Bypass)
+    description: >
+      GraphQL supports batching multiple operations in a single request. Attackers
+      use this to bypass per-request rate limits for brute force or enumeration.
+    indicators:
+      - "array of operations in request body"
+      - "no per-operation rate limiting"
+    test_idea: >
+      Send [{"query":"mutation{login(user:\"admin\",pass:\"a\")}"},
+      {"query":"mutation{login(user:\"admin\",pass:\"b\")}"},...]
+      in a single request to bypass rate limits.
+
+  - vuln_name: IDOR via GraphQL Node ID
+    description: >
+      Global object IDs (Relay-style node IDs, often base64-encoded type:id)
+      may allow cross-account access by modifying the ID portion.
+    indicators:
+      - "node(id:"
+      - "base64 encoded id"
+      - "type:id pattern"
+    test_idea: >
+      Decode a node ID (base64), increment the numeric part, re-encode and query
+      with node(id: <modified>). Compare with data owned by another user.
+
+  - vuln_name: Denial of Service via Deeply Nested Queries
+    description: >
+      Without query depth limiting, attackers send deeply nested recursive queries
+      (e.g., friends.friends.friends...) consuming unbounded server resources.
+    indicators:
+      - "no depth limiting"
+      - "no query complexity analysis"
+    test_idea: >
+      Send a query with 20+ levels of nesting on a recursive type relation.
+      Measure server response time and resource consumption.
+
+  - vuln_name: SQL/NoSQL Injection via GraphQL Arguments
+    description: >
+      GraphQL resolvers passing arguments directly to database queries without
+      sanitization are vulnerable to injection in filter/search arguments.
+    indicators:
+      - "filter: { name: <user_input> }"
+      - "search argument passed to LIKE or $regex"
+    test_idea: >
+      Supply {users(filter:{name:"' OR 1=1--"})} or
+      {users(filter:{name:{$gt:""}})} and observe if unexpected records are returned.
+
+  - vuln_name: Sensitive Field Exposure via Overfetching
+    description: >
+      GraphQL types with sensitive fields (passwordHash, secretKey, internalNote)
+      not excluded from the schema allow direct querying if resolvers lack
+      field-level authorization.
+    indicators:
+      - "passwordHash field in User type"
+      - "secret fields in schema"
+      - "no field-level ACL"
+    test_idea: >
+      After schema introspection, query sensitive fields directly:
+      {user(id:1){passwordHash email internalNote}}.
+
+  - vuln_name: Mass Assignment via Mutations
+    description: >
+      Input types accepting privileged fields (role, isAdmin) without server-side
+      stripping allow privilege escalation through mutation arguments.
+    indicators:
+      - "UpdateUserInput includes role field"
+      - "isAdmin in mutation input"
+    test_idea: >
+      Call updateUser mutation with isAdmin:true or role:"ADMIN" in the input.
+      Verify if the privilege change is persisted.
+
+misconfigurations:
+  - Introspection not disabled in production
+  - No query depth limit (graphql-depth-limit not configured)
+  - No query complexity budget
+  - Subscriptions not authenticated
+  - __typename exposed on sensitive types
+
+payload_hints:
+  introspection: "{__schema{types{name fields{name args{name}}}}}"
+  batch_brute: "[{\"query\":\"mutation{login(u:\\\"admin\\\",p:\\\"pass1\\\")}\"}]"
+  nested_dos: "{a{a{a{a{a{a{a{a{a{a{a{a{a{a{a{a{id}}}}}}}}}}}}}}}}}"
+  sqli_filter: "{users(filter:{name:\"' OR 1=1--\"})}"
+  sensitive_fields: "{user(id:1){passwordHash internalNote}}"

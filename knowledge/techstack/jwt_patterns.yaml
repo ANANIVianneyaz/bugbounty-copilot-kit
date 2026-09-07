@@ -1,0 +1,108 @@
+tech_name: JWT (JSON Web Tokens)
+
+common_vulns:
+  - vuln_name: Algorithm Confusion (RS256 to HS256)
+    description: >
+      If a server using RS256 (asymmetric) accepts HS256 (symmetric), an attacker
+      can forge tokens by signing with the public key as the HMAC secret. The
+      server verifies assuming the public key is the HMAC secret.
+    indicators:
+      - "alg: RS256"
+      - "Public key accessible at /api/public-key"
+      - "algorithms not whitelisted"
+    test_idea: >
+      Fetch the public key (PEM). Re-sign a modified JWT using HS256 with the
+      public key bytes as the HMAC secret. Submit and check if accepted.
+
+  - vuln_name: None Algorithm (CVE-2015-9235)
+    description: >
+      Setting alg to "none" removes signature requirement entirely. Some
+      libraries without algorithm whitelisting accept unsigned tokens.
+    indicators:
+      - "alg: none"
+      - "jwt.verify without algorithm list"
+    test_idea: >
+      Base64url-encode {"alg":"none","typ":"JWT"} as header. Modify payload.
+      Set signature to empty string. Submit token.
+
+  - vuln_name: Weak Secret Key Brute Force
+    description: >
+      HS256/HS384/HS512 signed JWTs with weak secrets (e.g., 'secret', 'password',
+      app name) can be brute-forced offline to forge arbitrary tokens.
+    indicators:
+      - "alg: HS256"
+      - "short or predictable secret"
+    test_idea: >
+      Run hashcat or jwt-cracker with rockyou.txt against the captured JWT.
+      On success, forge admin token and submit.
+
+  - vuln_name: JWT Kid Header Injection
+    description: >
+      The 'kid' (Key ID) header parameter used to select a signing key is vulnerable
+      to path traversal or SQL injection if passed to filesystem reads or DB queries.
+    indicators:
+      - "kid parameter in header"
+      - "SELECT key FROM keys WHERE id="
+      - "fs.readFileSync(kid"
+    test_idea: >
+      Set kid to "../../../dev/null" for an empty key, or inject SQL:
+      kid = "x' UNION SELECT 'attackersecret'--" then sign with 'attackersecret'.
+
+  - vuln_name: JWT Expiry Not Validated
+    description: >
+      Some implementations do not verify the 'exp' claim, allowing use of expired
+      tokens indefinitely after session expiry.
+    indicators:
+      - "exp claim present but not checked"
+      - "verify options ignoreExpiration: true"
+    test_idea: >
+      Capture a JWT. Wait until after expiry time or manually set exp to a past
+      timestamp. Submit and verify if the server still accepts it.
+
+  - vuln_name: Sensitive Data in JWT Payload
+    description: >
+      JWT payloads are base64-encoded, not encrypted. Sensitive data (SSN, passwords,
+      PII) stored in claims is readable by anyone holding the token.
+    indicators:
+      - "ssn in payload"
+      - "password in claims"
+      - "credit_card"
+    test_idea: >
+      Decode the JWT payload (base64url decode the middle segment) and inspect
+      all claims for sensitive information disclosure.
+
+  - vuln_name: JWT Without Signature Verification (jku/x5u Injection)
+    description: >
+      The 'jku' (JWK Set URL) or 'x5u' header parameter directs the server to
+      fetch verification keys from an attacker-controlled URL, allowing key substitution.
+    indicators:
+      - "jku header parameter"
+      - "x5u header parameter"
+    test_idea: >
+      Generate an RSA key pair. Host the public key as a JWK Set on a controlled
+      server. Set jku to that URL in a forged JWT header. Sign with the private key.
+
+  - vuln_name: Refresh Token Leakage and Reuse
+    description: >
+      Long-lived refresh tokens stored insecurely (localStorage, logs) or not
+      invalidated on logout allow persistent session hijacking.
+    indicators:
+      - "refresh_token in localStorage"
+      - "refresh_token in URL"
+      - "token not invalidated on /logout"
+    test_idea: >
+      Capture refresh token from browser storage. Call /logout. Attempt to use
+      the refresh token to obtain a new access token. Check if rotation was enforced.
+
+misconfigurations:
+  - JWT secret stored in environment variable without rotation policy
+  - Token not invalidated server-side on logout (stateless without blocklist)
+  - refresh_token lifetime equal to access_token lifetime
+  - No audience (aud) claim validation
+
+payload_hints:
+  none_alg_header: "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0"
+  hs256_crack_cmd: "hashcat -a 0 -m 16500 <jwt> /usr/share/wordlists/rockyou.txt"
+  kid_traversal: '{"kid":"../../../dev/null"}'
+  kid_sqli: "x' UNION SELECT 'secret'-- -"
+  jku_inject: '{"alg":"RS256","jku":"https://attacker.com/jwks.json"}'

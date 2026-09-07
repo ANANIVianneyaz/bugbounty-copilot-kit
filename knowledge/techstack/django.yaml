@@ -1,0 +1,111 @@
+tech_name: Django
+
+common_vulns:
+  - vuln_name: SQL Injection via raw queries
+    description: >
+      Django ORM is safe by default, but raw() and extra() methods allow raw SQL.
+      Developers bypassing the ORM open injection vectors.
+    indicators:
+      - ".raw("
+      - "cursor.execute("
+      - "extra(where="
+      - "RawSQL("
+    test_idea: >
+      Inject classic SQLi payloads (' OR 1=1--, UNION SELECT) in parameters
+      used by raw query endpoints. Look for Django debug stack traces leaking table names.
+
+  - vuln_name: Debug Mode Information Disclosure
+    description: >
+      DEBUG=True exposes full stack traces, local variables, settings keys (SECRET_KEY,
+      DB passwords) and installed apps to any 404/500 response.
+    indicators:
+      - "Django Version"
+      - "Exception Value"
+      - "Request information"
+      - "INSTALLED_APPS"
+    test_idea: >
+      Trigger a 404 or 500. Check response body for Django debug page.
+      If present, extract SECRET_KEY and database credentials from environment dump.
+
+  - vuln_name: CSRF Token Bypass
+    description: >
+      @csrf_exempt decorator or custom middleware may exempt state-changing endpoints
+      from CSRF validation. SameSite=None cookies compound the risk.
+    indicators:
+      - "csrf_exempt"
+      - "X-CSRFToken header absent"
+      - "csrftoken cookie SameSite=None"
+    test_idea: >
+      Identify POST/PUT/DELETE endpoints that lack CSRF validation.
+      Craft a cross-origin form submission and observe if state change succeeds.
+
+  - vuln_name: Insecure Direct Object Reference via pk/id
+    description: >
+      Django views using Model.objects.get(pk=request.GET['id']) without ownership
+      checks expose arbitrary object access by guessing sequential IDs.
+    indicators:
+      - "/api/*/[0-9]+"
+      - "pk="
+      - "id="
+    test_idea: >
+      Enumerate integer IDs in REST endpoints. Compare responses across two accounts
+      to detect cross-account data leakage.
+
+  - vuln_name: Server-Side Template Injection
+    description: >
+      User-controlled input rendered through Template(user_input).render() enables
+      full RCE via Django template engine bypasses.
+    indicators:
+      - "Template("
+      - "render_to_string(template_name"
+      - "{% include user_var %}"
+    test_idea: >
+      Inject {{7*7}} or {{request.META}} into template name or content fields.
+      A reflected 49 or environment dump confirms SSTI.
+
+  - vuln_name: Pickle Deserialization in Cache Backend
+    description: >
+      Django's cache framework may store pickled Python objects. Arbitrary cache
+      write (e.g., via Redis misconfiguration) allows RCE through pickle gadgets.
+    indicators:
+      - "cache.set("
+      - "pickle.loads("
+      - "PickleSerializer"
+    test_idea: >
+      If Redis is externally accessible or writable, inject a pickled payload into
+      a cache key used by Django views.
+
+  - vuln_name: Mass Assignment via ModelForm
+    description: >
+      ModelForm without explicit fields list or with Meta fields='__all__' allows
+      attackers to set privileged fields (is_staff, is_superuser) via POST parameters.
+    indicators:
+      - "fields = '__all__'"
+      - "exclude = []"
+    test_idea: >
+      Add is_staff=True or is_superuser=True to a registration or profile update POST.
+      Verify if the field is persisted in the database.
+
+  - vuln_name: Open Redirect in next Parameter
+    description: >
+      Django's login view and custom redirects using ?next= parameter without
+      URL validation allow phishing via off-domain redirects.
+    indicators:
+      - "?next="
+      - "redirect_to = request.GET.get('next')"
+    test_idea: >
+      Supply ?next=https://evil.com and authenticate. Verify redirect destination.
+
+misconfigurations:
+  - ALLOWED_HOSTS set to '*' in production
+  - SECRET_KEY hardcoded in settings.py committed to VCS
+  - MEDIA_ROOT serving user uploads without Content-Disposition: attachment
+  - Session cookie missing Secure and HttpOnly flags
+  - CORS headers allowing all origins with credentials
+
+payload_hints:
+  sqli: "' OR '1'='1' -- -"
+  ssti: "{{request.user.is_superuser}}"
+  debug_trigger: "/nonexistent-path-zzz"
+  mass_assignment: "is_staff=1&is_superuser=1"
+  open_redirect: "?next=//evil.com/%2f.."

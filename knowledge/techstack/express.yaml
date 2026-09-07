@@ -1,0 +1,116 @@
+tech_name: Express.js
+
+common_vulns:
+  - vuln_name: Prototype Pollution
+    description: >
+      Merging user-controlled JSON into plain objects via lodash.merge, _.defaults,
+      or manual key assignment can pollute Object.prototype, leading to property
+      injection, authentication bypass, or RCE in some gadget chains.
+    indicators:
+      - "__proto__"
+      - "constructor.prototype"
+      - "merge(req.body"
+      - "lodash"
+    test_idea: >
+      POST {"__proto__":{"admin":true}} or {"constructor":{"prototype":{"admin":true}}}
+      to merge endpoints. Verify if subsequent admin checks are bypassed.
+
+  - vuln_name: Path Traversal via express.static
+    description: >
+      Misconfigured express.static serving from a directory above webroot, or
+      custom file-serving routes using req.params without sanitization, allow
+      reading arbitrary files.
+    indicators:
+      - "express.static("
+      - "res.sendFile(req.params"
+      - "path.join(__dirname, req.query"
+    test_idea: >
+      Request /static/../../../etc/passwd or equivalent encoded traversal sequences.
+      Check for /proc/self/environ to leak environment variables.
+
+  - vuln_name: NoSQL Injection in MongoDB queries
+    description: >
+      Express apps using MongoDB via Mongoose or native driver are vulnerable when
+      user-controlled objects are passed directly to find() without sanitization.
+    indicators:
+      - "req.body.username"
+      - "collection.find({"
+      - "$where"
+      - "$regex"
+    test_idea: >
+      POST {"username":{"$gt":""},"password":{"$gt":""}} to login endpoint.
+      The $gt operator matches all non-empty strings, bypassing authentication.
+
+  - vuln_name: JWT None Algorithm Attack
+    description: >
+      jwt.verify() with insecure options (algorithms: ['none'] or no algorithm
+      whitelist) allows forging tokens by setting alg to none and stripping the signature.
+    indicators:
+      - "jwt.verify("
+      - "algorithms:"
+      - "jsonwebtoken"
+    test_idea: >
+      Decode the JWT, change payload claims (role, admin), re-encode with alg=none
+      and empty signature. Send modified token and check if server accepts it.
+
+  - vuln_name: Cross-Site Request Forgery (missing CSRF)
+    description: >
+      Express apps using cookie-based sessions without CSRF middleware (csurf or
+      double-submit cookie pattern) are vulnerable to CSRF attacks from any origin.
+    indicators:
+      - "express-session"
+      - "cookie-session"
+      - "csurf absent"
+    test_idea: >
+      Craft an HTML form posting to the target state-changing endpoint from an
+      external origin. Verify if the request is accepted when the victim is authenticated.
+
+  - vuln_name: Server-Side Request Forgery via URL parameter
+    description: >
+      Express routes using axios.get(req.query.url) or fetch(req.body.url) without
+      URL validation allow internal network scanning and metadata service access.
+    indicators:
+      - "axios.get(req.query"
+      - "fetch(req.body.url"
+      - "request(url"
+    test_idea: >
+      Supply url=http://169.254.169.254/latest/meta-data/ (AWS IMDSv1) or
+      url=http://localhost:6379 (Redis). Check for successful responses.
+
+  - vuln_name: Arbitrary File Upload leading to RCE
+    description: >
+      Multer or busboy-based upload handlers without MIME/extension validation allow
+      uploading .js files executed by Node.js require() or served as scripts.
+    indicators:
+      - "multer"
+      - "fileFilter absent"
+      - "allowedMimes"
+    test_idea: >
+      Upload a file with .js extension containing require('child_process').exec('id').
+      Trigger execution via a known include/require pattern or webshell endpoint.
+
+  - vuln_name: Insecure Deserialization (node-serialize)
+    description: >
+      node-serialize.unserialize() executes IIFE (Immediately Invoked Function
+      Expression) embedded in serialized JSON, leading to RCE.
+    indicators:
+      - "node-serialize"
+      - "unserialize("
+      - "serialize.unserialize"
+    test_idea: >
+      Craft a payload with {"rce":"_$$ND_FUNC$$_function(){require('child_process').exec('id')}()"}
+      and send it to the deserialization endpoint.
+
+misconfigurations:
+  - Helmet.js not applied (missing security headers)
+  - express.json() body size limit not set (DoS via large body)
+  - CORS allowing all origins with credentials: true
+  - Session secret set to 'secret' or weak default
+  - X-Powered-By header revealing Express version
+
+payload_hints:
+  prototype_pollution: '{"__proto__":{"admin":true}}'
+  nosql_injection: '{"username":{"$gt":""},"password":{"$gt":""}}'
+  jwt_none: "eyJhbGciOiJub25lIn0.<payload>."
+  ssrf: "url=http://169.254.169.254/latest/meta-data/"
+  path_traversal: "/../../../etc/passwd"
