@@ -1,5 +1,8 @@
 # Index de WRITEUP_KB.md (215 cas réels, 24 catégories, 8 634 lignes)
 
+> **Corpus 2025-2026 : voir `arsenal_2025_2026/INDEX.md`** — index complet des
+> writeups récents classés dans les mêmes 24 catégories, + fiches détaillées SSS.
+
 **Lire d'abord** `EXPERT_METHODOLOGY.md` (282 lignes, entier) — ce n'est pas un
 catalogue de plus, c'est ce qui enseigne COMMENT regarder une fonctionnalité
 inconnue et en tirer des hypothèses. Le corpus ci-dessous sert ensuite de

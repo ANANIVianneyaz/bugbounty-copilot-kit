@@ -1,0 +1,5 @@
+# Collecteur — données brutes et environnement (jamais commités)
+tools/collector/.venv/
+tools/collector/data/
+__pycache__/
+*.pyc
