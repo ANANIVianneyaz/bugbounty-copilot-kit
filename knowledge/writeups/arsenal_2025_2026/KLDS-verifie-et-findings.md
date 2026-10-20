@@ -20,6 +20,12 @@ réponse** (elle construit l'identité du client : `client_id`, `client_name`, `
 Preuve : journal du listener du chercheur (44 requêtes, chemin unique par essai) + capture PNG du
 log + 302 verbatim horodatée à la seconde (voir `rapports/`).
 
+**Position du filtre d'adresses (distribution, 8 échantillons/cible) :** les cibles internes sont
+refusées **avant l'émission du paquet** — `127.0.0.1:3000` min 88 ms / max 101 ms, `127.0.0.1:53682` min 85 / max 124,
+`169.254.169.254` min 89 / max 98, `10.255.255.1` min 88 / max 156, contre un témoin non routable
+`192.0.2.1` min 82 / max 102 et un témoin **externe** (qui effectue réellement le fetch) min 173 / max 375.
+→ les cibles internes sont statistiquement indiscernables du refus immédiat, et plus rapides que le fetch réel.
+
 Limites **mesurées et documentées** dans le rapport : le filtre d'adresses écarte loopback /
 RFC1918 / `169.254.169.254` (y compris via nom DNS `localtest.me`, `127.0.0.1.nip.io`,
 IPv4-mapped IPv6, NAT64 local-use `64:ff9b:1::/48`) ; les redirections ne sont pas suivies ; le
@@ -136,7 +142,19 @@ Claims du `challengeToken` (JWT signé, 5 min) : `id` (user), `requires2fa:true`
 
 Intégration Discord (piste annexe, non protégée par la 2FA) : `discordLinkedRolesUrl` est accessible sans 2FA et renvoie une URL Discord OAuth dont le `state` est un **JWT signé** unique par appel (donc pas de CSRF sur le state) ; le callback `GET /api/discord/linked-roles/callback` répond `302 → /researcher/settings/account?discord=error` pour tout code invalide (taxonomie uniforme, aucune fuite) ; `unlinkDiscord` est accessible (no-op sur un compte non lié).
 
-## 2ter. Observations de faible impact (non rapportables)
+### Filtre anti-usurpation d'identité de client — vérifié robuste
+
+| Voie | Variantes testées | Résultat |
+|---|---|---|
+| DCR (`client_name`) | 10 : `BugSecureX`, `XBugSecure`, `)BugSecure(`, espaces (initial/final/interne), casse mélée, majuscules, trait d'union, underscore | **toutes refusées** (`invalid_client_metadata`) → le filtre n'est pas une recherche de sous-chaîne |
+| DCR (reste) | 18 variantes de confusables Unicode | **non testées** : bloquées par le quota d'inscription DCR (`429 temporarily_unavailable`) |
+| **CIMD (chemin sans quota)** | 22 : point, domaine, cyrillique (initiale/médiane/finale), accents, zero-width (initial/median), insécable, bidi RLO/PDF (initial/final), soft hyphen, BOM, turc `ı`, ZWJ, signe moins, espace em, « Bug Secure Africa » | **toutes refusées** (`invalid_client`) |
+
+→ le filtre **normalise l'Unicode** et refuse aussi bien les homoglyphes que les caractères invisibles.
+Effet de bord exploitable pour l'audit : le chemin CIMD, **sans quota**, permet de tester le filtre au-delà
+du quota du chemin DCR.
+
+ de faible impact (non rapportables)
 
 `organizationStanding` renvoie un objet par défaut (zéros/null) à un non-membre au lieu d'une erreur ·
 `programs(filters:{visibility:PRIVATE})` ignore le filtre (bug fonctionnel, aucun programme privé exposé) ·

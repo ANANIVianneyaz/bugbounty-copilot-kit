@@ -57,6 +57,21 @@ La cible est **exceptionnellement bien durcie** : sur l'ensemble des surfaces te
 4. **Campagne de payloads** — construction de payloads sur mesure (contournements WAF, encodages de traversée, variantes de résolution DNS, vecteurs de transport HTTP, analytique de WAF).
 5. **Validation / réfutation** — chaque hypothèse est notée avec sa **mesure** (latence, message d'erreur, code HTTP, capture OOB) : c'est ce qui permet de conclure « non exploitable » au lieu de « Forbidden ⇒ OK ».
 
+### 3.1bis Autocorrection issue de la relecture croisée (transparence)
+
+Deux points du dossier ont été **repris et corrigés** après relecture par deux modèles indépendants :
+1. La couverture du balayage en profil « session web first-party » est de **53 opérations sur 198**
+   (arrêt sur erreur réseau), et non 198 : la formulation initiale était trop forte. **Correction
+   appliquée** ; le balayage complet est en attente d'un jeton de session frais.
+2. L'affirmation « profil de latence identique à l'IP directe » (filtre d'adresses) a été **remplacée par
+   une distribution à 8 échantillons par cible**, qui montre que les cibles internes sont refusées
+   **avant l'émission du paquet** (min 85-89 ms, max 98-156 ms) alors que le témoin externe, qui
+   effectue réellement le fetch, est plus lent (min 173 ms). La bimodalité observée initialement était du
+   bruit de file d'attente de l'AS, pas une tentative de connexion.
+3. Une piste proposée en relecture (les outils d'écriture seraient annoncés malgré un jeton lecture-seule)
+   a été **vérifiée puis écartée** : le README du dépôt documente que « *Every tool is listed whatever you
+   granted* » et que le masquage total ne concerne que le mode local `--read-only` → **aucun défaut**.
+
 ### 3.2 Outils sur mesure développés (tous conservés et réutilisables)
 | Script | Rôle |
 |---|---|
