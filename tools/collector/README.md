@@ -25,13 +25,18 @@ python3 -m venv .venv
 .venv/bin/python render_arsenal.py        # 8. génère le Markdown dans knowledge/writeups/arsenal_2025_2026/
 .venv/bin/python select_fiches.py         # 9. sélection + squelettes des fiches SSS
 .venv/bin/python top_exploitable.py       # 10. TOP_EXPLOITABLE.md (cas triés par reproductibilité)
-.venv/bin/python verify_fiches.py         # 11. contrôle qualité : structure + verbatim des 72 fiches
+.venv/bin/python verify_fiches.py         # 11. contrôle qualité : structure + verbatim + longueur
+.venv/bin/python count_fiches.py 450      # 11b. audit de longueur (prose hors blocs de code)
+.venv/bin/python fiche_profile.py 08-cookie-injection.md 2   # 11c. où passent les mots d'une fiche
 ```
 
-`verify_fiches.py` compare chaque ligne substantielle (≥ 25 car.) des blocs de code
+`verify_fiches.py` compare **toutes** les lignes substantielles (≥ 25 car.) des blocs de code
 des fiches au texte source correspondant (`.json` H1 + `summaries` + writeups externes
-déclarés dans `EXTRA_SOURCES`) ; code de sortie non nul si écart. Il sert aussi de
-test de non-régression : une ligne fabriquée dans une fiche fait échouer le contrôle.
+déclarés dans `EXTRA_SOURCES`) ; code de sortie non nul si écart. Il vérifie aussi les
+champs obligatoires, le drapeau « indisponible » des cas à texte restreint, et la longueur
+de la prose (cible du gabarit 150-400 mots, tolérance 450, plafond dur 550 → erreur).
+Il sert de test de non-régression : une ligne fabriquée dans une fiche fait échouer le contrôle
+(corruption en tête de ligne → exit 1, restauration → exit 0).
 
 ## Conventions et garde-fous
 

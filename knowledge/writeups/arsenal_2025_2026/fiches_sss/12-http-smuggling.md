@@ -83,7 +83,7 @@ Note that their request towards the home page, occasionally produces a 405 respo
 **Rejouer / exploiter (dérivé de la source) :**
 - Prérequis : Burp Suite + extension Turbo Intruder ; une requête valide vers la cible (host masqué ████ dans le rapport) ; la cible doit présenter le desync 0.CL entre son proxy et son backend.
 - Étapes : 1. Envoyer une requête valide vers la cible puis l'envoyer vers Turbo Intruder. 2. Coller le script fourni (stage1 avec `Content-length:` + `%s` ; `smuggled = '''TRACE /assets HTTP/1.1\nX: x'''` ; stage2_chopped/stage2_revealed ; puis « Attack »). 3. Observer le tableau de résultats : la victime simulée reçoit parfois 405 au lieu de 200 — preuve que le préfixe smugglé s'est collé devant sa requête (`X: xGET / HTTP/1.1`).
-- Pièges / limites : les attaques 0.CL « use a double desync so they can take a while » ; le script exige que stage1 finisse par une ligne vide sans corps ; si le serveur n'accepte pas GET avec corps, essayer OPTIONS ; les attaques request smuggling sont dangereuses en production (rate/timing) ; host et cookie masqués dans le rapport.
+- Pièges / limites : les attaques 0.CL « use a double desync so they can take a while » (script : stage1 peut prendre du temps) ; le script exige que stage1 finisse par une ligne vide sans corps ; si le serveur n'accepte pas GET avec corps, essayer OPTIONS ; host et cookie masqués dans le rapport.
 
 **Reproductibilité :** moyenne — script complet fourni, mais dépend d'une pile proxy/backend vulnérable au 0.CL et d'un timing de desync.
 

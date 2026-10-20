@@ -36,7 +36,7 @@ curl -X GET https://api.netlify.com/api/v1/accounts -H "Authorization: Bearer �
 - Étapes : 1. Ouvrir l'URL du log public. 2. Chercher le mot-clé `auth:` et extraire le token Netlify. 3. Vérifier sa validité : `curl -X GET https://api.netlify.com/api/v1/accounts -H "Authorization: Bearer <token>" -s | jq` → réponse contenant les infos du compte (name, role, billing_email, roles_allowed, saml_config…). 4. Confirmer l'accès complet via les autres endpoints de l'API Netlify (déployer, supprimer, modifier des sites ; lire variables d'environnement et logs) — la documentation référence est `https://open-api.netlify.com`.
 - Pièges / limites : le token est intégralement masqué (`███`) et a vraisemblablement été révoqué ; le rejeu nécessite un log équivalent non nettoyé. La source recommande révocation, audit des pipelines (masquage) et scopes OAuth/IP allowlisting.
 
-**Reproductibilité :** basse — le credential est masqué et révoqué ; seule la technique (fouille de logs CI publics) est rejouable, pas l'artefact.
+**Reproductibilité :** basse — le credential est masqué dans la source et la révocation n'est qu'une recommandation du rapport (non confirmée) ; seule la technique (fouille de logs CI publics) est rejouable, pas l'artefact.
 
 **Techniques :** secrets in public ci logs, token leak, public build logs, api token abuse, credential exposure, log mining
 

@@ -32,11 +32,11 @@ X-Forwarded-For: 54.247.167.106
 ```
 
 **Rejouer / exploiter (dérivé de la source) :**
-- Prérequis : compte Stripo avec accès au service d'export et identifiant de compte webhook (ex. `52027412`) ; un listener attaquant (ngrok).
+- Prérequis : accès à l'endpoint d'export de Stripo — l'URL citée porte le segment `accounts/52027412` (identifiant de compte webhook) et l'éditeur `my.stripo.email`, mais la source ne documente ni authentification ni compte requis (le PoC `curl` est sans cookie ni en-tête d'autorisation) ; un listener attaquant (ngrok).
 - Étapes : 1. Envoyer le POST de la source vers `/bapi/exportservice/v3/exports/WEBHOOK/accounts/<id>` avec `"destination": "WEBHOOK"` et `properties.webhookUrl` pointant vers l'hôte attaquant. 2. Observer la requête sortante reçue sur cet hôte (Host, User-Agent `Apache-HttpClient`), preuve du SSRF. 3. Faire varier `webhookUrl` pour sonder des services internes ou des métadonnées cloud.
-- Pièges / limites : SSRF aveugle (la réponse de la cible n'est pas renvoyée dans la réponse HTTP de Stripo) ; URL attaquante doit être en HTTPS/HTTP valide pour le service ; l'impact reste dépendant du réseau interne.
+- Pièges / limites : SSRF aveugle (la réponse de la cible n'est pas renvoyée dans la réponse HTTP de Stripo) ; aucun contrôle de schéma d'URL n'est documenté dans la source (seul un `webhookUrl` en `https://` y est montré) ; l'impact reste dépendant du réseau interne.
 
-**Reproductibilité :** moyenne — nécessite un compte Stripo et l'identifiant d'un compte d'export webhook ; requête complète fournie.
+**Reproductibilité :** moyenne — identifiant de compte (`accounts/52027412`) et requêtes complets dans la source, listener ngrok à monter ; l'exigence éventuelle d'un compte n'est pas documentée.
 
 **Techniques :** blind ssrf, attacker-controlled webhook url, server-side outbound request, internal port scan, cloud metadata access
 

@@ -11,7 +11,7 @@ sévérité : high · [source](https://hackerone.com/reports/1387366)
 
 `elections.k8s.io` (application d'élection Elekto) signe ses cookies d'authentification avec une `SECRET_KEY` Flask faible, littéralement la chaîne `N/A`. Découverte via l'outil CookieMonster (avec @nagli) : un cookie `session=eyJ…` récupéré sans authentification est décodé puis bruteforcé hors ligne avec `flask-unsign`, qui retrouve la clé. L'impact n'est pas forcément une prise de contrôle complète, Elekto injectant le jeton OAuth GitHub dans la session plutôt qu'un identifiant utilisateur (difficile à obtenir pour un tiers) ; la clé permet de manipuler la session et d'envisager du CSRF sur les flux de vote/authentification.
 
-**Cause racine :** l'application est déployée avec la valeur de repli de `SECRET_KEY` (le code source avertit explicitement « please do not deploy before doing this! ») ; tous les cookies signés deviennent forgeables.
+**Cause racine :** la clé de signature `SECRET_KEY` de l'application n'a jamais été renseignée pour de bon : le code source (Elekto) porte la valeur par défaut `env('APP_KEY', 'test')` avec l'avertissement « please do not deploy before doing this! », et le rapport confirme que l'instance déploie la valeur `N/A` (« this is what you have set to `N/A` »), relevée par `flask-unsign`. Cookies signés donc forgeables.
 
 **Preuve technique (verbatim depuis la source) :**
 
@@ -99,9 +99,9 @@ sévérité : medium · [source](https://hackerone.com/reports/3589551)
 
 ⚠️ texte intégral indisponible — le fichier brut `data/raw/h1/3589551.json` ne contient pas de `vulnerability_information` ; seuls le titre, le CVE et le résumé d'équipe sont exploitables.
 
-Un typo dans le mécanisme de permissions fait que les endpoints de logs d'App de Rocket.Chat (`/api/apps/logs` et `/api/apps/:id/logs`) ne sont pas correctement protégés : tout utilisateur authentifié peut récupérer des informations par des requêtes GET, y compris des logs d'Enterprise App en principe réservés aux admins. Le correctif touche les versions <8.4.0, <8.3.2, <8.2.2, <8.1.3, <8.0.4, <7.13.6, <7.12.7, <7.11.7 et <7.10.10 ; CVE-2026-29197.
+Une typo dans le mécanisme de permissions fait que les endpoints de logs d'App de Rocket.Chat (`/api/apps/logs` et `/api/apps/:id/logs`) ne sont pas correctement protégés : tout utilisateur authentifié peut récupérer des informations par des requêtes GET, y compris des logs d'Enterprise App en principe réservés aux admins. Le correctif touche les versions <8.4.0, <8.3.2, <8.2.2, <8.1.3, <8.0.4, <7.13.6, <7.12.7, <7.11.7 et <7.10.10 ; CVE-2026-29197.
 
-**Cause racine :** d'après le titre, un typo dans la clé de permission (`permissionRequired`) rend la vérification de droits inopérante sur les endpoints de logs d'App ; le résumé d'équipe parle d'« a typo in the permissions mechanism ». Le détail du code fautif n'est pas documenté dans le fichier brut.
+**Cause racine :** d'après le titre, une typo dans la clé de permission (`permissionRequired`) rend la vérification de droits inopérante sur les endpoints de logs d'App ; le résumé d'équipe parle d'« a typo in the permissions mechanism ». Le détail du code fautif n'est pas documenté dans le fichier brut.
 
 **Preuve technique (verbatim depuis la source — résumé d'équipe du JSON brut) :**
 

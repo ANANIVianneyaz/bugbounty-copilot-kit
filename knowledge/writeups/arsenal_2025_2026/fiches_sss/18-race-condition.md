@@ -9,9 +9,9 @@
 **📄 Cas réel**
 sévérité : medium · [source](https://hackerone.com/reports/2616045)
 
-Sur wordpress.com/Gravatar, un compte gratuit permet de réclamer un domaine personnalisé offert. En interceptant la requête de commande, puis en la dupliquant et en variant le paramètre `meta` avant d'envoyer toutes les copies en parallèle (groupe), l'utilisateur achète plus d'un domaine gratuit ; la limitation « 1 domaine » est contournée. Impact : création de plusieurs domaines gratuits avec un seul compte.
+Sur wordpress.com/Gravatar, un compte gratuit permet de réclamer un domaine personnalisé offert. D'après les étapes du rapport, l'utilisateur complète le paiement jusqu'à obtenir l'endpoint `public-api.wordpress.com/rest/v1.1/me/transactions?…`, crée ensuite un groupe de requêtes (duplication 1 à 15 fois), change le paramètre `meta` pour un autre nom, puis envoie toutes les copies en parallèle : plus d'un domaine gratuit est acheté avec le même compte, la limitation « 1 domaine » étant contournée. Impact : création de plusieurs domaines gratuits avec un seul compte.
 
-**Cause racine :** La vérification du droit au domaine gratuit et son attribution ne sont pas atomiques (pas de verrou sur la transaction) : plusieurs requêtes parallèles passent le contrôle avant que l'état « déjà utilisé » soit enregistré.
+**Cause racine :** le rapport établit la cause au niveau macro : la limite de domaine gratuit est contournable « by sending multiple requests at the same time » (race condition). Le détail mécanique (lecture du quota, verrou, état « déjà utilisé ») n'est pas documenté dans la source.
 
 **Preuve technique (verbatim depuis la source) :**
 
@@ -30,7 +30,7 @@ public-api.wordpress.com/rest/v1.1/me/transactions?
 **Rejouer / exploiter (dérivé de la source) :**
 - Prérequis : compte gratuit Gravatar ; passage par le flux de paiement jusqu'à obtenir l'endpoint de transactions.
 - Étapes : 1. Créer un compte gratuit dans Gravatar et sélectionner « claim free custom domain » sous My profile. 2. Compléter le paiement jusqu'à l'endpoint `public-api.wordpress.com/rest/v1.1/me/transactions?`. 3. Dupliquer la requête en groupe (1 à 15 fois), renommer `meta` dans chaque copie, puis envoyer le groupe en parallèle : plus d'un domaine gratuit est acheté.
-- Pièges / limites : plusieurs parties du flux sont caviardées (`██████`) dans la source (URL de claim, identifiant de transaction) ; le détail du PoC est annoncé en pièce jointe, non incluse dans le texte brut.
+- Pièges / limites : plusieurs parties du flux sont caviardées (`██████`) dans la source (URL de claim du domaine, suite de paramètres après `me/transactions?`) ; le détail du PoC est annoncé en pièce jointe, non incluse dans le texte brut ; le mécanisme interne de contrôle de quota n'est pas décrit.
 
 **Reproductibilité :** moyenne — compte gratuit et flux de paiement requis ; méthode de course documentée mais étapes partiellement caviardées.
 
@@ -53,7 +53,7 @@ sévérité : medium · [source](https://hackerone.com/reports/3104355)
 
 L'application impose une limite de 10 dossiers par utilisateur dans un espace (`Knowledge -> Space -> Folder`). Après suppression d'un dossier (total 9), l'envoi simultané de nombreuses requêtes de création crée plus de 10 dossiers : la limite est contournée. Impact annoncé : abus de ressources et dégradation de performance pour les autres utilisateurs.
 
-**Cause racine :** Le contrôle du quota de dossiers n'est pas atomique : plusieurs créations concurrentes lisent le même comptage (9 < 10) et passent le contrôle avant que les insertions soient comptabilisées (TOCTOU).
+**Cause racine :** le rapport attribue la cause à une race condition observée au moment des créations simultanées : « due to a Race Condition, it is possible to bypass this limit by sending multiple folder creation requests simultaneously after deleting one folder ». La source ne détaille pas le mécanisme interne (comptage lu avant insertion, TOCTOU, verrou) — seule l'enchaînement « supprimer un dossier → bombarder les créations » est documenté.
 
 **Preuve technique (verbatim depuis la source) :**
 
@@ -93,7 +93,7 @@ sévérité : medium · [source](https://hackerone.com/reports/3226838)
 
 Sur `backend.singlestore.com`, un utilisateur free-tier a pu contourner la limite de 5 workspaces en envoyant de multiples requêtes `CreateWorkspace` simultanées, permettant une création illimitée de workspaces et un abus potentiel de ressources. Le problème a été corrigé par SingleStore en date du 3 octobre 2025.
 
-**Cause racine :** d'après le résumé équipe, le contrôle du quota de 5 workspaces et la création ne sont pas atomiques : des requêtes simultanées passent le contrôle avant la mise à jour du compteur.
+**Cause racine :** le résumé d'équipe documente une race condition sur le quota : « bypass the 5-workspace limit by sending multiple simultaneous CreateWorkspace requests ». Il ne précise ni atomicité, ni compteur, ni ordre des vérifications — ces détails ne sont pas dans le JSON brut (champ `vulnerability_information` vide).
 
 **Preuve technique (verbatim depuis la source) :**
 

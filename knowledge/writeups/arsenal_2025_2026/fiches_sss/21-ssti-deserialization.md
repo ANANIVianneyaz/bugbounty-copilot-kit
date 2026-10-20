@@ -67,7 +67,7 @@ The vulnerability has been remediated by removing public access to the affected 
 
 **Reproductibilité :** basse — seuls l'en-tête vulnérable, la classe de composant (`BinaryFormatter`) et l'outil (`ysoserial.net`) sont documentés ; aucune étape ni payload.
 
-**Techniques :** binaryformatter deserialization, ysoserial.net, http header injection, unauthenticated rce, cve-2025-27218
+**Techniques :** binaryformatter deserialization, ysoserial.net, unsanitized user input in http header, cve-2025-27218
 
 **Correspond aux classes qualifiantes :** deserialization, rce
 

