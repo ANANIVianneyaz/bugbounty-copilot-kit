@@ -1,0 +1,39 @@
+PIECE JOINTE 7 - CAPTURE VERBATIM DE LA REPONSE HTTP DU SERVEUR D AUTORISATION
+===========================================================================
+
+Document de metadonnees client publie sur : https://0485d925d84935.lhr.life/doc/final-proof-1792512705
+
+{"client_id":"https://0485d925d84935.lhr.life/doc/final-proof-1792512705","client_name":"bb-cimd-research (document de test)","redirect_uris":["https://0485d925d84935.lhr.life/cb"],"grant_types":["authorization_code","refresh_token"],"response_types":["code"],"token_endpoint_auth_method":"none","scope":"programs:read profile:read reports:read reports:write"}
+
+Commande (aucune authentification) :
+
+curl -sS -D- -o/dev/null 'https://bugsecure-api.senintel.sn/oauth/authorize?response_type=code&client_id=https%3A%2F%2F0485d925d84935.lhr.life%2Fdoc%2Ffinal-proof-1792512705&redirect_uri=https%3A%2F%2F0485d925d84935.lhr.life%2Fcb&scope=programs%3Aread%20profile%3Aread&state=bb-final&code_challenge=E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM&code_challenge_method=S256&resource=https%3A%2F%2Fbugsecure-api.senintel.sn'
+
+Date du releve : 2026-10-20 16:11:46 UTC
+
+---- RepONSE (en-tetes bruts) ----
+
+HTTP/2 302 
+date: Tue, 20 Oct 2026 16:11:47 GMT
+content-type: text/plain; charset=utf-8
+content-length: 110
+location: https://bugsecure.senintel.sn/oauth/consent?request=a88ebf41-66a4-47bc-94c0-2348e16739ab
+set-cookie: AWSALB=FSIkanQlZunXQ8UqaAzXumH/yzC73d5j+YtkH79+iTb+dvd5FQApkwGkUQ+m+5uH3r/TictlyjEcikRVn8j93tMPxmDt3tpoq0vP6/n0F0GJPKjw44+u1/9SnbMP; Expires=Tue, 27 Oct 2026 16:11:47 GMT; Path=/
+set-cookie: AWSALBCORS=FSIkanQlZunXQ8UqaAzXumH/yzC73d5j+YtkH79+iTb+dvd5FQApkwGkUQ+m+5uH3r/TictlyjEcikRVn8j93tMPxmDt3tpoq0vP6/n0F0GJPKjw44+u1/9SnbMP; Expires=Tue, 27 Oct 2026 16:11:47 GMT; Path=/; SameSite=None; Secure
+vary: Origin, Accept
+access-control-allow-credentials: true
+content-security-policy: default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+cross-origin-opener-policy: same-origin
+cross-origin-resource-policy: same-origin
+origin-agent-cluster: ?1
+referrer-policy: no-referrer
+x-content-type-options: nosniff
+x-dns-prefetch-control: off
+x-download-options: noopen
+x-frame-options: SAMEORIGIN
+x-permitted-cross-domain-policies: none
+x-xss-protection: 0
+cache-control: no-store
+set-cookie: __Secure-bugsecure_oauth_browser=WQxHe-CUnmSzR2jab-PvcyAiywbmom1IbIsejNAeuqY; Max-Age=600; Path=/; Expires=Tue, 20 Oct 2026 16:21:47 GMT; HttpOnly; Secure; SameSite=Lax
+strict-transport-security: max-age=31536000; includeSubDomains
+

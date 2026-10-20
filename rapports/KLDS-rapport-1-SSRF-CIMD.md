@@ -31,10 +31,14 @@ d'autorisation (`https://bugsecure-api.senintel.sn`) :
 
 - **Aucune authentification** n'est requise (ni token, ni cookie, ni en-tête `Authorization`) ;
 - **L'URL est entièrement choisie par l'appelant** (schéma, hôte, port, chemin, query string) ;
-- **Aucun quota, aucune inscription** : contrairement à `POST /oauth/register` (qui répond
-  `429 temporarily_unavailable` après une dizaine d'appels), le chemin CIMD n'exige **aucune
-  création de client** et **aucun rate-limit** — j'ai observé **25 requêtes émises** par le
-  serveur d'autorisation pour 25 `authorize` distincts ;
+- **Aucune inscription n'est nécessaire** : contrairement à `POST /oauth/register` (qui répond
+  `429 temporarily_unavailable` après une dizaine d'appels, et qui **restitue** un `client_id`
+  enregistré), le chemin CIMD **construit le client à la volée** à partir du document distant.
+  Chaque appel à `/oauth/authorize` déclenche un fetch : j'ai observé **25 requêtes émises par le
+  serveur d'autorisation** pour 25 appels distincts. Le serveur d'autorisation applique par
+  ailleurs son propre quota d'appels sur `/oauth/authorize` (je l'ai rencontré sous la forme
+  `error=rate_limited`) : ce quota limite le **débit**, pas le **nombre de clients réalisables**,
+  puisqu'aucune inscription n'est requise ;
 - **La réponse distante est analysée** : le contenu téléchargé définit `client_id`, `client_name`,
   `redirect_uris`, `grant_types`, `scope`, et l'issue de l'analyse est **observable par l'appelant**
   (voir 2.3) ;

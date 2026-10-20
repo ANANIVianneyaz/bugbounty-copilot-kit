@@ -1,0 +1,35 @@
+PIECE JOINTE 3 - ORACLE : comportement du serveur d autorisation selon le document distant
+==========================================================================================
+
+
+Chaque document ci-dessous a ete publie sur une URL unique (le client_id vaut cette URL,
+donc aucun cache de client n intervenait), puis sollicite par GET /oauth/authorize.
+
+  | document distant | reponse de l AS
+  | document valide (client_id = URL, redirect_uris https, nom neutre) | 302 -> /oauth/consent?request=... (client accepte)
+  | corps non JSON (texte) | 302 -> /oauth/error?code=invalid_client
+  | JSON invalide | 302 -> /oauth/error?code=invalid_client
+  | JSON sans client_id | 302 -> /oauth/error?code=invalid_client
+  | JSON avec client_id different de l URL | 302 -> /oauth/error?code=
+  | JSON sans redirect_uris | 302 -> /oauth/error?code=invalid_client
+  | redirect_uris vers un hote de la plateforme | 302 -> /oauth/error?code=invalid_client
+  | redirect_uris vers un IP litteral | 302 -> /oauth/error?code=invalid_client
+  | redirect_uris = javascript: | 302 -> /oauth/error?code=invalid_client
+  | redirect_uris en http non loopback | 302 -> /oauth/error?code=invalid_client
+  | client_name usurpant la plateforme ("BugSecure Africa") | 302 -> /oauth/error?code=invalid_client
+  | scope hors perimetre (admin:all triage:write) | 302 -> /oauth/consent?request=... (client accepte)
+  | grant_types non autorises (password, implicit) | 302 -> /oauth/error?code=invalid_client
+  | token_endpoint_auth_method = client_secret_basic | 302 -> /oauth/error?code=invalid_client
+
+Lecture :
+- un document distant conforme fait aboutir a la creation d une demande de consentement
+  (le serveur d autorisation construit l identite du client, son nom et ses redirect_uris, a
+  partir du document telecharge) ;
+- tout autre contenu est refuse avec invalid_client.
+
+L appelant distingue donc les deux cas : il dispose d un oracle binaire sur la cible atteinte
+(presence d un service, et caractere de sa reponse), a raison d une requete par cible.
+
+Le meme controle refuse par ailleurs toute usurpation du nom de la plateforme, sur les deux
+chemins d enregistrement (POST /oauth/register et CIMD) : la protection est coherente.
+

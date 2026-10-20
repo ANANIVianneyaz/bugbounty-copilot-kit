@@ -1,0 +1,52 @@
+# P1 - Journal de reception (preuve serveur) - requetes emises par le serveur d autorisation
+
+Source : webhook.site (service tiers de reception, hors perimetre BugSecure). Chaque entree correspond
+a un appel distinct de GET /oauth/authorize. Aucune de ces requetes n a ete emise par le chercheur :
+elles portent l agent utilisateur du serveur d autorisation et l IP de sortie de la plateforme.
+
+Requetes emises par le serveur d autorisation : 44
+IP source (identique pour toutes)      : 52.214.90.218  (AWS)
+Agent utilisateur                      : BugSecure-OAuth/1 (+client-id-metadata-document)
+
+---- 8 entrees completes sur 44 ----
+
+GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a//final-proof-1792512537702
+Host: webhook.site
+User-Agent: BugSecure-OAuth/1 (+client-id-metadata-document)
+ip: 52.214.90.218   pays: IE   date: 2026-10-20 16:09:02
+
+GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/oracle-1792510980068-13
+Host: webhook.site
+User-Agent: BugSecure-OAuth/1 (+client-id-metadata-document)
+ip: 52.214.90.218   pays: IE   date: 2026-10-20 15:43:01
+
+GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/oracle-1792510975252-12
+Host: webhook.site
+User-Agent: BugSecure-OAuth/1 (+client-id-metadata-document)
+ip: 52.214.90.218   pays: IE   date: 2026-10-20 15:42:57
+
+GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/oracle-1792510964256-11
+Host: webhook.site
+User-Agent: BugSecure-OAuth/1 (+client-id-metadata-document)
+ip: 52.214.90.218   pays: IE   date: 2026-10-20 15:42:52
+
+GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/oracle-1792510951230-10
+Host: webhook.site
+User-Agent: BugSecure-OAuth/1 (+client-id-metadata-document)
+ip: 52.214.90.218   pays: IE   date: 2026-10-20 15:42:41
+
+GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/oracle-1792510946123-9
+Host: webhook.site
+User-Agent: BugSecure-OAuth/1 (+client-id-metadata-document)
+ip: 52.214.90.218   pays: IE   date: 2026-10-20 15:42:28
+
+GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/oracle-1792510931367-8
+Host: webhook.site
+User-Agent: BugSecure-OAuth/1 (+client-id-metadata-document)
+ip: 52.214.90.218   pays: IE   date: 2026-10-20 15:42:23
+
+GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/oracle-1792510921204-7
+Host: webhook.site
+User-Agent: BugSecure-OAuth/1 (+client-id-metadata-document)
+ip: 52.214.90.218   pays: IE   date: 2026-10-20 15:42:08
+

