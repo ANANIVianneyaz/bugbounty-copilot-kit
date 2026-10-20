@@ -116,12 +116,29 @@ l'IP de sortie `52.214.90.218`, ou si le filtre d'adresses est contournable sur 
 
 ---
 
+## 2bis. MFA / 2FA — les 7 patterns du kit, tous vérifiés
+
+| # | Pattern (`hunt-mfa-bypass`) | Résultat mesuré |
+|---|---|---|
+| 1 | Saut de l'étape MFA (jeton pré-MFA sur une ressource protégée) | **CLOS** — la réponse de `login` est `{"accessToken":null,"refreshToken":null,"requiresTwoFactor":true,"challengeToken":"<JWT>","user":null}` : **aucun jeton avant la 2FA**. Et une session **non vérifiée 2FA** (via `/api/auth/session/refresh`) est refusée sur tout le contenu sensible : le sweep des 198 opérations n'y renvoie que `BountyMe` (identité propre), `certificateSigningKeys` (clés publiques), `confirmEmailChange` (no-op), `dismissOnboarding` (flag d'UI) et `discordLinkedRolesUrl` (lien d'intégration) |
+| 1b | Le `challengeToken` sert-il de jeton d'accès ? | **NON** — testé comme `Bearer` sur `me`, `reports`, `myKycStatus` et une écriture → tous « Unauthorized » (audience `mfa-challenge` appliquée) |
+| 1c | Downgrade via le flux device-code (CLI) | **CLOS** — `createCliSignInCode` exige une session 2FA-vérifiée |
+| 2 | Rejeu de l'OTP | sans effet (le challenge survit aux échecs) |
+| 3 | Code manifestement faux | message **uniforme** (« Invalid or expired challenge token ») → aucun oracle sur le code |
+| 4 | Oracle de préfixe (10⁶ → ~60 requêtes) | **AUCUN** — 20 préfixes testés : 2 messages distincts (format / rate-limit) et **latences plates 31-40 ms** |
+| 5 | Race sur la validation | non exploitable (le rate-limit s'applique avant) |
+| 6 | Dump des codes de secours via `/me` | **CLOS** — `me` ne renvoie que `id/email/username/roles/status/kycStatus/twoFactorEnabled/hasAuthenticatorApp` ; les codes de secours sont **8 caractères** (36⁸ / 10⁸ → non brutables) |
+| 7 | Downgrade de facteur (SMS) | sans objet : TOTP + email uniquement |
+
+Budget mesuré : **rate-limit après ~3-4 tentatives / 60 s** sur `verify2fa` → 10⁶ combinaisons = plusieurs années sur une IP, donc non brutable.
+
+Claims du `challengeToken` (JWT signé, 5 min) : `id` (user), `requires2fa:true`, `jti` (clé du challenge côté serveur), `epoch`, `aud:"mfa-challenge"`, `iss`, `sub:"klds-bug-bounty-api"`.
+
+Intégration Discord (piste annexe, non protégée par la 2FA) : `discordLinkedRolesUrl` est accessible sans 2FA et renvoie une URL Discord OAuth dont le `state` est un **JWT signé** unique par appel (donc pas de CSRF sur le state) ; le callback `GET /api/discord/linked-roles/callback` répond `302 → /researcher/settings/account?discord=error` pour tout code invalide (taxonomie uniforme, aucune fuite) ; `unlinkDiscord` est accessible (no-op sur un compte non lié).
+
 ## 3. Restes à tester (il faut une action du chercheur)
 
-1. **Bypass MFA (seul High potentiel restant)** — la réponse JSON de la mutation `login` (avec captcha)
-   alors que le 2FA est actif : vérifier si le `accessToken` **émis avant la validation du code TOTP**
-   est utilisable. Le token de *session* pré-2FA est déjà refusé partout (epoch), mais le token
-   retourné par `login` avant le challenge est une autre emitter.
+1. ~~Bypass MFA~~ → **CLOS**, voir §2bis (les 7 patterns).
 2. **Entropie des tokens par email** (reset de mot de passe, suppression du 2FA, invitation) —
    l'API refuse les adresses jetables (`Disposable email addresses are not accepted`) → il faut une
    adresse **non jetable** lisible par le chercheur.
