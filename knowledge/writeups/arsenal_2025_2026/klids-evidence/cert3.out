@@ -1,0 +1,3 @@
+  verifyCertificate(BSC-2026-0001)            HTTP 200  {"verifyCertificate":null}
+  researcherStats(userId reel)                HTTP 200  {"researcherStats":{"totalReports":34,"validatedReports":16,"validationRate":47.05882352941176,"totalEarned":null,"currentStreak":0,"longestStreak":2}}
+  researcherActivity(userId reel)             HTTP 200  ERR: Unauthorized

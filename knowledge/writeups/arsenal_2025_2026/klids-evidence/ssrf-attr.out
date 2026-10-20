@@ -1,0 +1,31 @@
+=== A) ATTRIBUTION : quel endpoint declenche le fetch ? (chemin unique) ===
+  document publie sur https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/cimd-attr-1792505953170
+  AUTHORIZE avec client_id=URL unique            1020ms  CONSENT
+      -> requetes vues par le webhook apres l authorize :
+      GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/cimd-attr-1792505953170  | UA: BugSecure-OAuth/1 (+client-id-metadata-document)
+      GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a  | UA: BugSecure-OAuth/1 (+client-id-metadata-document)
+      GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a  | UA: node
+      GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a  | UA: node
+      GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a  | UA: node
+      GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a  | UA: BugSecure-OAuth/1 (+client-id-metadata-document)
+  DCR avec client_uri=https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/dcr-attr-1792505962618 -> HTTP 201 {"client_id":"dcr_CPAKIiU2LxkOcbzdvm36xRVOuZ_xdQmydKpqko5sgDw","client_id_issued_at":1792505963,"client_name":"attr-dcr","redirect_uris":["https://web
+      -> requetes vues par le webhook apres le DCR :
+      GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a/cimd-attr-1792505953170  | UA: BugSecure-OAuth/1 (+client-id-metadata-document)
+      GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a  | UA: BugSecure-OAuth/1 (+client-id-metadata-document)
+      GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a  | UA: node
+      GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a  | UA: node
+      GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a  | UA: node
+      GET https://webhook.site/3ef992c0-b173-407f-ab55-e3ea613a534a  | UA: BugSecure-OAuth/1 (+client-id-metadata-document)
+
+=== B) le document est-il fetch plusieurs fois ? (authorize + echange) ===
+  requetes recues par UA : {"BugSecure-OAuth/1 (+client-id-metadata-document)":4,"node":4} (total=8)
+
+=== C) portee interne : mesure propre (espacement 4s, 2 echantillons) ===
+  webhook externe (temoin)        latence AS=  672ms  err=invalid_client   (mon poste: 1024,169ms)
+  IMDS 169.254.169.254            latence AS=  626ms  err=invalid_client   (mon poste: 10544,10530ms)
+  TEST-NET 192.0.2.1              latence AS=  661ms  err=invalid_client   (mon poste: 10535,10493ms)
+  10.255.255.1 (prive)            latence AS=  585ms  err=invalid_client   (mon poste: 10495,10495ms)
+  127.0.0.1:3000                  latence AS= 5709ms  err=invalid_client   (mon poste: 11,6ms)
+  127.0.0.1:53682 (MCP)           latence AS=  620ms  err=invalid_client   (mon poste: 11,7ms)
+  127.0.0.1:8080                  latence AS=  512ms  err=invalid_client   (mon poste: 6,7ms)
+  hote inexistant                 latence AS=  614ms  err=invalid_client   (mon poste: 4,3ms)

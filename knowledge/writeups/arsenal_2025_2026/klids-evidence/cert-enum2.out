@@ -1,0 +1,15 @@
+=== 0) ORACLE : reponse pour une reference qui n existe pas ===
+  BSC-2026-9999   -> HTTP 200 Unauthorized
+  NOPE            -> HTTP 200 Unauthorized
+  BSC-2026-0001   -> HTTP 200 Unauthorized
+  bsc-2026-0001   -> HTTP 200 Unauthorized
+
+=== 1) balayage des references sequentielles ===
+  BSC-2026-0001 -> Unauthorized
+  BSC-2026-0002 -> Unauthorized
+  BSC-2026-0003 -> Unauthorized
+  BSC-2025-0001 -> Unauthorized
+  BSC-2025-0002 -> Unauthorized
+  BSC-2025-0003 -> Unauthorized
+
+  certificats trouves : 0

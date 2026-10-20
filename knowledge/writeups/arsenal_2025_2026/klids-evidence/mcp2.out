@@ -1,0 +1,21 @@
+=== 1) initialize / tools/list sans Origin ===
+node:internal/deps/undici/undici:14976
+      Error.captureStackTrace(err);
+            ^
+
+TypeError: fetch failed
+    at node:internal/deps/undici/undici:14976:13
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async rpc (file:///tmp/opencode/mcp2.mjs:5:44)
+    at async file:///tmp/opencode/mcp2.mjs:8:7 {
+  [cause]: ConnectTimeoutError: Connect Timeout Error (attempted address: bugsecure-mcp.senintel.sn:443, timeout: 10000ms)
+      at onConnectTimeout (node:internal/deps/undici/undici:2746:28)
+      at Immediate._onImmediate (node:internal/deps/undici/undici:2727:11)
+      at process.processImmediate (node:internal/timers:483:21) {
+    code: 'UND_ERR_CONNECT_TIMEOUT',
+    [Symbol(undici.error.UND_ERR)]: true,
+    [Symbol(undici.error.UND_ERR_CONNECT_TIMEOUT)]: true
+  }
+}
+
+Node.js v20.20.2

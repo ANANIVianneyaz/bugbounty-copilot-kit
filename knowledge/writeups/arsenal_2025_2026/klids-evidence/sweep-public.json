@@ -1,0 +1,2044 @@
+[
+ {
+  "name": "ExchangeCliSignInCode",
+  "kind": "mutation",
+  "cls": "TOKEN-DEAD",
+  "detail": "Invalid or expired sign-in code",
+  "trail": [
+   "stop:Invalid or expired sign-in code"
+  ],
+  "iters": 0,
+  "text": "mutation ExchangeCliSignInCode($code: String!) { exchangeCliSignInCode(code: $code) { accessToken refreshToken user { id email username roles } } }",
+  "variables": {
+   "code": "bb-test"
+  }
+ },
+ {
+  "name": "ExportAuditLog",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation ExportAuditLog($filter: AuditLogFilterInput) { exportAuditLog(filter: $filter) { csv rowCount truncated limit } }",
+  "variables": {
+   "filter": {}
+  }
+ },
+ {
+  "name": "ForgotPassword",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "GenerateBackupCodes",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "GenerateTotpSecret",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation GenerateTotpSecret { generateTotpSecret { secret otpauthUrl } }",
+  "variables": {}
+ },
+ {
+  "name": "GetAdminPrograms",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetAdminPrograms($filters: ProgramFilterInput, $skip: Int, $take: Int) { adminPrograms(filters: $filters, skip: $skip, take: $take) { ...ProgramCardFields } }\nfragment OrganizationSummaryFields on ProgramOrganizationModel { id name slug }\nfragment ProgramCardFields on ProgramModel { currency id organizationId organization { ...OrganizationSummaryFields } title slug description contentLocale scope rules status visibility rewardGrid rewardRange { min max currency } triageDeadlineBusinessDays startDate endDate createdAt }",
+  "variables": {
+   "filters": {},
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetAppealQueue",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetAppealQueue($skip: Int, $take: Int) { appealQueue(skip: $skip, take: $take) { ...AppealFields } }\nfragment AppealFields on SeverityAppealModel { id adjudicationId reportId reportTitle raisedById raisedByUsername raisedBy grounds status assessorId assessorUsername decision decidedAt resultingAdjudicationId createdAt }",
+  "variables": {
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetBadgeCatalog",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetBadgeCatalog { badgeCatalog { id name slug description icon state awardedAt hidden progress { current threshold } } }",
+  "variables": {}
+ },
+ {
+  "name": "GetBillableInterventions",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetBillableInterventions($month: String) { billableInterventions(month: $month) { organizationName usage { ...InterventionUsageFields } interventions { id kind reportId reportTitle createdAt } } }\nfragment InterventionUsageFields on InterventionUsageModel { organizationId month subscriptionTier quota used remaining billable }",
+  "variables": {
+   "month": "bb-test"
+  }
+ },
+ {
+  "name": "GetCertificate",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetCertificate($reference: String!) { certificate(reference: $reference) { ...CertificateFields } }\nfragment CertificateFields on PayoutCertificateModel { id reference reportId adjudicationId organizationId researcherId researcherUsername reportTitle grossAmount withheldAmount netAmount currency status issuedAt appealClosesAt dueAt isOverdue researcherVerified paymentDueAt voidReason disputeClosesAt graderSide graderUsername criticalReviewOutcome settlement { id attestedById attestedByUsername method reference paidAt note withheldAmount withholdingReason disputedAt disputeReason createdAt proof { id fileName contentType fileSize fileAccess createdAt } } receipt { receivedAt amountReceived differenceReason onBehalf declaredAt confirmsAttestation } expectedAmount openAppealBy }",
+  "variables": {
+   "reference": "bb-test"
+  }
+ },
+ {
+  "name": "GetCertificateDocument",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetCertificateDocument($reference: String!) { certificateDocument(reference: $reference) { reference rendered signedDocument signature keyId signedAt isSigned publicToken retainedUntil signatureCovers } }",
+  "variables": {
+   "reference": "bb-test"
+  }
+ },
+ {
+  "name": "GetCertificateDocumentPdfUrl",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetCertificateDocumentPdfUrl($reference: String!) { certificateDocumentPdfUrl(reference: $reference) }",
+  "variables": {
+   "reference": "bb-test"
+  }
+ },
+ {
+  "name": "GetCriticalReviewQueue",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetCriticalReviewQueue($organizationId: ID, $skip: Int, $take: Int) { criticalReviewQueue(organizationId: $organizationId, skip: $skip, take: $take) { adjudicationId reportId reportTitle organizationId organizationName severity amount currency graderId graderUsername gradedAt reviewDueAt } }",
+  "variables": {
+   "organizationId": "841471b7-0bbb-4fa1-bd6e-bf0d365f945b",
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetDisputedSettlements",
+  "kind": "query",
+  "cls": "SKIP"
+ },
+ {
+  "name": "GetDownloadUrl",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetDownloadUrl($attachmentId: ID!) { downloadUrl(attachmentId: $attachmentId) }",
+  "variables": {
+   "attachmentId": "1a7c048c-f689-455d-9d8f-92bcb9459494"
+  }
+ },
+ {
+  "name": "GetEscalatedReports",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetEscalatedReports($skip: Int, $take: Int) { escalatedReports(skip: $skip, take: $take) { reportId title status claimedSeverity submittedAt triageDueAt programId programTitle organizationId organizationName } }",
+  "variables": {
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetInboundEmails",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetInboundEmails($skip: Int!, $take: Int!) { inboundEmails(skip: $skip, take: $take) { id fromAddress toAddress subject text receivedAt } }",
+  "variables": {
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetKycDocuments",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetKycDocuments($status: KycStatus, $userId: ID, $skip: Int, $take: Int) { kycDocuments(status: $status, userId: $userId, skip: $skip, take: $take) { id userId username email type s3Key contentType fileSize fileAccess scanStatus status reviewedById reviewedAt rejectionNote createdAt } }",
+  "variables": {
+   "status": "APPROVED",
+   "userId": "5efafdb8-e124-4ae9-ae6e-bcf139952ce0",
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetLapsedCriticalReviews",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetLapsedCriticalReviews($since: DateTime, $skip: Int, $take: Int) { lapsedCriticalReviews(since: $since, skip: $skip, take: $take) { reviewId adjudicationId reportId reportTitle organizationId organizationName severity amount currency graderId graderUsername gradedAt lapsedAt certificateReference } }",
+  "variables": {
+   "since": "PENDING",
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetLeaderboard",
+  "kind": "query",
+  "cls": "DATA",
+  "detail": "{\"leaderboard\":[]}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query GetLeaderboard($timeRange: String, $country: String, $limit: Int) { leaderboard(timeRange: $timeRange, country: $country, limit: $limit) { score rank username memberSince isAmbassador profile { id reputation level xp streak country avatarUrl } badges { id badgeId awardedAt } } }",
+  "variables": {
+   "timeRange": "bb-test",
+   "country": "bb-test",
+   "limit": 1
+  }
+ },
+ {
+  "name": "GetMyCertificates",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetMyCertificates { myCertificates { ...CertificateFields } }\nfragment CertificateFields on PayoutCertificateModel { id reference reportId adjudicationId organizationId researcherId researcherUsername reportTitle grossAmount withheldAmount netAmount currency status issuedAt appealClosesAt dueAt isOverdue researcherVerified paymentDueAt voidReason disputeClosesAt graderSide graderUsername criticalReviewOutcome settlement { id attestedById attestedByUsername method reference paidAt note withheldAmount withholdingReason disputedAt disputeReason createdAt proof { id fileName contentType fileSize fileAccess createdAt } } receipt { receivedAt amountReceived differenceReason onBehalf declaredAt confirmsAttestation } expectedAmount openAppealBy }",
+  "variables": {}
+ },
+ {
+  "name": "GetMyInvitedPrograms",
+  "kind": "query",
+  "cls": "SKIP"
+ },
+ {
+  "name": "GetMyKycDocuments",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetMyKycDocuments { myKycDocuments { id type s3Key contentType fileSize fileAccess status reviewedAt rejectionNote createdAt } }",
+  "variables": {}
+ },
+ {
+  "name": "GetMyKycStatus",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetMyKycStatus { myKycStatus { status approvedAt isComplete hasIdDocument hasProofOfAddress documents { id type status createdAt } } }",
+  "variables": {}
+ },
+ {
+  "name": "GetMyOrganizationInvitations",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetMyOrganizationInvitations { myOrganizationInvitations { id organizationId organizationName role token expiresAt createdAt refusal } }",
+  "variables": {}
+ },
+ {
+  "name": "GetMyOrganizations",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetMyOrganizations { myOrganizations { ...OrganizationFields viewerRole viewerActions members { id userId role joinedAt user { id username email } } createdAt } }\nfragment OrganizationFields on OrganizationModel { id name slug description website logoUrl industry country kycStatus subscriptionTier subscriptionExpiresAt aiTriageAccessEnabled aiGradingEnabled submissionsSuspendedAt createdAt updatedAt }",
+  "variables": {}
+ },
+ {
+  "name": "GetMyProfile",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetMyProfile { myProfile { ...ResearcherProfileFields } }\nfragment ResearcherProfileFields on ResearcherProfileModel { id userId reputation level xp totalEarned streak longestStreak bio website country avatarUrl lastActiveDate pgpKey }",
+  "variables": {}
+ },
+ {
+  "name": "GetMyPrograms",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetMyPrograms($skip: Int, $take: Int) { myPrograms(skip: $skip, take: $take) { ...ProgramCardFields } }\nfragment OrganizationSummaryFields on ProgramOrganizationModel { id name slug }\nfragment ProgramCardFields on ProgramModel { currency id organizationId organization { ...OrganizationSummaryFields } title slug description contentLocale scope rules status visibility rewardGrid rewardRange { min max currency } triageDeadlineBusinessDays startDate endDate createdAt }",
+  "variables": {
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetMySupportConversation",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetMySupportConversation { mySupportConversation { ...SupportConversationFields } }\nfragment SupportMessageFields on SupportMessageModel { id conversationId body author { id username } authorSide createdAt redactedAt attachments { id fileName contentType fileSize fileAccess } }\nfragment SupportConversationFields on SupportConversationModel { id userId user { id username email } status createdAt lastMessageAt closedAt unreadCount lastMessage { ...SupportMessageFields } }",
+  "variables": {}
+ },
+ {
+  "name": "GetMyWebAuthnCredentials",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetMyWebAuthnCredentials { myWebAuthnCredentials { id credentialId deviceName lastUsedAt createdAt } }",
+  "variables": {}
+ },
+ {
+  "name": "GetNotificationPreferences",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetNotificationPreferences { notificationPreferences { ...NotificationPreferenceFields } }\nfragment NotificationPreferenceFields on NotificationPreferenceModel { id emailReportStatus emailPayment emailDigest smsPayment smsSecurity inAppAll updatedAt }",
+  "variables": {}
+ },
+ {
+  "name": "GetNotifications",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetNotifications($skip: Int, $take: Int, $unreadOnly: Boolean) { notifications(skip: $skip, take: $take, unreadOnly: $unreadOnly) { id type title body data readAt createdAt } }",
+  "variables": {
+   "skip": 1,
+   "take": 1,
+   "unreadOnly": false
+  }
+ },
+ {
+  "name": "GetOrganization",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetOrganization($id: ID!) { organization(id: $id) { ...OrganizationFields } }\nfragment OrganizationFields on OrganizationModel { id name slug description website logoUrl industry country kycStatus subscriptionTier subscriptionExpiresAt aiTriageAccessEnabled aiGradingEnabled submissionsSuspendedAt createdAt updatedAt }",
+  "variables": {
+   "id": "b93c557e-8a79-436d-9816-90a712459192"
+  }
+ },
+ {
+  "name": "GetOrganizationCertificates",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetOrganizationCertificates($orgId: ID!, $status: CertificateStatus, $reportId: ID, $skip: Int, $take: Int) { organizationCertificates(orgId: $orgId, status: $status, reportId: $reportId, skip: $skip, take: $take) { ...CertificateFields } }\nfragment CertificateFields on PayoutCertificateModel { id reference reportId adjudicationId organizationId researcherId researcherUsername reportTitle grossAmount withheldAmount netAmount currency status issuedAt appealClosesAt dueAt isOverdue researcherVerified paymentDueAt voidReason disputeClosesAt graderSide graderUsername criticalReviewOutcome settlement { id attestedById attestedByUsername method reference paidAt note withheldAmount withholdingReason disputedAt disputeReason createdAt proof { id fileName contentType fileSize fileAccess createdAt } } receipt { receivedAt amountReceived differenceReason onBehalf declaredAt confirmsAttestation } expectedAmount openAppealBy }",
+  "variables": {
+   "orgId": "0e5ca293-ccd9-4112-886d-e3389dfcff29",
+   "status": "ATTESTED",
+   "reportId": "9e3b4db3-ffde-49b7-b96e-e795c32e7d31",
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetOrganizationInterventionUsage",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetOrganizationInterventionUsage($organizationId: ID!, $month: String) { organizationInterventionUsage(organizationId: $organizationId, month: $month) { ...InterventionUsageFields } }\nfragment InterventionUsageFields on InterventionUsageModel { organizationId month subscriptionTier quota used remaining billable }",
+  "variables": {
+   "organizationId": "958237cf-e444-4818-aa80-adbe05dfde2d",
+   "month": "bb-test"
+  }
+ },
+ {
+  "name": "GetOrganizationInvitations",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetOrganizationInvitations($organizationId: ID!) { organizationInvitations(organizationId: $organizationId) { id email role token expiresAt createdAt } }",
+  "variables": {
+   "organizationId": "5a106627-7c53-4765-976d-851054310381"
+  }
+ },
+ {
+  "name": "GetOrganizationMembers",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetOrganizationMembers($id: ID!) { organization(id: $id) { id name members { id role joinedAt user { id email username roles status } } } }",
+  "variables": {
+   "id": "d88e3c86-1bb8-482b-b7f5-95cc9005b4c1"
+  }
+ },
+ {
+  "name": "GetOrganizationStanding",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetOrganizationStanding($orgId: ID!) { organizationStanding(orgId: $orgId) { totalIssued totalSettled currentlyOverdue longestOverdueDays oldestOverdueSince overrideRate submissionsSuspended } }",
+  "variables": {
+   "orgId": "1184e1c4-f03e-4515-97dd-e7140b45ad93"
+  }
+ },
+ {
+  "name": "GetOrganizations",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetOrganizations($skip: Int, $take: Int, $search: String) { organizations(skip: $skip, take: $take, search: $search) { id name slug description industry country website kycStatus subscriptionTier subscriptionExpiresAt aiTriageAccessEnabled aiGradingEnabled submissionsSuspendedAt createdAt } }",
+  "variables": {
+   "skip": 1,
+   "take": 1,
+   "search": "bb-test"
+  }
+ },
+ {
+  "name": "GetOverdueCertificates",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetOverdueCertificates($organizationId: ID, $skip: Int, $take: Int) { overdueCertificates(organizationId: $organizationId, skip: $skip, take: $take) { ...CertificateFields } }\nfragment CertificateFields on PayoutCertificateModel { id reference reportId adjudicationId organizationId researcherId researcherUsername reportTitle grossAmount withheldAmount netAmount currency status issuedAt appealClosesAt dueAt isOverdue researcherVerified paymentDueAt voidReason disputeClosesAt graderSide graderUsername criticalReviewOutcome settlement { id attestedById attestedByUsername method reference paidAt note withheldAmount withholdingReason disputedAt disputeReason createdAt proof { id fileName contentType fileSize fileAccess createdAt } } receipt { receivedAt amountReceived differenceReason onBehalf declaredAt confirmsAttestation } expectedAmount openAppealBy }",
+  "variables": {
+   "organizationId": "8eb03090-49d7-4620-9f92-4696311e6294",
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetPayoutSummary",
+  "kind": "query",
+  "cls": "SKIP"
+ },
+ {
+  "name": "GetPendingKycDocuments",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetPendingKycDocuments($skip: Int, $take: Int) { pendingKycDocuments(skip: $skip, take: $take) { id userId username email type s3Key contentType fileSize fileAccess scanStatus status createdAt } }",
+  "variables": {
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetProgram",
+  "kind": "query",
+  "cls": "EMPTY",
+  "detail": "{\"program\":null}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query GetProgram($id: ID!) { program(id: $id) { ...ProgramDetailFields } }\nfragment OrganizationSummaryFields on ProgramOrganizationModel { id name slug }\nfragment ProgramCardFields on ProgramModel { currency id organizationId organization { ...OrganizationSummaryFields } title slug description contentLocale scope rules status visibility rewardGrid rewardRange { min max currency } triageDeadlineBusinessDays startDate endDate createdAt }\nfragment ProgramDetailFields on ProgramModel { currency ...ProgramCardFields outOfScope updatedAt sentBack { reason sentAt } }",
+  "variables": {
+   "id": "e51d1a64-a62d-4fdc-9394-7f09719f01f8"
+  }
+ },
+ {
+  "name": "GetProgramBySlug",
+  "kind": "query",
+  "cls": "NOT-FOUND",
+  "detail": "Program not found",
+  "trail": [
+   "stop:Program not found"
+  ],
+  "iters": 0,
+  "text": "query GetProgramBySlug($slug: String!) { programBySlug(slug: $slug) { ...ProgramDetailFields } }\nfragment OrganizationSummaryFields on ProgramOrganizationModel { id name slug }\nfragment ProgramCardFields on ProgramModel { currency id organizationId organization { ...OrganizationSummaryFields } title slug description contentLocale scope rules status visibility rewardGrid rewardRange { min max currency } triageDeadlineBusinessDays startDate endDate createdAt }\nfragment ProgramDetailFields on ProgramModel { currency ...ProgramCardFields outOfScope updatedAt sentBack { reason sentAt } }",
+  "variables": {
+   "slug": "bb-test"
+  }
+ },
+ {
+  "name": "GetProgramStats",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetProgramStats($programId: ID!) { programStats(programId: $programId) { totalReports reportsByStatus reportsBySeverity averageResolutionTime } }",
+  "variables": {
+   "programId": "26db0a60-e8ec-4acd-a339-e3eee99cf84b"
+  }
+ },
+ {
+  "name": "GetPrograms",
+  "kind": "query",
+  "cls": "DATA",
+  "detail": "{\"programs\":[]}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query GetPrograms($filters: ProgramFilterInput, $skip: Int, $take: Int) { programs(filters: $filters, skip: $skip, take: $take) { ...ProgramCardFields } }\nfragment OrganizationSummaryFields on ProgramOrganizationModel { id name slug }\nfragment ProgramCardFields on ProgramModel { currency id organizationId organization { ...OrganizationSummaryFields } title slug description contentLocale scope rules status visibility rewardGrid rewardRange { min max currency } triageDeadlineBusinessDays startDate endDate createdAt }",
+  "variables": {
+   "filters": {},
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetReport",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetReport($id: ID!) { report(id: $id) { id programId reporterId title description stepsToReproduce impact remediation claimedSeverity claimedCvssVector claimedCvssScore status assignedTriageId assignedTriage { id username } duplicateOfId createdAt updatedAt triageDueAt isOverdue awaitingGrade grade { severity side certifiedAmount currency } gridVersionId termsVersionId boundRewardGrid program { ...ReportProgramFields } reporter { id username } attachments { id fileName contentType fileSize scanStatus fileAccess createdAt } } }\nfragment ReportProgramFields on ReportProgramModel { id title slug }",
+  "variables": {
+   "id": "409c6f44-2ef5-47c8-8591-e27ad2804eff"
+  }
+ },
+ {
+  "name": "GetReportAdjudication",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetReportAdjudication($reportId: ID!) { reportAdjudication(reportId: $reportId) { ...AdjudicationFields } }\nfragment CriticalReviewFields on CriticalReviewModel { id adjudicationId outcome reviewerId supersedingAdjudicationId createdAt }\nfragment AdjudicationFields on AdjudicationModel { id reportId severity amount currency taxonomyId taxonomyVersion vrtNodeId vrtBaselinePriority deviationReason cvssVersion cvssVector cvssScore cweId amountBasis amountReason reasoning decisionVector assessorId assessorUsername side awaitingCriticalReview criticalReviewDueAt criticalReview { ...CriticalReviewFields } supersedesId createdAt }",
+  "variables": {
+   "reportId": "c8301733-1b45-4554-a395-4bea168ad595"
+  }
+ },
+ {
+  "name": "GetReportAppeals",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetReportAppeals($reportId: ID!) { reportAppeals(reportId: $reportId) { ...AppealFields } }\nfragment AppealFields on SeverityAppealModel { id adjudicationId reportId reportTitle raisedById raisedByUsername raisedBy grounds status assessorId assessorUsername decision decidedAt resultingAdjudicationId createdAt }",
+  "variables": {
+   "reportId": "13436315-606c-41b6-b754-aadd2177c7ee"
+  }
+ },
+ {
+  "name": "GetReportComments",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetReportComments($reportId: ID!) { reportComments(reportId: $reportId) { id reportId authorId authorUsername content isInternal createdAt } }",
+  "variables": {
+   "reportId": "39d2ce5b-b62c-4eec-8ac2-3e4445f7590d"
+  }
+ },
+ {
+  "name": "GetReportTransitions",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetReportTransitions($reportId: ID!) { reportTransitions(reportId: $reportId) { id fromStatus toStatus changedById changedByUsername reason createdAt } }",
+  "variables": {
+   "reportId": "2a33fee8-80c7-49cb-9eba-1bf66eea13bd"
+  }
+ },
+ {
+  "name": "GetReportTrends",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetReportTrends($orgId: ID!, $months: Int) { reportTrends(orgId: $orgId, months: $months) { date count status } }",
+  "variables": {
+   "orgId": "a34c7210-0dfb-4c49-a6d2-7962c6c14d26",
+   "months": 1
+  }
+ },
+ {
+  "name": "GetReports",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetReports($filters: ReportFilterInput, $skip: Int, $take: Int) { reports(filters: $filters, skip: $skip, take: $take) { id programId title claimedSeverity status createdAt triageDueAt isOverdue awaitingGrade grade { severity side certifiedAmount currency } disclosure { revision organizationApproved researcherApproved publishedAt } reporter { id username } assignedTriage { id username } program { ...ReportProgramFields } } }\nfragment ReportProgramFields on ReportProgramModel { id title slug }",
+  "variables": {
+   "filters": {},
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetResearcherActivity",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetResearcherActivity($userId: ID!, $months: Int) { researcherActivity(userId: $userId, months: $months) { date submissions validated } }",
+  "variables": {
+   "userId": "6fc5b366-da01-4bad-8a81-140aab761c66",
+   "months": 1
+  }
+ },
+ {
+  "name": "GetResearcherProfile",
+  "kind": "query",
+  "cls": "EMPTY",
+  "detail": "{\"researcherProfile\":null}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query GetResearcherProfile($userId: ID!) { researcherProfile(userId: $userId) { ...ResearcherProfileFields } }\nfragment ResearcherProfileFields on ResearcherProfileModel { id userId reputation level xp totalEarned streak longestStreak bio website country avatarUrl lastActiveDate pgpKey }",
+  "variables": {
+   "userId": "6366ec20-0b86-4c47-b2eb-d8d6504e114e"
+  }
+ },
+ {
+  "name": "GetResearcherPublicProfile",
+  "kind": "query",
+  "cls": "EMPTY",
+  "detail": "{\"researcherPublicProfile\":null}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query GetResearcherPublicProfile($username: String!) { researcherPublicProfile(username: $username) { id userId username memberSince isAmbassador reputation level xp streak longestStreak reportsSubmitted reportsAccepted badges { id name description icon awardedAt disclosurePath } bio website country avatarUrl } }",
+  "variables": {
+   "username": "bb-test"
+  }
+ },
+ {
+  "name": "GetResearcherStats",
+  "kind": "query",
+  "cls": "EMPTY",
+  "detail": "{\"researcherStats\":null}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query GetResearcherStats($userId: ID!) { researcherStats(userId: $userId) { totalReports validatedReports validationRate reportsBySeverity totalEarned currentStreak longestStreak } }",
+  "variables": {
+   "userId": "80d71c1e-ebb2-4921-b3f8-b000095d622a"
+  }
+ },
+ {
+  "name": "GetResearchers",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetResearchers($search: String, $kycStatus: KycStatus, $skip: Int, $take: Int) { researchers(search: $search, kycStatus: $kycStatus, skip: $skip, take: $take) { id username email kycStatus level reputation totalEarned createdAt } }",
+  "variables": {
+   "search": "bb-test",
+   "kycStatus": "APPROVED",
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetSettlementInstruction",
+  "kind": "query",
+  "cls": "SKIP"
+ },
+ {
+  "name": "GetSeverityDistribution",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetSeverityDistribution($orgId: ID!) { severityDistribution(orgId: $orgId) { severity count } }",
+  "variables": {
+   "orgId": "ec123261-44d8-4665-8185-87e58b269ce5"
+  }
+ },
+ {
+  "name": "GetStuckFiles",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetStuckFiles($olderThanMinutes: Int, $skip: Int, $take: Int) { stuckFiles(olderThanMinutes: $olderThanMinutes, skip: $skip, take: $take) { id purpose scanStatus contentType fileSize reportId userId attestationId supportConversationId uploadedAt ageMinutes rescansUsed maxRescans lastRescanAt } }",
+  "variables": {
+   "olderThanMinutes": 1,
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetSupportAttachmentUrl",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetSupportAttachmentUrl($attachmentId: ID!) { supportAttachmentUrl(attachmentId: $attachmentId) }",
+  "variables": {
+   "attachmentId": "85125ed7-4083-4641-9ab5-f8b0142e780e"
+  }
+ },
+ {
+  "name": "GetSupportConversationForUser",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetSupportConversationForUser($userId: ID!) { supportConversationForUser(userId: $userId) { ...SupportConversationFields } }\nfragment SupportMessageFields on SupportMessageModel { id conversationId body author { id username } authorSide createdAt redactedAt attachments { id fileName contentType fileSize fileAccess } }\nfragment SupportConversationFields on SupportConversationModel { id userId user { id username email } status createdAt lastMessageAt closedAt unreadCount lastMessage { ...SupportMessageFields } }",
+  "variables": {
+   "userId": "3d008aae-daa2-4df8-bd2e-d18ac80ab911"
+  }
+ },
+ {
+  "name": "GetSupportConversations",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetSupportConversations($filter: SupportConversationFilterInput, $cursor: String, $take: Int) { supportConversations(filter: $filter, cursor: $cursor, take: $take) { items { ...SupportConversationFields } nextCursor } }\nfragment SupportMessageFields on SupportMessageModel { id conversationId body author { id username } authorSide createdAt redactedAt attachments { id fileName contentType fileSize fileAccess } }\nfragment SupportConversationFields on SupportConversationModel { id userId user { id username email } status createdAt lastMessageAt closedAt unreadCount lastMessage { ...SupportMessageFields } }",
+  "variables": {
+   "filter": {},
+   "cursor": "bb-test",
+   "take": 1
+  }
+ },
+ {
+  "name": "GetSupportMessages",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetSupportMessages($conversationId: ID!, $before: String, $take: Int) { supportMessages(conversationId: $conversationId, before: $before, take: $take) { items { ...SupportMessageFields } nextCursor } }\nfragment SupportMessageFields on SupportMessageModel { id conversationId body author { id username } authorSide createdAt redactedAt attachments { id fileName contentType fileSize fileAccess } }",
+  "variables": {
+   "conversationId": "123fb844-c0e8-4c88-903e-2a402cea166b",
+   "before": "bb-test",
+   "take": 1
+  }
+ },
+ {
+  "name": "GetTermsDocument",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetTermsDocument($termsVersionId: ID!) { termsDocument(termsVersionId: $termsVersionId) { ...TermsDocumentFields } }\nfragment TermsDocumentFields on TermsDocument { id kind programId version body bodyDigest publishedAt }",
+  "variables": {
+   "termsVersionId": "b115acef-432d-44ec-9e52-84008166b823"
+  }
+ },
+ {
+  "name": "GetTermsVersions",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetTermsVersions($kind: TermsKind!, $programId: ID) { termsVersions(kind: $kind, programId: $programId) { ...TermsDocumentFields } }\nfragment TermsDocumentFields on TermsDocument { id kind programId version body bodyDigest publishedAt }",
+  "variables": {
+   "kind": "PLATFORM_ORGANIZATION",
+   "programId": "16ec9a74-03cd-4a6c-8bb9-db39d75010db"
+  }
+ },
+ {
+  "name": "GetUnreadNotificationCount",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query GetUnreadNotificationCount { unreadNotificationCount }",
+  "variables": {}
+ },
+ {
+  "name": "GithubLinkUrl",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation GithubLinkUrl($returnTo: String) { githubLinkUrl(returnTo: $returnTo) }",
+  "variables": {
+   "returnTo": "bb-test"
+  }
+ },
+ {
+  "name": "HasAcceptedPlatformTerms",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query HasAcceptedPlatformTerms($kind: TermsKind!) { hasAcceptedPlatformTerms(kind: $kind) }",
+  "variables": {
+   "kind": "PLATFORM_ORGANIZATION"
+  }
+ },
+ {
+  "name": "HasAcceptedProgrammeTerms",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query HasAcceptedProgrammeTerms($programId: ID!) { hasAcceptedProgrammeTerms(programId: $programId) }",
+  "variables": {
+   "programId": "2f60beeb-dc5e-40eb-b2f0-7978916a0ee4"
+  }
+ },
+ {
+  "name": "HasOrganizationAcceptedTerms",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query HasOrganizationAcceptedTerms($organizationId: ID!) { hasOrganizationAcceptedTerms(organizationId: $organizationId) }",
+  "variables": {
+   "organizationId": "927653c7-320f-480f-9b76-ef19285c9ddd"
+  }
+ },
+ {
+  "name": "InviteOrganizationMember",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "KycDocumentUrl",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query KycDocumentUrl($documentId: ID!) { kycDocumentUrl(documentId: $documentId) }",
+  "variables": {
+   "documentId": "872439cd-e0ba-4563-9ef8-c5c8d7b287b2"
+  }
+ },
+ {
+  "name": "MarkAllNotificationsAsRead",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation MarkAllNotificationsAsRead($clientRequestId: String) { markAllNotificationsAsRead(clientRequestId: $clientRequestId) }",
+  "variables": {
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "MarkEmailVerified",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "fill reason:String!",
+   "fill userId:ID!",
+   "stop:Unauthorized"
+  ],
+  "iters": 2,
+  "text": "mutation MarkEmailVerified($input: MarkEmailVerifiedInput!) { markEmailVerified(input: $input) { ...AdminUserFields } }\nfragment AdminUserFields on AdminUserModel { id email username roles status kycStatus emailVerified approvedAt rejectedAt rejectionReason isAmbassador twoFactorEnabled lastLogin createdAt organizationCount }",
+  "variables": {
+   "input": {
+    "reason": "bb-test",
+    "userId": "1384e379-be63-4c18-b602-f484033e4e31"
+   }
+  }
+ },
+ {
+  "name": "MarkNotificationAsRead",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation MarkNotificationAsRead($id: ID!, $clientRequestId: String) { markNotificationAsRead(id: $id, clientRequestId: $clientRequestId) }",
+  "variables": {
+   "id": "d7ef9165-a676-4d6c-b7e5-72a53a62e006",
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "MarkSupportConversationRead",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation MarkSupportConversationRead($conversationId: ID!) { markSupportConversationRead(conversationId: $conversationId) }",
+  "variables": {
+   "conversationId": "fad86657-9cd9-4acd-ae42-ce7bfad2be3a"
+  }
+ },
+ {
+  "name": "MyAgentApprovals",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query MyAgentApprovals($statuses: [AgentApprovalStatus!], $take: Int) { myAgentApprovals(statuses: $statuses, take: $take) { id status requiresStepUp createdAt expiresAt decidedAt consumedAt client { name } parts { index operation irreversible audience } } }",
+  "variables": {
+   "statuses": "APPROVED",
+   "take": 1
+  }
+ },
+ {
+  "name": "MyDiscordLink",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query MyDiscordLink { myDiscordLink { discordUsername linkedAt celebrateOptIn needsRelink } }",
+  "variables": {}
+ },
+ {
+  "name": "MyGithubLink",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query MyGithubLink { myGithubLink { githubLogin linkedAt mergedContributions } }",
+  "variables": {}
+ },
+ {
+  "name": "MyOAuthGrants",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query MyOAuthGrants { myOAuthGrants { id client { ...OAuthClientInfoFields } scopes resource createdAt lastUsedAt } }\nfragment OAuthClientInfoFields on OAuthClientInfo { clientId name uri verified redirectHost clientIdHost }",
+  "variables": {}
+ },
+ {
+  "name": "MyOnboarding",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query MyOnboarding { myOnboarding { steps { step done } dismissed } }",
+  "variables": {}
+ },
+ {
+  "name": "MyPayoutMethod",
+  "kind": "query",
+  "cls": "SKIP"
+ },
+ {
+  "name": "OAuthAuthorizationRequest",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query OAuthAuthorizationRequest($id: ID!) { oauthAuthorizationRequest(id: $id) { id client { ...OAuthClientInfoFields } resource requestedScopes { scope title description write } unavailableScopes { scope title description write } triageOrganizations { id name aiTriageAccessEnabled aiGradingEnabled } expiresAt } }\nfragment OAuthClientInfoFields on OAuthClientInfo { clientId name uri verified redirectHost clientIdHost }",
+  "variables": {
+   "id": "99385b9b-3e00-4008-aff4-01ef2eefb08d"
+  }
+ },
+ {
+  "name": "PlanBulkDeletion",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query PlanBulkDeletion($input: BulkDeletionInput!) { planBulkDeletion(input: $input) { ...BulkDeletionReportFields } }\nfragment BulkDeletionReportFields on BulkDeletionReport { executed hardDeleteCount tombstoneCount refusedCount deletableCount items { kind id label detail outcome refusal retained blockingOrganizationName message } }",
+  "variables": {
+   "input": {}
+  }
+ },
+ {
+  "name": "PresentPlatformTerms",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation PresentPlatformTerms($kind: TermsKind!) { presentPlatformTerms(kind: $kind) { presentationId expiresAt document { id version body bodyDigest publishedAt } } }",
+  "variables": {
+   "kind": "PLATFORM_ORGANIZATION"
+  }
+ },
+ {
+  "name": "PresentProgrammeTerms",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation PresentProgrammeTerms($programId: ID!) { presentProgrammeTerms(programId: $programId) { presentationId expiresAt document { id version body bodyDigest publishedAt } } }",
+  "variables": {
+   "programId": "c3c33a30-30e0-4415-8fa0-23882b8e4921"
+  }
+ },
+ {
+  "name": "PreviewGrade",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "fill cvssVector:String!",
+   "fill reportId:ID!",
+   "fill severity:SeverityLevel!",
+   "fill vrtNodeId:String!",
+   "stop:Unauthorized"
+  ],
+  "iters": 4,
+  "text": "query PreviewGrade($input: PreviewGradeInput!) { previewGrade(input: $input) { reportId side severity currency gridVersionId gridVersion cvssScore impliedSeverity band { min max } payable derivedAmount amount amountBasis deadlineTakeover awaitingCriticalReview certificateWouldIssue reasoningChecked refusal { code message } } }",
+  "variables": {
+   "input": {
+    "cvssVector": "bb-test",
+    "reportId": "d0e84a3c-258b-440d-9493-c4de37c71dda",
+    "severity": "CRITICAL",
+    "vrtNodeId": "bb-test"
+   }
+  }
+ },
+ {
+  "name": "PublicProgramActivity",
+  "kind": "query",
+  "cls": "NOT-FOUND",
+  "detail": "Public program not found",
+  "trail": [
+   "stop:Public program not found"
+  ],
+  "iters": 0,
+  "text": "query PublicProgramActivity($slug: String!, $cursor: String) { publicProgramActivity(slug: $slug, cursor: $cursor) { overview { total lastWeek averageCertifiedReward rewardSampleSize confirmedSettlements hallOfFame { username isAmbassador contributions } programTotals { certificatesIssued receiptsConfirmed } } disclosures { id title summary writeup publishedAt username severity certifiedReward settlement } nextCursor } }",
+  "variables": {
+   "slug": "bb-test",
+   "cursor": "bb-test"
+  }
+ },
+ {
+  "name": "PublishRewardGrid",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "fill grid:JSON!",
+   "fill programId:String!",
+   "stop:Unauthorized"
+  ],
+  "iters": 2,
+  "text": "mutation PublishRewardGrid($input: PublishRewardGridInput!) { publishRewardGrid(input: $input) }",
+  "variables": {
+   "input": {
+    "grid": "PENDING",
+    "programId": "bb-test"
+   }
+  }
+ },
+ {
+  "name": "PublishTerms",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "fill body:String!",
+   "fill kind:TermsKind!",
+   "stop:Unauthorized"
+  ],
+  "iters": 2,
+  "text": "mutation PublishTerms($input: PublishTermsInput!) { publishTerms(input: $input) }",
+  "variables": {
+   "input": {
+    "body": "bb-test",
+    "kind": "PLATFORM_ORGANIZATION"
+   }
+  }
+ },
+ {
+  "name": "RaiseAppeal",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "fill adjudicationId:String!",
+   "fill grounds:String!",
+   "stop:Unauthorized"
+  ],
+  "iters": 2,
+  "text": "mutation RaiseAppeal($input: RaiseAppealInput!, $clientRequestId: String) { raiseAppeal(input: $input, clientRequestId: $clientRequestId) { id adjudicationId status createdAt } }",
+  "variables": {
+   "input": {
+    "adjudicationId": "bb-test",
+    "grounds": "bb-test"
+   },
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "RedactSupportMessage",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation RedactSupportMessage($messageId: ID!, $reason: String!, $clientRequestId: String) { redactSupportMessage(messageId: $messageId, reason: $reason, clientRequestId: $clientRequestId) { ...SupportMessageFields } }\nfragment SupportMessageFields on SupportMessageModel { id conversationId body author { id username } authorSide createdAt redactedAt attachments { id fileName contentType fileSize fileAccess } }",
+  "variables": {
+   "messageId": "59f74622-ce9b-4c1f-8d4e-4f20ffd054e7",
+   "reason": "bb-test",
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "RejectSettlementClaim",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "RejectUser",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "fill reason:String!",
+   "fill userId:ID!",
+   "stop:Unauthorized"
+  ],
+  "iters": 2,
+  "text": "mutation RejectUser($input: RejectUserInput!) { rejectUser(input: $input) { ...AdminUserFields } }\nfragment AdminUserFields on AdminUserModel { id email username roles status kycStatus emailVerified approvedAt rejectedAt rejectionReason isAmbassador twoFactorEnabled lastLogin createdAt organizationCount }",
+  "variables": {
+   "input": {
+    "reason": "bb-test",
+    "userId": "ad1ddeb4-497b-4e92-a8d3-f3be34456642"
+   }
+  }
+ },
+ {
+  "name": "RemoveOrganizationMember",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation RemoveOrganizationMember($organizationId: ID!, $memberId: ID!) { removeOrganizationMember(organizationId: $organizationId, memberId: $memberId) }",
+  "variables": {
+   "organizationId": "522215ba-f884-49d2-ad1d-f1dfd4eac364",
+   "memberId": "0fbf2a57-cdf9-472f-8068-d926c923b167"
+  }
+ },
+ {
+  "name": "RemoveTotpViaToken",
+  "kind": "mutation",
+  "cls": "DATA",
+  "detail": "{\"removeTotpViaToken\":false}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "mutation RemoveTotpViaToken($token: String!) { removeTotpViaToken(token: $token) }",
+  "variables": {
+   "token": "bb-test"
+  }
+ },
+ {
+  "name": "RemoveWebAuthnCredential",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation RemoveWebAuthnCredential($credentialId: String!) { removeWebAuthnCredential(credentialId: $credentialId) }",
+  "variables": {
+   "credentialId": "bb-test"
+  }
+ },
+ {
+  "name": "ReopenSupportConversation",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation ReopenSupportConversation($conversationId: ID!) { reopenSupportConversation(conversationId: $conversationId) }",
+  "variables": {
+   "conversationId": "d3678064-a423-4356-9511-0ada6f4a8cdb"
+  }
+ },
+ {
+  "name": "ReplaceSettlementProof",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "ReportDisclosureDraft",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query ReportDisclosureDraft($reportId: String!) { reportDisclosureDraft(reportId: $reportId) { ...DisclosureDraftStateFields } }\nfragment DisclosureDraftStateFields on DisclosureDraftStateModel { side draft { severity certifiedReward revision title summary writeup creditResearcher organizationApproved researcherApproved publishedAt isPublic } }",
+  "variables": {
+   "reportId": "bb-test"
+  }
+ },
+ {
+  "name": "RequestEmailChange",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "fill currentPassword:String!",
+   "fill newEmail:String!",
+   "stop:Unauthorized"
+  ],
+  "iters": 2,
+  "text": "mutation RequestEmailChange($input: RequestEmailChangeInput!) { requestEmailChange(input: $input) }",
+  "variables": {
+   "input": {
+    "currentPassword": "bb-test",
+    "newEmail": "bb-test"
+   }
+  }
+ },
+ {
+  "name": "RequestUploadUrl",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "fill fileName:String!",
+   "fill fileSize:Int!",
+   "fill mimeType:String!",
+   "stop:Unauthorized"
+  ],
+  "iters": 3,
+  "text": "mutation RequestUploadUrl($input: RequestUploadUrlInput!) { requestUploadUrl(input: $input) { uploadUrl s3Key } }",
+  "variables": {
+   "input": {
+    "fileName": "bb-test",
+    "fileSize": 1,
+    "mimeType": "bb-test"
+   }
+  }
+ },
+ {
+  "name": "RequeueFileVerification",
+  "kind": "mutation",
+  "cls": "NOT-FOUND",
+  "detail": "Variable \"$purpose\" got invalid value \"PENDING\"; Value \"PENDING\" does not exist in \"UploadPurpose\" enum.",
+  "trail": [
+   "stop:Variable \"$purpose\" got invalid value \"PENDING\"; Value \"PEND"
+  ],
+  "iters": 0,
+  "text": "mutation RequeueFileVerification($purpose: UploadPurpose!, $fileId: ID!) { requeueFileVerification(purpose: $purpose, fileId: $fileId) { id purpose scanStatus round rescanRequested } }",
+  "variables": {
+   "purpose": "PENDING",
+   "fileId": "65be943c-8913-4c17-b185-003970b61e80"
+  }
+ },
+ {
+  "name": "ResendVerificationEmail",
+  "kind": "mutation",
+  "cls": "OTHER",
+  "detail": "Human verification failed",
+  "trail": [
+   "stop:Human verification failed"
+  ],
+  "iters": 0,
+  "text": "mutation ResendVerificationEmail($email: String!, $captchaToken: String, $next: String) { resendVerificationEmail(email: $email, captchaToken: $captchaToken, next: $next) }",
+  "variables": {
+   "email": "bb-test",
+   "captchaToken": "bb-test",
+   "next": "bb-test"
+  }
+ },
+ {
+  "name": "ResetPassword",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "ResetUserTwoFactor",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "fill reason:String!",
+   "fill userId:ID!",
+   "stop:Unauthorized"
+  ],
+  "iters": 2,
+  "text": "mutation ResetUserTwoFactor($input: ResetUserTwoFactorInput!) { resetUserTwoFactor(input: $input) { ...AdminUserFields } }\nfragment AdminUserFields on AdminUserModel { id email username roles status kycStatus emailVerified approvedAt rejectedAt rejectionReason isAmbassador twoFactorEnabled lastLogin createdAt organizationCount }",
+  "variables": {
+   "input": {
+    "reason": "bb-test",
+    "userId": "b5566fa4-a19d-4aa8-bedf-c4acda6b27f4"
+   }
+  }
+ },
+ {
+  "name": "ReviewCriticalGrade",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "fill adjudicationId:String!",
+   "fill outcome:CriticalReviewOutcome!",
+   "stop:Unauthorized"
+  ],
+  "iters": 2,
+  "text": "mutation ReviewCriticalGrade($input: ReviewCriticalGradeInput!) { reviewCriticalGrade(input: $input) { ...AdjudicationFields } }\nfragment CriticalReviewFields on CriticalReviewModel { id adjudicationId outcome reviewerId supersedingAdjudicationId createdAt }\nfragment AdjudicationFields on AdjudicationModel { id reportId severity amount currency taxonomyId taxonomyVersion vrtNodeId vrtBaselinePriority deviationReason cvssVersion cvssVector cvssScore cweId amountBasis amountReason reasoning decisionVector assessorId assessorUsername side awaitingCriticalReview criticalReviewDueAt criticalReview { ...CriticalReviewFields } supersedesId createdAt }",
+  "variables": {
+   "input": {
+    "adjudicationId": "bb-test",
+    "outcome": "CHANGED"
+   }
+  }
+ },
+ {
+  "name": "ReviewKycDocument",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "fill documentId:ID!",
+   "fill status:KycStatus!",
+   "stop:Unauthorized"
+  ],
+  "iters": 2,
+  "text": "mutation ReviewKycDocument($input: ReviewKycDocumentInput!) { reviewKycDocument(input: $input) { id status reviewedAt rejectionNote } }",
+  "variables": {
+   "input": {
+    "documentId": "03a8137f-28e0-4e01-b0a9-b5e653f054fc",
+    "status": "APPROVED"
+   }
+  }
+ },
+ {
+  "name": "RevokeCertificateShare",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation RevokeCertificateShare($certificateId: ID!) { revokeCertificateShare(certificateId: $certificateId) }",
+  "variables": {
+   "certificateId": "a777e699-37a6-46b7-9a41-9793cc4e81d9"
+  }
+ },
+ {
+  "name": "RevokeOAuthGrant",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "RevokeOrganizationInvitation",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation RevokeOrganizationInvitation($organizationId: ID!, $invitationId: ID!) { revokeOrganizationInvitation(organizationId: $organizationId, invitationId: $invitationId) }",
+  "variables": {
+   "organizationId": "eae8d80f-e8f3-4e6a-a513-f74a9e3fc779",
+   "invitationId": "c2d9b817-9db5-4a2c-aadb-254310ee8c2a"
+  }
+ },
+ {
+  "name": "RevokeStaffBadge",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "fill badgeSlug:String!",
+   "fill reason:String!",
+   "fill userId:ID!",
+   "stop:Unauthorized"
+  ],
+  "iters": 3,
+  "text": "mutation RevokeStaffBadge($input: RevokeStaffBadgeInput!) { revokeStaffBadge(input: $input) }",
+  "variables": {
+   "input": {
+    "badgeSlug": "bb-test",
+    "reason": "bb-test",
+    "userId": "144f8e4b-e95e-4219-8f6f-8c5e233aaca9"
+   }
+  }
+ },
+ {
+  "name": "SaveReportDisclosure",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "fill creditResearcher:Boolean!",
+   "fill reportId:String!",
+   "fill revision:Int!",
+   "fill summary:String!",
+   "fill title:String!",
+   "fill writeup:String!",
+   "stop:Unauthorized"
+  ],
+  "iters": 6,
+  "text": "mutation SaveReportDisclosure($input: SaveDisclosureInput!, $clientRequestId: String) { saveReportDisclosure(input: $input, clientRequestId: $clientRequestId) { ...DisclosureDraftStateFields } }\nfragment DisclosureDraftStateFields on DisclosureDraftStateModel { side draft { severity certifiedReward revision title summary writeup creditResearcher organizationApproved researcherApproved publishedAt isPublic } }",
+  "variables": {
+   "input": {
+    "creditResearcher": false,
+    "reportId": "bb-test",
+    "revision": 1,
+    "summary": "bb-test",
+    "title": "bb-test",
+    "writeup": "bb-test"
+   },
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "Search",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query Search($query: String!, $types: [String!], $limit: Int, $offset: Int) { search(query: $query, types: $types, limit: $limit, offset: $offset) { id type title highlight rank slug status contentLocale } }",
+  "variables": {
+   "query": "bb-test",
+   "types": "bb-test",
+   "limit": 1,
+   "offset": 1
+  }
+ },
+ {
+  "name": "SendProgramBackToDraft",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation SendProgramBackToDraft($id: ID!, $reason: String!) { sendProgramBackToDraft(id: $id, reason: $reason) { ...ProgramDetailFields } }\nfragment OrganizationSummaryFields on ProgramOrganizationModel { id name slug }\nfragment ProgramCardFields on ProgramModel { currency id organizationId organization { ...OrganizationSummaryFields } title slug description contentLocale scope rules status visibility rewardGrid rewardRange { min max currency } triageDeadlineBusinessDays startDate endDate createdAt }\nfragment ProgramDetailFields on ProgramModel { currency ...ProgramCardFields outOfScope updatedAt sentBack { reason sentAt } }",
+  "variables": {
+   "id": "6da12c77-359d-4a2e-b94f-5180b0691e85",
+   "reason": "bb-test"
+  }
+ },
+ {
+  "name": "SendSupportMessage",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation SendSupportMessage($conversationId: ID!, $body: String, $attachmentKeys: [String!], $clientRequestId: String) { sendSupportMessage(conversationId: $conversationId, body: $body, attachmentKeys: $attachmentKeys, clientRequestId: $clientRequestId) { ...SupportMessageFields } }\nfragment SupportMessageFields on SupportMessageModel { id conversationId body author { id username } authorSide createdAt redactedAt attachments { id fileName contentType fileSize fileAccess } }",
+  "variables": {
+   "conversationId": "9ccc9d5a-b552-4d65-8973-6e8f6b4aa083",
+   "body": "bb-test",
+   "attachmentKeys": "bb-test",
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "SetAmbassador",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "fill isAmbassador:Boolean!",
+   "fill userId:ID!",
+   "stop:Unauthorized"
+  ],
+  "iters": 2,
+  "text": "mutation SetAmbassador($input: SetAmbassadorInput!) { setAmbassador(input: $input) { ...AdminUserFields } }\nfragment AdminUserFields on AdminUserModel { id email username roles status kycStatus emailVerified approvedAt rejectedAt rejectionReason isAmbassador twoFactorEnabled lastLogin createdAt organizationCount }",
+  "variables": {
+   "input": {
+    "isAmbassador": false,
+    "userId": "8013c084-b7c6-4e12-8343-44bafa6bd6ed"
+   }
+  }
+ },
+ {
+  "name": "SetDiscordCelebration",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation SetDiscordCelebration($optIn: Boolean!) { setDiscordCelebration(optIn: $optIn) { discordUsername linkedAt celebrateOptIn needsRelink } }",
+  "variables": {
+   "optIn": false
+  }
+ },
+ {
+  "name": "SetOrganizationAiGrading",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation SetOrganizationAiGrading($organizationId: ID!, $enabled: Boolean!) { setOrganizationAiGrading(organizationId: $organizationId, enabled: $enabled) { ...OrganizationFields } }\nfragment OrganizationFields on OrganizationModel { id name slug description website logoUrl industry country kycStatus subscriptionTier subscriptionExpiresAt aiTriageAccessEnabled aiGradingEnabled submissionsSuspendedAt createdAt updatedAt }",
+  "variables": {
+   "organizationId": "91cc506c-65c0-40e3-9f4e-c765359729d6",
+   "enabled": false
+  }
+ },
+ {
+  "name": "SetOrganizationAiTriageAccess",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation SetOrganizationAiTriageAccess($organizationId: ID!, $enabled: Boolean!) { setOrganizationAiTriageAccess(organizationId: $organizationId, enabled: $enabled) { ...OrganizationFields } }\nfragment OrganizationFields on OrganizationModel { id name slug description website logoUrl industry country kycStatus subscriptionTier subscriptionExpiresAt aiTriageAccessEnabled aiGradingEnabled submissionsSuspendedAt createdAt updatedAt }",
+  "variables": {
+   "organizationId": "d744c7fc-20d5-470f-85e8-87348c6a5f46",
+   "enabled": false
+  }
+ },
+ {
+  "name": "SetOrganizationSubmissionsSuspended",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "fill organizationId:ID!",
+   "fill reason:String!",
+   "fill suspended:Boolean!",
+   "stop:Unauthorized"
+  ],
+  "iters": 3,
+  "text": "mutation SetOrganizationSubmissionsSuspended($input: SetOrganizationSubmissionsSuspendedInput!) { setOrganizationSubmissionsSuspended(input: $input) { ...OrganizationFields } }\nfragment OrganizationFields on OrganizationModel { id name slug description website logoUrl industry country kycStatus subscriptionTier subscriptionExpiresAt aiTriageAccessEnabled aiGradingEnabled submissionsSuspendedAt createdAt updatedAt }",
+  "variables": {
+   "input": {
+    "organizationId": "8f6828a9-21d3-4d2e-bb65-072feb2718e0",
+    "reason": "bb-test",
+    "suspended": false
+   }
+  }
+ },
+ {
+  "name": "SetResearcherPayoutMethod",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "SetUserRoles",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "fill roles:[BountyUserRole!]!",
+   "fill userId:ID!",
+   "stop:Unauthorized"
+  ],
+  "iters": 2,
+  "text": "mutation SetUserRoles($input: SetUserRolesInput!) { setUserRoles(input: $input) { ...AdminUserFields } }\nfragment AdminUserFields on AdminUserModel { id email username roles status kycStatus emailVerified approvedAt rejectedAt rejectionReason isAmbassador twoFactorEnabled lastLogin createdAt organizationCount }",
+  "variables": {
+   "input": {
+    "roles": "COMPANY_ADMIN",
+    "userId": "334abc59-2c8b-46e7-a143-886b69bb22c6"
+   }
+  }
+ },
+ {
+  "name": "SetUserStatus",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "fill status:UserStatus!",
+   "fill userId:ID!",
+   "stop:Unauthorized"
+  ],
+  "iters": 2,
+  "text": "mutation SetUserStatus($input: SetUserStatusInput!) { setUserStatus(input: $input) { ...AdminUserFields } }\nfragment AdminUserFields on AdminUserModel { id email username roles status kycStatus emailVerified approvedAt rejectedAt rejectionReason isAmbassador twoFactorEnabled lastLogin createdAt organizationCount }",
+  "variables": {
+   "input": {
+    "status": "ACTIVE",
+    "userId": "1762c6f3-08a0-4966-9ea4-36c530796e4f"
+   }
+  }
+ },
+ {
+  "name": "SettlementProofUrl",
+  "kind": "query",
+  "cls": "SKIP"
+ },
+ {
+  "name": "ShareCertificate",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation ShareCertificate($certificateId: ID!, $showAmount: Boolean!) { shareCertificate(certificateId: $certificateId, showAmount: $showAmount) { certificateId token showAmount active } }",
+  "variables": {
+   "certificateId": "c3657b2d-86ad-4fd1-8221-1f0c6c1c70bd",
+   "showAmount": false
+  }
+ },
+ {
+  "name": "SharedFinding",
+  "kind": "query",
+  "cls": "EMPTY",
+  "detail": "{\"sharedFinding\":null}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query SharedFinding($token: String!) { sharedFinding(token: $token) { researcherUsername researcherAvatarUrl severity cvssScore category categoryGroup cweId paidOn amount currency programTitle programSlug } }",
+  "variables": {
+   "token": "bb-test"
+  }
+ },
+ {
+  "name": "StartSupportConversation",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation StartSupportConversation($userId: ID!, $clientRequestId: String) { startSupportConversation(userId: $userId, clientRequestId: $clientRequestId) { ...SupportConversationFields } }\nfragment SupportMessageFields on SupportMessageModel { id conversationId body author { id username } authorSide createdAt redactedAt attachments { id fileName contentType fileSize fileAccess } }\nfragment SupportConversationFields on SupportConversationModel { id userId user { id username email } status createdAt lastMessageAt closedAt unreadCount lastMessage { ...SupportMessageFields } }",
+  "variables": {
+   "userId": "9f883f3c-8b03-4784-b5da-f2bd733f8a12",
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "SubmitKycDocument",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "fill s3Key:String!",
+   "fill type:String!",
+   "stop:Unauthorized"
+  ],
+  "iters": 2,
+  "text": "mutation SubmitKycDocument($input: SubmitKycDocumentInput!) { submitKycDocument(input: $input) { id type status createdAt contentType fileAccess } }",
+  "variables": {
+   "input": {
+    "s3Key": "bb-test",
+    "type": "bb-test"
+   }
+  }
+ },
+ {
+  "name": "SubmitReport",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "fill description:String!",
+   "fill impact:String!",
+   "fill programId:String!",
+   "fill severity:SeverityLevel!",
+   "fill stepsToReproduce:String!",
+   "fill title:String!",
+   "stop:Unauthorized"
+  ],
+  "iters": 6,
+  "text": "mutation SubmitReport($input: SubmitReportInput!, $clientRequestId: String) { submitReport(input: $input, clientRequestId: $clientRequestId) { id title status claimedSeverity createdAt } }",
+  "variables": {
+   "input": {
+    "description": "bb-test",
+    "impact": "bb-test",
+    "programId": "bb-test",
+    "severity": "CRITICAL",
+    "stepsToReproduce": "bb-test",
+    "title": "bb-test"
+   },
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "TaxonomyProfile",
+  "kind": "query",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "query TaxonomyProfile { taxonomyProfile { taxonomyId taxonomyVersion releaseAt nodes { id name priority cvssVector cweId } } }",
+  "variables": {}
+ },
+ {
+  "name": "TransitionProgramStatus",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation TransitionProgramStatus($id: ID!, $status: ProgramStatus!, $reason: String) { transitionProgramStatus(id: $id, status: $status, reason: $reason) { id status } }",
+  "variables": {
+   "id": "b804b4c1-b6fd-4851-877d-fdcd373ffd1a",
+   "status": "ACTIVE",
+   "reason": "bb-test"
+  }
+ },
+ {
+  "name": "UnlinkDiscord",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation UnlinkDiscord { unlinkDiscord }",
+  "variables": {}
+ },
+ {
+  "name": "UnlinkGithub",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation UnlinkGithub { unlinkGithub }",
+  "variables": {}
+ },
+ {
+  "name": "UpdateNotificationPreferences",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation UpdateNotificationPreferences($input: UpdateNotificationPreferencesInput!) { updateNotificationPreferences(input: $input) { ...NotificationPreferenceFields } }\nfragment NotificationPreferenceFields on NotificationPreferenceModel { id emailReportStatus emailPayment emailDigest smsPayment smsSecurity inAppAll updatedAt }",
+  "variables": {
+   "input": {}
+  }
+ },
+ {
+  "name": "UpdateOrganization",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation UpdateOrganization($id: ID!, $input: UpdateOrganizationInput!) { updateOrganization(id: $id, input: $input) { ...OrganizationFields } }\nfragment OrganizationFields on OrganizationModel { id name slug description website logoUrl industry country kycStatus subscriptionTier subscriptionExpiresAt aiTriageAccessEnabled aiGradingEnabled submissionsSuspendedAt createdAt updatedAt }",
+  "variables": {
+   "id": "0141a6f5-d64b-49ea-98b5-af0b828d08a5",
+   "input": {}
+  }
+ },
+ {
+  "name": "UpdateProgram",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation UpdateProgram($id: ID!, $input: UpdateProgramInput!) { updateProgram(id: $id, input: $input) { id title slug status updatedAt } }",
+  "variables": {
+   "id": "ea6dd8ff-53c7-4d60-9704-1faf0bbb0d49",
+   "input": {}
+  }
+ },
+ {
+  "name": "UpdateReportStatus",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "fill reportId:String!",
+   "fill status:ReportStatus!",
+   "stop:Unauthorized"
+  ],
+  "iters": 2,
+  "text": "mutation UpdateReportStatus($input: UpdateReportStatusInput!, $clientRequestId: String) { updateReportStatus(input: $input, clientRequestId: $clientRequestId) { id status } }",
+  "variables": {
+   "input": {
+    "reportId": "bb-test",
+    "status": "CLOSED"
+   },
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "UpdateResearcherProfile",
+  "kind": "mutation",
+  "cls": "UNAUTH",
+  "detail": "",
+  "trail": [
+   "stop:Unauthorized"
+  ],
+  "iters": 0,
+  "text": "mutation UpdateResearcherProfile($input: UpdateResearcherProfileInput!, $clientRequestId: String) { updateResearcherProfile(input: $input, clientRequestId: $clientRequestId) { id userId bio website country avatarUrl reputation level xp } }",
+  "variables": {
+   "input": {},
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "Verify2fa",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "VerifyCertificate",
+  "kind": "query",
+  "cls": "EMPTY",
+  "detail": "{\"verifyCertificate\":null}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query VerifyCertificate($publicToken: String!) { verifyCertificate(publicToken: $publicToken) { reference document signature keyId signedAt isSigned status documentVersion } }",
+  "variables": {
+   "publicToken": "bb-test"
+  }
+ },
+ {
+  "name": "VerifyEmail",
+  "kind": "mutation",
+  "cls": "DATA",
+  "detail": "{\"verifyEmail\":\"INVALID\"}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "mutation VerifyEmail($token: String!) { verifyEmail(token: $token) }",
+  "variables": {
+   "token": "bb-test"
+  }
+ }
+]

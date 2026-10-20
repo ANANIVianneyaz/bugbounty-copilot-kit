@@ -1,0 +1,28 @@
+=== 1) protocole MCP sans authentification ===
+  initialize                                    HTTP 401  WWW-Auth: Bearer scope="programs:read profile:read reports:read report {"error":"unauthorized"}
+  tools/list                                    HTTP 401  WWW-Auth: Bearer scope="programs:read profile:read reports:read report {"error":"unauthorized"}
+  prompts/list                                  HTTP 401  WWW-Auth: Bearer scope="programs:read profile:read reports:read report {"error":"unauthorized"}
+  resources/list                                HTTP 401  WWW-Auth: Bearer scope="programs:read profile:read reports:read report {"error":"unauthorized"}
+  resources/templates/list                      HTTP 401  WWW-Auth: Bearer scope="programs:read profile:read reports:read report {"error":"unauthorized"}
+  tools/call (search_programs)                  HTTP 401  WWW-Auth: Bearer scope="programs:read profile:read reports:read report {"error":"unauthorized"}
+
+=== 2) forger un jeton avec la bonne audience (aud=MCP) ===
+  initialize + jeton forge (aud=MCP, sig invalide)HTTP 401  WWW-Auth: Bearer error="invalid_token", error_description="token faile {"error":"invalid_token","error_description":"token failed validation"}
+  tools/list + jeton forge                      HTTP 401  WWW-Auth: Bearer error="invalid_token", error_description="token faile {"error":"invalid_token","error_description":"token failed validation"}
+
+=== 3) enforcement de l audience : un jeton API (aud=API) est-il accepte par le MCP ? ===
+  tools/list + jeton forge aud=API              HTTP 401  WWW-Auth: Bearer error="invalid_token", error_description="token faile {"error":"invalid_token","error_description":"token failed validation"}
+
+=== 4) en-tetes / CORS / Origin ===
+  Origin=https://evil.example          HTTP 403  ACAO=-  ACAC=-
+  Origin=https://bugsecure.senintel.sn HTTP 403  ACAO=-  ACAC=-
+  Origin=null                          HTTP 403  ACAO=-  ACAC=-
+  Origin=https://localhost:3000        HTTP 403  ACAO=-  ACAC=-
+
+=== 5) methodes HTTP et chemins voisins ===
+  GET    /mcp                                      HTTP 405  {"error":"method_not_allowed"}
+  DELETE /mcp                                      HTTP 405  {"error":"method_not_allowed"}
+  PUT    /mcp                                      HTTP 405  {"error":"method_not_allowed"}
+  POST   /                                         HTTP 404  {"error":"not_found"}
+  POST   /mcp/                                     HTTP 404  {"error":"not_found"}
+  GET    /.well-known/oauth-protected-resource/mcp HTTP 200  {"resource":"https://bugsecure-mcp.senintel.sn/mcp","authorization_servers":["https://bugs

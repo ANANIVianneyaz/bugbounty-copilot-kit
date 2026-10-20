@@ -1,0 +1,107 @@
+[
+ {
+  "name": "AcceptOrganizationInvitation",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "AcceptPlatformTerms",
+  "kind": "mutation",
+  "cls": "TOKEN-DEAD",
+  "detail": "Access has been revoked",
+  "trail": [
+   "fill bodyDigest:String!",
+   "fill presentationId:ID!",
+   "stop:Access has been revoked"
+  ],
+  "iters": 2,
+  "text": "mutation AcceptPlatformTerms($input: AcceptProgrammeTermsInput!) { acceptPlatformTerms(input: $input) }",
+  "variables": {
+   "input": {
+    "bodyDigest": "bb-test",
+    "presentationId": "f6cbd4b0-8294-422e-9841-8342662ed8c3"
+   }
+  }
+ },
+ {
+  "name": "AcceptProgrammeTerms",
+  "kind": "mutation",
+  "cls": "TOKEN-DEAD",
+  "detail": "Access has been revoked",
+  "trail": [
+   "fill bodyDigest:String!",
+   "fill presentationId:ID!",
+   "stop:Access has been revoked"
+  ],
+  "iters": 2,
+  "text": "mutation AcceptProgrammeTerms($input: AcceptProgrammeTermsInput!) { acceptProgrammeTerms(input: $input) }",
+  "variables": {
+   "input": {
+    "bodyDigest": "bb-test",
+    "presentationId": "aa914e3d-23d0-4480-8895-d7ca027fa9be"
+   }
+  }
+ },
+ {
+  "name": "AddReportComment",
+  "kind": "mutation",
+  "cls": "TOKEN-DEAD",
+  "detail": "Access has been revoked",
+  "trail": [
+   "fill content:String!",
+   "fill reportId:String!",
+   "stop:Access has been revoked"
+  ],
+  "iters": 2,
+  "text": "mutation AddReportComment($input: AddCommentInput!, $clientRequestId: String) { addReportComment(input: $input, clientRequestId: $clientRequestId) { id reportId content isInternal createdAt } }",
+  "variables": {
+   "input": {
+    "content": "bb-test",
+    "reportId": "bb-test"
+   },
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "AdjudicateReport",
+  "kind": "mutation",
+  "cls": "TOKEN-DEAD",
+  "detail": "Access has been revoked",
+  "trail": [
+   "fill cvssScore:Float!",
+   "fill cvssVector:String!",
+   "fill reasoning:String!",
+   "fill reportId:String!",
+   "fill severity:SeverityLevel!",
+   "fill vrtNodeId:String!",
+   "stop:Access has been revoked"
+  ],
+  "iters": 6,
+  "text": "mutation AdjudicateReport($input: AdjudicateReportInput!, $clientRequestId: String) { adjudicateReport(input: $input, clientRequestId: $clientRequestId) { ...CertificateFields } }\nfragment CertificateFields on PayoutCertificateModel { id reference reportId adjudicationId organizationId researcherId researcherUsername reportTitle grossAmount withheldAmount netAmount currency status issuedAt appealClosesAt dueAt isOverdue researcherVerified paymentDueAt voidReason disputeClosesAt graderSide graderUsername criticalReviewOutcome settlement { id attestedById attestedByUsername method reference paidAt note withheldAmount withholdingReason disputedAt disputeReason createdAt proof { id fileName contentType fileSize fileAccess createdAt } } receipt { receivedAt amountReceived differenceReason onBehalf declaredAt confirmsAttestation } expectedAmount openAppealBy }",
+  "variables": {
+   "input": {
+    "cvssScore": 1,
+    "cvssVector": "bb-test",
+    "reasoning": "bb-test",
+    "reportId": "bb-test",
+    "severity": "CRITICAL",
+    "vrtNodeId": "bb-test"
+   },
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "AdminUser",
+  "kind": "query",
+  "cls": "TOKEN-DEAD",
+  "detail": "Access has been revoked",
+  "trail": [
+   "stop:Access has been revoked"
+  ],
+  "iters": 0,
+  "text": "query AdminUser($id: ID!) { adminUser(id: $id) { ...AdminUserFields } }\nfragment AdminUserFields on AdminUserModel { id email username roles status kycStatus emailVerified approvedAt rejectedAt rejectionReason isAmbassador twoFactorEnabled lastLogin createdAt organizationCount }",
+  "variables": {
+   "id": "75677ae0-95b3-4752-b601-1b6c6012c467"
+  }
+ }
+]

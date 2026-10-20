@@ -1,0 +1,52 @@
+=== A) taxonomie d erreurs AVEC resource (les vraies erreurs du client) ===
+  CIMD valide                               645ms  CONSENT-OK
+  client_id != URL (echo ?)                 194ms  CONSENT-OK
+  texte non JSON                            137ms  CONSENT-OK
+  HTML                                      137ms  CONSENT-OK
+  JSON casse                                146ms  CONSENT-OK
+  client_name avec marqueur                 222ms  CONSENT-OK
+  redirect_uris = plateforme                185ms  CONSENT-OK
+  redirect_uris = IP literal                491ms  CONSENT-OK
+  redirect_uris = javascript:               172ms  CONSENT-OK
+  redirect_uris = http non-loc              136ms  CONSENT-OK
+  scopes interdits                          209ms  CONSENT-OK
+  grant_types interdits                     151ms  CONSENT-OK
+  token_endpoint_auth_method=secret         140ms  CONSENT-OK
+
+=== B) SSRF interne : la reponse de l AS differe-t-elle ? (latence + erreur) ===
+  webhook (externe)                         140ms  CONSENT-OK
+  webhook (externe) (2)                     199ms  CONSENT-OK
+      => erreurs: CONSENT | latences: 140,199
+  IMDS AWS                                  138ms  loc:https://bugsecure.senintel.sn/oauth/error?code=invalid_clien
+  IMDS AWS (2)                              147ms  loc:https://bugsecure.senintel.sn/oauth/error?code=invalid_clien
+      => erreurs: ? | latences: 138,147
+  IMDS AWS v2 token                         144ms  loc:https://bugsecure.senintel.sn/oauth/error?code=invalid_clien
+  IMDS AWS v2 token (2)                     131ms  loc:https://bugsecure.senintel.sn/oauth/error?code=invalid_clien
+      => erreurs: ? | latences: 144,131
+  IP prive 10.0.0.1                         173ms  loc:https://bugsecure.senintel.sn/oauth/error?code=invalid_clien
+  IP prive 10.0.0.1 (2)                     145ms  loc:https://bugsecure.senintel.sn/oauth/error?code=invalid_clien
+      => erreurs: ? | latences: 173,145
+  TEST-NET 192.0.2.1                        133ms  loc:https://bugsecure.senintel.sn/oauth/error?code=invalid_clien
+  TEST-NET 192.0.2.1 (2)                    131ms  loc:https://bugsecure.senintel.sn/oauth/error?code=invalid_clien
+      => erreurs: ? | latences: 133,131
+  localhost:80                              141ms  loc:https://bugsecure.senintel.sn/oauth/error?code=invalid_clien
+  localhost:80 (2)                          136ms  loc:https://bugsecure.senintel.sn/oauth/error?code=invalid_clien
+      => erreurs: ? | latences: 141,136
+  localhost:3000                           1539ms  loc:https://bugsecure.senintel.sn/oauth/error?code=invalid_clien
+  localhost:3000 (2)                        694ms  loc:https://bugsecure.senintel.sn/oauth/error?code=invalid_clien
+      => erreurs: ? | latences: 1539,694
+  localhost:53682 (MCP)                     538ms  loc:https://bugsecure.senintel.sn/oauth/error?code=invalid_clien
+  localhost:53682 (MCP) (2)                 131ms  loc:https://bugsecure.senintel.sn/oauth/error?code=invalid_clien
+      => erreurs: ? | latences: 538,131
+  localhost:8099                            145ms  loc:https://bugsecure.senintel.sn/oauth/error?code=invalid_clien
+  localhost:8099 (2)                        132ms  loc:https://bugsecure.senintel.sn/oauth/error?code=rate_limited
+      => erreurs: ? | latences: 145,132
+  file://                                   134ms  loc:https://bugsecure.senintel.sn/oauth/error?code=rate_limited
+  file:// (2)                               134ms  loc:https://bugsecure.senintel.sn/oauth/error?code=rate_limited
+      => erreurs: ? | latences: 134,134
+  hote inexistant                           134ms  loc:https://bugsecure.senintel.sn/oauth/error?code=rate_limited
+  hote inexistant (2)                       145ms  loc:https://bugsecure.senintel.sn/oauth/error?code=rate_limited
+      => erreurs: ? | latences: 134,145
+
+=== C) le document peut-il Pointer le redirect vers NOTRE webhook avec un client_id arbitraire ? ===
+  2 redirect_uris dont un 2e webhook        138ms  loc:https://bugsecure.senintel.sn/oauth/error?code=rate_limited

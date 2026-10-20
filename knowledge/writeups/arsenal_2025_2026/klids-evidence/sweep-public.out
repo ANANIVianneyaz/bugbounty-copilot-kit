@@ -1,0 +1,209 @@
+operations: 198 | auth: false
+
+  (deja) AcceptOrganizationInvitation
+  (deja) AcceptPlatformTerms
+  (deja) AcceptProgrammeTerms
+  (deja) AddReportComment
+  (deja) AdjudicateReport
+  (deja) AdminUser
+  (deja) AdminUserAccount
+  (deja) AdminUserActivity
+  (deja) AdminUserCount
+  (deja) AdminUserLinkedAccounts
+  (deja) AdminUserMoney
+  (deja) AdminUserOrganisations
+  (deja) AdminUserSecurity
+  (deja) AdminUserSummary
+  (deja) AdminUsers
+  (deja) AgentApproval
+  (deja) ApproveUser
+  (deja) AssignTriageAnalyst
+  (deja) AttestSettlement
+  (deja) AuditLogEntries
+  (deja) AuditLogNewerCount
+  (deja) AuditLogs
+  (deja) AwardStaffBadge
+  (deja) BountyLogin
+  (deja) BountyLogout
+  (deja) BountyMe
+  (deja) BountyRefreshToken
+  (deja) BountySignUp
+  (deja) BulkDelete
+  (deja) CertificateShare
+  (deja) CertificateSigningKeys
+  (deja) ChangePassword
+  (deja) CheckDuplicates
+  (deja) CloseSupportConversation
+  (deja) CompleteGithubLink
+  (deja) ConfirmEmailChange
+  (deja) ConfirmSettlement
+  (deja) ConfirmSettlementOnBehalf
+  (deja) CreateCliSignInCode
+  (deja) CreateOrganization
+  (deja) CreateProgram
+  (deja) DecideAgentApproval
+  (deja) DecideAppeal
+  (deja) DecideOAuthAuthorization
+  (deja) DecideReportDisclosure
+  (deja) DeleteKycDocument
+  (deja) DeleteMyAccount
+  (deja) DisableTotp
+  (deja) DiscordLinkedRolesUrl
+  (deja) DismissOnboarding
+  (deja) DisputeSettlement
+  (deja) DuplicateCandidates
+  (deja) EnableTotp
+  ExchangeCliSignInCode             mutation TOKEN-DEAD     i0 Invalid or expired sign-in code
+  ExportAuditLog                    mutation UNAUTH         i0 
+  SKIP  ForgotPassword
+  SKIP  GenerateBackupCodes
+  GenerateTotpSecret                mutation UNAUTH         i0 
+  GetAdminPrograms                  query    UNAUTH         i0 
+  GetAppealQueue                    query    UNAUTH         i0 
+  GetBadgeCatalog                   query    UNAUTH         i0 
+  GetBillableInterventions          query    UNAUTH         i0 
+  GetCertificate                    query    UNAUTH         i0 
+  GetCertificateDocument            query    UNAUTH         i0 
+  GetCertificateDocumentPdfUrl      query    UNAUTH         i0 
+  GetCriticalReviewQueue            query    UNAUTH         i0 
+  SKIP  GetDisputedSettlements
+  GetDownloadUrl                    query    UNAUTH         i0 
+  GetEscalatedReports               query    UNAUTH         i0 
+  GetInboundEmails                  query    UNAUTH         i0 
+  GetKycDocuments                   query    UNAUTH         i0 
+  GetLapsedCriticalReviews          query    UNAUTH         i0 
+  GetLeaderboard                    query    DATA           i0 {"leaderboard":[]}
+  GetMyCertificates                 query    UNAUTH         i0 
+  SKIP  GetMyInvitedPrograms
+  GetMyKycDocuments                 query    UNAUTH         i0 
+  GetMyKycStatus                    query    UNAUTH         i0 
+  GetMyOrganizationInvitations      query    UNAUTH         i0 
+  GetMyOrganizations                query    UNAUTH         i0 
+  GetMyProfile                      query    UNAUTH         i0 
+  GetMyPrograms                     query    UNAUTH         i0 
+  GetMySupportConversation          query    UNAUTH         i0 
+  GetMyWebAuthnCredentials          query    UNAUTH         i0 
+  GetNotificationPreferences        query    UNAUTH         i0 
+  GetNotifications                  query    UNAUTH         i0 
+  GetOrganization                   query    UNAUTH         i0 
+  GetOrganizationCertificates       query    UNAUTH         i0 
+  GetOrganizationInterventionUsage  query    UNAUTH         i0 
+  GetOrganizationInvitations        query    UNAUTH         i0 
+  GetOrganizationMembers            query    UNAUTH         i0 
+  GetOrganizationStanding           query    UNAUTH         i0 
+  GetOrganizations                  query    UNAUTH         i0 
+  GetOverdueCertificates            query    UNAUTH         i0 
+  SKIP  GetPayoutSummary
+  GetPendingKycDocuments            query    UNAUTH         i0 
+  GetProgram                        query    EMPTY          i0 {"program":null}
+  GetProgramBySlug                  query    NOT-FOUND      i0 Program not found
+  GetProgramStats                   query    UNAUTH         i0 
+  GetPrograms                       query    DATA           i0 {"programs":[]}
+  GetReport                         query    UNAUTH         i0 
+  GetReportAdjudication             query    UNAUTH         i0 
+  GetReportAppeals                  query    UNAUTH         i0 
+  GetReportComments                 query    UNAUTH         i0 
+  GetReportTransitions              query    UNAUTH         i0 
+  GetReportTrends                   query    UNAUTH         i0 
+  GetReports                        query    UNAUTH         i0 
+  GetResearcherActivity             query    UNAUTH         i0 
+  GetResearcherProfile              query    EMPTY          i0 {"researcherProfile":null}
+  GetResearcherPublicProfile        query    EMPTY          i0 {"researcherPublicProfile":null}
+  GetResearcherStats                query    EMPTY          i0 {"researcherStats":null}
+  GetResearchers                    query    UNAUTH         i0 
+  SKIP  GetSettlementInstruction
+  GetSeverityDistribution           query    UNAUTH         i0 
+  GetStuckFiles                     query    UNAUTH         i0 
+  GetSupportAttachmentUrl           query    UNAUTH         i0 
+  GetSupportConversationForUser     query    UNAUTH         i0 
+  GetSupportConversations           query    UNAUTH         i0 
+  GetSupportMessages                query    UNAUTH         i0 
+  GetTermsDocument                  query    UNAUTH         i0 
+  GetTermsVersions                  query    UNAUTH         i0 
+  GetUnreadNotificationCount        query    UNAUTH         i0 
+  GithubLinkUrl                     mutation UNAUTH         i0 
+  HasAcceptedPlatformTerms          query    UNAUTH         i0 
+  HasAcceptedProgrammeTerms         query    UNAUTH         i0 
+  HasOrganizationAcceptedTerms      query    UNAUTH         i0 
+  SKIP  InviteOrganizationMember
+  KycDocumentUrl                    query    UNAUTH         i0 
+  MarkAllNotificationsAsRead        mutation UNAUTH         i0 
+  MarkEmailVerified                 mutation UNAUTH         i2 
+  MarkNotificationAsRead            mutation UNAUTH         i0 
+  MarkSupportConversationRead       mutation UNAUTH         i0 
+  MyAgentApprovals                  query    UNAUTH         i0 
+  MyDiscordLink                     query    UNAUTH         i0 
+  MyGithubLink                      query    UNAUTH         i0 
+  MyOAuthGrants                     query    UNAUTH         i0 
+  MyOnboarding                      query    UNAUTH         i0 
+  SKIP  MyPayoutMethod
+  OAuthAuthorizationRequest         query    UNAUTH         i0 
+  PlanBulkDeletion                  query    UNAUTH         i0 
+  PresentPlatformTerms              mutation UNAUTH         i0 
+  PresentProgrammeTerms             mutation UNAUTH         i0 
+  PreviewGrade                      query    UNAUTH         i4 
+  PublicProgramActivity             query    NOT-FOUND      i0 Public program not found
+  PublishRewardGrid                 mutation UNAUTH         i2 
+  PublishTerms                      mutation UNAUTH         i2 
+  RaiseAppeal                       mutation UNAUTH         i2 
+  RedactSupportMessage              mutation UNAUTH         i0 
+  SKIP  RejectSettlementClaim
+  RejectUser                        mutation UNAUTH         i2 
+  RemoveOrganizationMember          mutation UNAUTH         i0 
+  RemoveTotpViaToken                mutation DATA           i0 {"removeTotpViaToken":false}
+  RemoveWebAuthnCredential          mutation UNAUTH         i0 
+  ReopenSupportConversation         mutation UNAUTH         i0 
+  SKIP  ReplaceSettlementProof
+  ReportDisclosureDraft             query    UNAUTH         i0 
+  RequestEmailChange                mutation UNAUTH         i2 
+  RequestUploadUrl                  mutation UNAUTH         i3 
+  RequeueFileVerification           mutation NOT-FOUND      i0 Variable "$purpose" got invalid value "PENDING"; Value "PENDING" does not exist in "UploadPurpose" enum.
+  ResendVerificationEmail           mutation OTHER          i0 Human verification failed
+  SKIP  ResetPassword
+  ResetUserTwoFactor                mutation UNAUTH         i2 
+  ReviewCriticalGrade               mutation UNAUTH         i2 
+  ReviewKycDocument                 mutation UNAUTH         i2 
+  RevokeCertificateShare            mutation UNAUTH         i0 
+  SKIP  RevokeOAuthGrant
+  RevokeOrganizationInvitation      mutation UNAUTH         i0 
+  RevokeStaffBadge                  mutation UNAUTH         i3 
+  SaveReportDisclosure              mutation UNAUTH         i6 
+  Search                            query    UNAUTH         i0 
+  SendProgramBackToDraft            mutation UNAUTH         i0 
+  SendSupportMessage                mutation UNAUTH         i0 
+  SetAmbassador                     mutation UNAUTH         i2 
+  SetDiscordCelebration             mutation UNAUTH         i0 
+  SetOrganizationAiGrading          mutation UNAUTH         i0 
+  SetOrganizationAiTriageAccess     mutation UNAUTH         i0 
+  SetOrganizationSubmissionsSuspendedmutation UNAUTH         i3 
+  SKIP  SetResearcherPayoutMethod
+  SetUserRoles                      mutation UNAUTH         i2 
+  SetUserStatus                     mutation UNAUTH         i2 
+  SKIP  SettlementProofUrl
+  ShareCertificate                  mutation UNAUTH         i0 
+  SharedFinding                     query    EMPTY          i0 {"sharedFinding":null}
+  StartSupportConversation          mutation UNAUTH         i0 
+  SubmitKycDocument                 mutation UNAUTH         i2 
+  SubmitReport                      mutation UNAUTH         i6 
+  TaxonomyProfile                   query    UNAUTH         i0 
+  TransitionProgramStatus           mutation UNAUTH         i0 
+  UnlinkDiscord                     mutation UNAUTH         i0 
+  UnlinkGithub                      mutation UNAUTH         i0 
+  UpdateNotificationPreferences     mutation UNAUTH         i0 
+  UpdateOrganization                mutation UNAUTH         i0 
+  UpdateProgram                     mutation UNAUTH         i0 
+  UpdateReportStatus                mutation UNAUTH         i2 
+  UpdateResearcherProfile           mutation UNAUTH         i0 
+  SKIP  Verify2fa
+  VerifyCertificate                 query    EMPTY          i0 {"verifyCertificate":null}
+  VerifyEmail                       mutation DATA           i0 {"verifyEmail":"INVALID"}
+  SKIP  WithdrawSettlementProof
+
+=== RECAP ===
+M:DATA = 2   M:NOT-FOUND = 1   M:OTHER = 1   M:SKIP = 10   M:TOKEN-DEAD = 1   M:UNAUTH = 47   Q:DATA = 2   Q:EMPTY = 6   Q:NOT-FOUND = 2   Q:SKIP = 6   Q:UNAUTH = 67
+
+=== TOUTES LES OPERATIONS QUI RETOURNENT DES DONNEES (priorite) ===
+  *** query GetLeaderboard -> {"leaderboard":[]}
+  *** query GetPrograms -> {"programs":[]}
+  *** mutation RemoveTotpViaToken -> {"removeTotpViaToken":false}
+  *** mutation VerifyEmail -> {"verifyEmail":"INVALID"}

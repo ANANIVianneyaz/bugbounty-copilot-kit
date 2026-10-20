@@ -1,0 +1,2568 @@
+[
+ {
+  "name": "AcceptOrganizationInvitation",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "AcceptPlatformTerms",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill bodyDigest:String!",
+   "fill presentationId:ID!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 2,
+  "text": "mutation AcceptPlatformTerms($input: AcceptProgrammeTermsInput!) { acceptPlatformTerms(input: $input) }",
+  "variables": {
+   "input": {
+    "bodyDigest": "bb-test",
+    "presentationId": "4b049c25-2356-4e76-93c2-52571b8f1580"
+   }
+  }
+ },
+ {
+  "name": "AcceptProgrammeTerms",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill bodyDigest:String!",
+   "fill presentationId:ID!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 2,
+  "text": "mutation AcceptProgrammeTerms($input: AcceptProgrammeTermsInput!) { acceptProgrammeTerms(input: $input) }",
+  "variables": {
+   "input": {
+    "bodyDigest": "bb-test",
+    "presentationId": "87568145-6a82-48e2-a311-e3cbaff95863"
+   }
+  }
+ },
+ {
+  "name": "AddReportComment",
+  "kind": "mutation",
+  "cls": "OTHER",
+  "detail": "You do not have access to this resource",
+  "trail": [
+   "fill content:String!",
+   "fill reportId:String!",
+   "stop:You do not have access to this resource"
+  ],
+  "iters": 2,
+  "text": "mutation AddReportComment($input: AddCommentInput!, $clientRequestId: String) { addReportComment(input: $input, clientRequestId: $clientRequestId) { id reportId content isInternal createdAt } }",
+  "variables": {
+   "input": {
+    "content": "bb-test",
+    "reportId": "bb-test"
+   },
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "AdjudicateReport",
+  "kind": "mutation",
+  "cls": "SCOPE",
+  "detail": " grade:write",
+  "trail": [
+   "fill cvssScore:Float!",
+   "fill cvssVector:String!",
+   "fill reasoning:String!",
+   "fill reportId:String!",
+   "fill severity:SeverityLevel!",
+   "fill vrtNodeId:String!",
+   "stop:This operation requires the scope(s): grade:write"
+  ],
+  "iters": 6,
+  "text": "mutation AdjudicateReport($input: AdjudicateReportInput!, $clientRequestId: String) { adjudicateReport(input: $input, clientRequestId: $clientRequestId) { ...CertificateFields } }\nfragment CertificateFields on PayoutCertificateModel { id reference reportId adjudicationId organizationId researcherId researcherUsername reportTitle grossAmount withheldAmount netAmount currency status issuedAt appealClosesAt dueAt isOverdue researcherVerified paymentDueAt voidReason disputeClosesAt graderSide graderUsername criticalReviewOutcome settlement { id attestedById attestedByUsername method reference paidAt note withheldAmount withholdingReason disputedAt disputeReason createdAt proof { id fileName contentType fileSize fileAccess createdAt } } receipt { receivedAt amountReceived differenceReason onBehalf declaredAt confirmsAttestation } expectedAmount openAppealBy }",
+  "variables": {
+   "input": {
+    "cvssScore": 1,
+    "cvssVector": "bb-test",
+    "reasoning": "bb-test",
+    "reportId": "bb-test",
+    "severity": "CRITICAL",
+    "vrtNodeId": "bb-test"
+   },
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "AdminUser",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query AdminUser($id: ID!) { adminUser(id: $id) { ...AdminUserFields } }\nfragment AdminUserFields on AdminUserModel { id email username roles status kycStatus emailVerified approvedAt rejectedAt rejectionReason isAmbassador twoFactorEnabled lastLogin createdAt organizationCount }",
+  "variables": {
+   "id": "6a313f69-e057-465d-ae3e-4aac2372ab61"
+  }
+ },
+ {
+  "name": "AdminUserAccount",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query AdminUserAccount($userId: ID!) { adminUserAccount(userId: $userId) { id email username roles status kycStatus emailVerified emailVerifiedAt approvedAt approvedBy { id username } rejectedAt rejectedBy { id username } rejectionReason isAmbassador twoFactorEnabled lastLogin deletedAt createdAt updatedAt organizationCount profile { country website bio avatarUrl hasPgpKey reputation level xp streak longestStreak lastActiveDate } badges { name slug icon awardedAt } acceptedInvitations { organizationId organizationName role invitedAt acceptedAt } history { ...AdminUserAuditEventFields } } }\nfragment AdminUserAuditEventFields on AdminUserAuditEventModel { id action category actorId actorUsername resource resourceId metadata metadataRedacted ipAddress createdAt }",
+  "variables": {
+   "userId": "30cdb7be-0aca-41a8-a6dd-33b36d682dbe"
+  }
+ },
+ {
+  "name": "AdminUserActivity",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query AdminUserActivity($userId: ID!, $skip: Int, $take: Int) { adminUserActivity(userId: $userId, skip: $skip, take: $take) { reportCount byStatus { status count } bySeverity { severity count } reports { id title status claimedSeverity grade { severity amount currency } createdAt program { id title slug } organization { id name } } submissionCap { used cap reached } commentCount appeals { id status raisedBy reportId reportTitle createdAt decidedAt } appealCount lastLogin lastActiveDate lastReportAt lastCommentAt lastAuditedActionAt lastActiveAt } }",
+  "variables": {
+   "userId": "f5d29c16-2997-493f-bbb5-b9acc1078c5a",
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "AdminUserCount",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query AdminUserCount($filter: AdminUserFilterInput) { adminUserCount(filter: $filter) }",
+  "variables": {
+   "filter": {}
+  }
+ },
+ {
+  "name": "AdminUserLinkedAccounts",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query AdminUserLinkedAccounts($userId: ID!) { adminUserLinkedAccounts(userId: $userId) { signals { kind matched totalAccounts crowded accounts { id username email status roles createdAt } } notRecorded compared { payoutNumber website publicAddresses identityDocuments } } }",
+  "variables": {
+   "userId": "6ef7f36b-c6e8-4c07-a05b-11ac238ebddf"
+  }
+ },
+ {
+  "name": "AdminUserMoney",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query AdminUserMoney($userId: ID!, $skip: Int, $take: Int) { adminUserMoney(userId: $userId, skip: $skip, take: $take) { totalEarned earnedCurrency kycStatus kycApprovedAt certificateCounts { status count } overdueCount certificateTotal certificates { id reference reportId reportTitle organizationId organizationName status grossAmount netAmount currency issuedAt paymentDueAt isOverdue receipt { receivedAt amountReceived onBehalf } proof { id fileName contentType fileSize fileAccess createdAt } } payout { provider maskedNumber accountName verifiedAt destinationChangedAt createdAt } payoutChanges { ...AdminUserAuditEventFields } documents { id type status contentType fileSize scanStatus fileAccess createdAt reviewedAt reviewedBy { id username } rejectionNote } reviews { ...AdminUserAuditEventFields } } }\nfragment AdminUserAuditEventFields on AdminUserAuditEventModel { id action category actorId actorUsername resource resourceId metadata metadataRedacted ipAddress createdAt }",
+  "variables": {
+   "userId": "cb425797-6d96-4365-b45b-8953e9a17c79",
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "AdminUserOrganisations",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query AdminUserOrganisations($userId: ID!) { adminUserOrganisations(userId: $userId) { seats { organizationId organizationName organizationSlug role joinedAt } invitations { id organizationId organizationName role createdAt expiresAt expired refusal } reportedTo { organizationId organizationName reportCount holdsSeat programs { id title slug reportCount } } conflictOfInterest } }",
+  "variables": {
+   "userId": "05aac3ed-0d74-4d4d-86f9-5137b1cd0ac9"
+  }
+ },
+ {
+  "name": "AdminUserSecurity",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query AdminUserSecurity($userId: ID!) { adminUserSecurity(userId: $userId) { twoFactorEnabled hasAuthenticatorApp backupCodesRemaining securityKeys { id deviceName createdAt lastUsedAt } sessions { startedAt lastRefreshedAt expiresAt active ipAddress deviceInfo } sessionCount signInAddressesRecorded addresses { source at ipAddress userAgent detail } oauthGrants { id clientName clientId verifiedClient scopes resource createdAt lastUsedAt revokedAt revokedReason } emailTokens { type createdAt expiresAt usedAt supersededAt } securityEvents { ...AdminUserAuditEventFields } isStaff } }\nfragment AdminUserAuditEventFields on AdminUserAuditEventModel { id action category actorId actorUsername resource resourceId metadata metadataRedacted ipAddress createdAt }",
+  "variables": {
+   "userId": "90b031c9-a72d-4712-87ae-d419218d94f0"
+  }
+ },
+ {
+  "name": "AdminUserSummary",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query AdminUserSummary($userId: ID!) { adminUserSummary(userId: $userId) { id email username roles status kycStatus approvedAt rejectedAt isAmbassador twoFactorEnabled deletedAt createdAt reportCount seatCount pendingInvitationCount overdueCertificateCount } }",
+  "variables": {
+   "userId": "7430faf4-64e4-44b8-89ff-8defec9e569e"
+  }
+ },
+ {
+  "name": "AdminUsers",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query AdminUsers($filter: AdminUserFilterInput) { adminUsers(filter: $filter) { ...AdminUserFields } }\nfragment AdminUserFields on AdminUserModel { id email username roles status kycStatus emailVerified approvedAt rejectedAt rejectionReason isAmbassador twoFactorEnabled lastLogin createdAt organizationCount }",
+  "variables": {
+   "filter": {}
+  }
+ },
+ {
+  "name": "AgentApproval",
+  "kind": "query",
+  "cls": "NOT-FOUND",
+  "detail": "Agent approval not found",
+  "trail": [
+   "stop:Agent approval not found"
+  ],
+  "iters": 0,
+  "text": "query AgentApproval($id: ID!) { agentApproval(id: $id) { ...AgentApprovalFields } }\nfragment AgentApprovalPartContextFields on AgentApprovalPartContextModel { report { id title status claimedSeverity programId programSlug programTitle organizationName researcherUsername } program { id slug title organizationName } adjudication { id reportId severity amount currency } assignee { id username } notifications { id type title createdAt readAt } profileBefore { bio country website } payoutPreview { reportId side severity impliedSeverity cvssScore currency band { min max } derivedAmount amount amountBasis payable certificateWouldIssue awaitingCriticalReview deadlineTakeover reasoningChecked gridVersion refusal { code message } } unreadNotificationCount }\nfragment AgentApprovalFields on AgentApprovalModel { id status reviewUrl clientRequestId clientDigest requiresStepUp createdAt expiresAt decidedAt consumedAt client { name } parts { index operation clientRequestId arguments irreversible audience consumedAt context { ...AgentApprovalPartContextFields } } repeatOf { id consumedAt clientName } }",
+  "variables": {
+   "id": "11b80496-2ae5-4eef-89f8-4887c05bafcf"
+  }
+ },
+ {
+  "name": "ApproveUser",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill userId:ID!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 1,
+  "text": "mutation ApproveUser($input: ApproveUserInput!) { approveUser(input: $input) { ...AdminUserFields } }\nfragment AdminUserFields on AdminUserModel { id email username roles status kycStatus emailVerified approvedAt rejectedAt rejectionReason isAmbassador twoFactorEnabled lastLogin createdAt organizationCount }",
+  "variables": {
+   "input": {
+    "userId": "1abd5ccf-bcb9-4ef2-b0c1-d1696be33435"
+   }
+  }
+ },
+ {
+  "name": "AssignTriageAnalyst",
+  "kind": "mutation",
+  "cls": "SCOPE",
+  "detail": " triage:write",
+  "trail": [
+   "stop:This operation requires the scope(s): triage:write"
+  ],
+  "iters": 0,
+  "text": "mutation AssignTriageAnalyst($reportId: ID!, $triageUserId: ID!, $clientRequestId: String) { assignTriageAnalyst(reportId: $reportId, triageUserId: $triageUserId, clientRequestId: $clientRequestId) { id status assignedTriageId } }",
+  "variables": {
+   "reportId": "ba9f4350-2240-45f8-9765-20cddca77ccb",
+   "triageUserId": "1718d180-93b4-43a1-9c54-e0e25128de48",
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "AttestSettlement",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "AuditLogEntries",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query AuditLogEntries($filter: AuditLogFilterInput, $after: String, $take: Int) { auditLogEntries(filter: $filter, after: $after, take: $take) { entries { ...AuditEntryFields } nextCursor headCursor } }\nfragment AuditEntryFields on AuditEntryModel { id actorId actorUsername action category resource resourceId target { label programSlug reportId } metadata metadataRedacted ipAddress userAgent createdAt }",
+  "variables": {
+   "filter": {},
+   "after": "bb-test",
+   "take": 1
+  }
+ },
+ {
+  "name": "AuditLogNewerCount",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query AuditLogNewerCount($newerThan: String!, $filter: AuditLogFilterInput) { auditLogNewerCount(newerThan: $newerThan, filter: $filter) }",
+  "variables": {
+   "newerThan": "bb-test",
+   "filter": {}
+  }
+ },
+ {
+  "name": "AuditLogs",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query AuditLogs($resource: String, $resourceId: String, $actorId: ID, $action: String, $since: DateTime, $until: DateTime, $skip: Int, $take: Int) { auditLogs(resource: $resource, resourceId: $resourceId, actorId: $actorId, action: $action, since: $since, until: $until, skip: $skip, take: $take) { id actorId actorUsername action resource resourceId metadata ipAddress userAgent createdAt } }",
+  "variables": {
+   "resource": "bb-test",
+   "resourceId": "bb-test",
+   "actorId": "12779a1c-8b2d-455e-85fa-5d732ed9a24c",
+   "action": "bb-test",
+   "since": "PENDING",
+   "until": "PENDING",
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "AwardStaffBadge",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill badgeSlug:String!",
+   "fill reason:String!",
+   "fill reportId:ID!",
+   "fill userId:ID!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 4,
+  "text": "mutation AwardStaffBadge($input: AwardStaffBadgeInput!) { awardStaffBadge(input: $input) { id userId badgeId awardedAt } }",
+  "variables": {
+   "input": {
+    "badgeSlug": "bb-test",
+    "reason": "bb-test",
+    "reportId": "3b9c639a-b2f7-430e-821d-5b37eaca0817",
+    "userId": "ddb275d2-ff99-47c9-ac2c-0a25311435fc"
+   }
+  }
+ },
+ {
+  "name": "BountyLogin",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill email:String!",
+   "fill password:String!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 2,
+  "text": "mutation BountyLogin($input: LoginInput!) { login(input: $input) { accessToken refreshToken requiresTwoFactor challengeToken user { id email username roles status approvedAt isAmbassador twoFactorEnabled hasAuthenticatorApp } } }",
+  "variables": {
+   "input": {
+    "email": "bb-test",
+    "password": "bb-test"
+   }
+  }
+ },
+ {
+  "name": "BountyLogout",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "BountyMe",
+  "kind": "query",
+  "cls": "DATA",
+  "detail": "{\"me\":{\"id\":\"e3aa51e2-2c87-4b64-a3cb-6d5eb857f40c\",\"email\":\"vianney24lechancelier@gmail.com\",\"username\":\"william_root\",\"roles\":[\"RESEARCHER\"],\"status\":\"ACTIVE\",\"approvedAt\":\"2026-09-27T19:49:51.853Z\",",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query BountyMe { me { id email username roles status approvedAt isAmbassador kycStatus twoFactorEnabled hasAuthenticatorApp } }",
+  "variables": {}
+ },
+ {
+  "name": "BountyRefreshToken",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation BountyRefreshToken($token: String!) { refreshToken(token: $token) { accessToken refreshToken user { id email username roles } } }",
+  "variables": {
+   "token": "bb-test"
+  }
+ },
+ {
+  "name": "BountySignUp",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill email:String!",
+   "fill password:String!",
+   "fill username:String!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 3,
+  "text": "mutation BountySignUp($input: SignupInput!) { signup(input: $input) { verificationRequired email } }",
+  "variables": {
+   "input": {
+    "email": "bb-test",
+    "password": "bb-test",
+    "username": "bb-test"
+   }
+  }
+ },
+ {
+  "name": "BulkDelete",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation BulkDelete($input: BulkDeletionInput!, $confirmation: String!) { bulkDelete(input: $input, confirmation: $confirmation) { ...BulkDeletionReportFields } }\nfragment BulkDeletionReportFields on BulkDeletionReport { executed hardDeleteCount tombstoneCount refusedCount deletableCount items { kind id label detail outcome refusal retained blockingOrganizationName message } }",
+  "variables": {
+   "input": {},
+   "confirmation": "bb-test"
+  }
+ },
+ {
+  "name": "CertificateShare",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query CertificateShare($certificateId: ID!) { certificateShare(certificateId: $certificateId) { certificateId token showAmount active } }",
+  "variables": {
+   "certificateId": "698d2a37-9b88-4c67-aa0c-68dad663bffa"
+  }
+ },
+ {
+  "name": "CertificateSigningKeys",
+  "kind": "query",
+  "cls": "DATA",
+  "detail": "{\"certificateSigningKeys\":{\"keys\":[{\"kty\":\"RSA\",\"n\":\"tRSkPzqK3eki_oGmZQBBGDMMe5dhsOZkxl1vvhunN6cerlyuPY0j7kXq1ifM8hosrQzsEjhOCOEbKoAiNdz4rukxU3FqAHBUh37TMDE7FFelv_LaDdLQD83_6OQej5dUzSN1xYcr0S2IF6ipH9_",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query CertificateSigningKeys { certificateSigningKeys { keys } }",
+  "variables": {}
+ },
+ {
+  "name": "ChangePassword",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "CheckDuplicates",
+  "kind": "query",
+  "cls": "SCOPE",
+  "detail": " triage:read",
+  "trail": [
+   "stop:This operation requires the scope(s): triage:read"
+  ],
+  "iters": 0,
+  "text": "query CheckDuplicates($programId: ID!, $title: String!, $description: String!) { checkDuplicates(programId: $programId, title: $title, description: $description) { id title claimedSeverity status } }",
+  "variables": {
+   "programId": "ac57bfb2-3e33-4466-a104-0d5195bb9ee4",
+   "title": "bb-test",
+   "description": "bb-test"
+  }
+ },
+ {
+  "name": "CloseSupportConversation",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation CloseSupportConversation($conversationId: ID!) { closeSupportConversation(conversationId: $conversationId) }",
+  "variables": {
+   "conversationId": "b8dc3ef7-8449-4b49-ae9a-9b4b58210a7f"
+  }
+ },
+ {
+  "name": "CompleteGithubLink",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation CompleteGithubLink($code: String!, $state: String!) { completeGithubLink(code: $code, state: $state) }",
+  "variables": {
+   "code": "bb-test",
+   "state": "bb-test"
+  }
+ },
+ {
+  "name": "ConfirmEmailChange",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation ConfirmEmailChange($token: String!) { confirmEmailChange(token: $token) }",
+  "variables": {
+   "token": "bb-test"
+  }
+ },
+ {
+  "name": "ConfirmSettlement",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "ConfirmSettlementOnBehalf",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "CreateCliSignInCode",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation CreateCliSignInCode($input: CreateCliSignInCodeInput!) { createCliSignInCode(input: $input) { code expiresAt } }",
+  "variables": {
+   "input": {}
+  }
+ },
+ {
+  "name": "CreateOrganization",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "CreateProgram",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill description:String!",
+   "fill organizationId:String!",
+   "fill rewardGrid:JSON!",
+   "fill rules:String!",
+   "fill scope:JSON!",
+   "fill title:String!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 6,
+  "text": "mutation CreateProgram($input: CreateProgramInput!) { createProgram(input: $input) { id title slug status createdAt } }",
+  "variables": {
+   "input": {
+    "description": "bb-test",
+    "organizationId": "bb-test",
+    "rewardGrid": "PENDING",
+    "rules": "bb-test",
+    "scope": "PENDING",
+    "title": "bb-test"
+   }
+  }
+ },
+ {
+  "name": "DecideAgentApproval",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill approve:Boolean!",
+   "fill id:ID!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 2,
+  "text": "mutation DecideAgentApproval($input: DecideAgentApprovalInput!) { decideAgentApproval(input: $input) { ...AgentApprovalFields } }\nfragment AgentApprovalPartContextFields on AgentApprovalPartContextModel { report { id title status claimedSeverity programId programSlug programTitle organizationName researcherUsername } program { id slug title organizationName } adjudication { id reportId severity amount currency } assignee { id username } notifications { id type title createdAt readAt } profileBefore { bio country website } payoutPreview { reportId side severity impliedSeverity cvssScore currency band { min max } derivedAmount amount amountBasis payable certificateWouldIssue awaitingCriticalReview deadlineTakeover reasoningChecked gridVersion refusal { code message } } unreadNotificationCount }\nfragment AgentApprovalFields on AgentApprovalModel { id status reviewUrl clientRequestId clientDigest requiresStepUp createdAt expiresAt decidedAt consumedAt client { name } parts { index operation clientRequestId arguments irreversible audience consumedAt context { ...AgentApprovalPartContextFields } } repeatOf { id consumedAt clientName } }",
+  "variables": {
+   "input": {
+    "approve": false,
+    "id": "a4a08e52-e6ca-4c77-91ad-d58e34bea69a"
+   }
+  }
+ },
+ {
+  "name": "DecideAppeal",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill appealId:String!",
+   "fill decision:String!",
+   "fill outcome:AppealStatus!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 3,
+  "text": "mutation DecideAppeal($input: DecideAppealInput!) { decideAppeal(input: $input) }",
+  "variables": {
+   "input": {
+    "appealId": "bb-test",
+    "decision": "bb-test",
+    "outcome": "OPEN"
+   }
+  }
+ },
+ {
+  "name": "DecideOAuthAuthorization",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill approve:Boolean!",
+   "fill grantedScopes:[String!]!",
+   "fill requestId:ID!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 3,
+  "text": "mutation DecideOAuthAuthorization($input: DecideOAuthAuthorizationInput!) { decideOAuthAuthorization(input: $input) { redirectUri } }",
+  "variables": {
+   "input": {
+    "approve": false,
+    "grantedScopes": "bb-test",
+    "requestId": "0839ae95-069e-4d5a-b38d-568a18102bec"
+   }
+  }
+ },
+ {
+  "name": "DecideReportDisclosure",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation DecideReportDisclosure($reportId: String!, $revision: Int!, $approve: Boolean!) { decideReportDisclosure(reportId: $reportId, revision: $revision, approve: $approve) { ...DisclosureDraftStateFields } }\nfragment DisclosureDraftStateFields on DisclosureDraftStateModel { side draft { severity certifiedReward revision title summary writeup creditResearcher organizationApproved researcherApproved publishedAt isPublic } }",
+  "variables": {
+   "reportId": "bb-test",
+   "revision": 1,
+   "approve": false
+  }
+ },
+ {
+  "name": "DeleteKycDocument",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation DeleteKycDocument($documentId: ID!) { deleteKycDocument(documentId: $documentId) }",
+  "variables": {
+   "documentId": "30ec0cb4-4667-405b-b30d-c5d17e7901e7"
+  }
+ },
+ {
+  "name": "DeleteMyAccount",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill currentPassword:String!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 1,
+  "text": "mutation DeleteMyAccount($input: DeleteAccountInput!) { deleteMyAccount(input: $input) }",
+  "variables": {
+   "input": {
+    "currentPassword": "bb-test"
+   }
+  }
+ },
+ {
+  "name": "DisableTotp",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation DisableTotp($token: String!) { disableTotp(token: $token) }",
+  "variables": {
+   "token": "bb-test"
+  }
+ },
+ {
+  "name": "DiscordLinkedRolesUrl",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation DiscordLinkedRolesUrl($returnTo: String, $join: Boolean) { discordLinkedRolesUrl(returnTo: $returnTo, join: $join) }",
+  "variables": {
+   "returnTo": "bb-test",
+   "join": false
+  }
+ },
+ {
+  "name": "DismissOnboarding",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation DismissOnboarding { dismissOnboarding }",
+  "variables": {}
+ },
+ {
+  "name": "DisputeSettlement",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "DuplicateCandidates",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query DuplicateCandidates($reportId: ID!, $search: String, $cursor: ID, $take: Int) { duplicateCandidates(reportId: $reportId, search: $search, cursor: $cursor, take: $take) { items { id title status createdAt reporterUsername } nextCursor } }",
+  "variables": {
+   "reportId": "2c69bf6e-b427-48eb-ba4b-3af45b1b550d",
+   "search": "bb-test",
+   "cursor": "8a24cb19-efbc-4d5b-ab4c-7b0a4c49b1c4",
+   "take": 1
+  }
+ },
+ {
+  "name": "EnableTotp",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill secret:String!",
+   "fill token:String!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 2,
+  "text": "mutation EnableTotp($input: EnableTotpInput!) { enableTotp(input: $input) }",
+  "variables": {
+   "input": {
+    "secret": "bb-test",
+    "token": "bb-test"
+   }
+  }
+ },
+ {
+  "name": "ExchangeCliSignInCode",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation ExchangeCliSignInCode($code: String!) { exchangeCliSignInCode(code: $code) { accessToken refreshToken user { id email username roles } } }",
+  "variables": {
+   "code": "bb-test"
+  }
+ },
+ {
+  "name": "ExportAuditLog",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation ExportAuditLog($filter: AuditLogFilterInput) { exportAuditLog(filter: $filter) { csv rowCount truncated limit } }",
+  "variables": {
+   "filter": {}
+  }
+ },
+ {
+  "name": "ForgotPassword",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "GenerateBackupCodes",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "GenerateTotpSecret",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation GenerateTotpSecret { generateTotpSecret { secret otpauthUrl } }",
+  "variables": {}
+ },
+ {
+  "name": "GetAdminPrograms",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetAdminPrograms($filters: ProgramFilterInput, $skip: Int, $take: Int) { adminPrograms(filters: $filters, skip: $skip, take: $take) { ...ProgramCardFields } }\nfragment OrganizationSummaryFields on ProgramOrganizationModel { id name slug }\nfragment ProgramCardFields on ProgramModel { currency id organizationId organization { ...OrganizationSummaryFields } title slug description contentLocale scope rules status visibility rewardGrid rewardRange { min max currency } triageDeadlineBusinessDays startDate endDate createdAt }",
+  "variables": {
+   "filters": {},
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetAppealQueue",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetAppealQueue($skip: Int, $take: Int) { appealQueue(skip: $skip, take: $take) { ...AppealFields } }\nfragment AppealFields on SeverityAppealModel { id adjudicationId reportId reportTitle raisedById raisedByUsername raisedBy grounds status assessorId assessorUsername decision decidedAt resultingAdjudicationId createdAt }",
+  "variables": {
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetBadgeCatalog",
+  "kind": "query",
+  "cls": "EMPTY",
+  "detail": "{\"badgeCatalog\":[{\"id\":\"8d5c22dd-0890-4be1-ab5d-6abb49e6a0a4\",\"name\":\"First Blood\",\"slug\":\"premier-sang\",\"description\":\"",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query GetBadgeCatalog { badgeCatalog { id name slug description icon state awardedAt hidden progress { current threshold } } }",
+  "variables": {}
+ },
+ {
+  "name": "GetBillableInterventions",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetBillableInterventions($month: String) { billableInterventions(month: $month) { organizationName usage { ...InterventionUsageFields } interventions { id kind reportId reportTitle createdAt } } }\nfragment InterventionUsageFields on InterventionUsageModel { organizationId month subscriptionTier quota used remaining billable }",
+  "variables": {
+   "month": "bb-test"
+  }
+ },
+ {
+  "name": "GetCertificate",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetCertificate($reference: String!) { certificate(reference: $reference) { ...CertificateFields } }\nfragment CertificateFields on PayoutCertificateModel { id reference reportId adjudicationId organizationId researcherId researcherUsername reportTitle grossAmount withheldAmount netAmount currency status issuedAt appealClosesAt dueAt isOverdue researcherVerified paymentDueAt voidReason disputeClosesAt graderSide graderUsername criticalReviewOutcome settlement { id attestedById attestedByUsername method reference paidAt note withheldAmount withholdingReason disputedAt disputeReason createdAt proof { id fileName contentType fileSize fileAccess createdAt } } receipt { receivedAt amountReceived differenceReason onBehalf declaredAt confirmsAttestation } expectedAmount openAppealBy }",
+  "variables": {
+   "reference": "bb-test"
+  }
+ },
+ {
+  "name": "GetCertificateDocument",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetCertificateDocument($reference: String!) { certificateDocument(reference: $reference) { reference rendered signedDocument signature keyId signedAt isSigned publicToken retainedUntil signatureCovers } }",
+  "variables": {
+   "reference": "bb-test"
+  }
+ },
+ {
+  "name": "GetCertificateDocumentPdfUrl",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetCertificateDocumentPdfUrl($reference: String!) { certificateDocumentPdfUrl(reference: $reference) }",
+  "variables": {
+   "reference": "bb-test"
+  }
+ },
+ {
+  "name": "GetCriticalReviewQueue",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetCriticalReviewQueue($organizationId: ID, $skip: Int, $take: Int) { criticalReviewQueue(organizationId: $organizationId, skip: $skip, take: $take) { adjudicationId reportId reportTitle organizationId organizationName severity amount currency graderId graderUsername gradedAt reviewDueAt } }",
+  "variables": {
+   "organizationId": "e9774016-6c03-4671-9b2c-99e04d154dc0",
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetDisputedSettlements",
+  "kind": "query",
+  "cls": "SKIP"
+ },
+ {
+  "name": "GetDownloadUrl",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetDownloadUrl($attachmentId: ID!) { downloadUrl(attachmentId: $attachmentId) }",
+  "variables": {
+   "attachmentId": "02c74a4e-f41f-471d-a5a3-29b884263394"
+  }
+ },
+ {
+  "name": "GetEscalatedReports",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetEscalatedReports($skip: Int, $take: Int) { escalatedReports(skip: $skip, take: $take) { reportId title status claimedSeverity submittedAt triageDueAt programId programTitle organizationId organizationName } }",
+  "variables": {
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetInboundEmails",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetInboundEmails($skip: Int!, $take: Int!) { inboundEmails(skip: $skip, take: $take) { id fromAddress toAddress subject text receivedAt } }",
+  "variables": {
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetKycDocuments",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetKycDocuments($status: KycStatus, $userId: ID, $skip: Int, $take: Int) { kycDocuments(status: $status, userId: $userId, skip: $skip, take: $take) { id userId username email type s3Key contentType fileSize fileAccess scanStatus status reviewedById reviewedAt rejectionNote createdAt } }",
+  "variables": {
+   "status": "APPROVED",
+   "userId": "bed0a482-f35f-4a3d-9549-14bae1ec9b7e",
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetLapsedCriticalReviews",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetLapsedCriticalReviews($since: DateTime, $skip: Int, $take: Int) { lapsedCriticalReviews(since: $since, skip: $skip, take: $take) { reviewId adjudicationId reportId reportTitle organizationId organizationName severity amount currency graderId graderUsername gradedAt lapsedAt certificateReference } }",
+  "variables": {
+   "since": "PENDING",
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetLeaderboard",
+  "kind": "query",
+  "cls": "DATA",
+  "detail": "{\"leaderboard\":[]}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query GetLeaderboard($timeRange: String, $country: String, $limit: Int) { leaderboard(timeRange: $timeRange, country: $country, limit: $limit) { score rank username memberSince isAmbassador profile { id reputation level xp streak country avatarUrl } badges { id badgeId awardedAt } } }",
+  "variables": {
+   "timeRange": "bb-test",
+   "country": "bb-test",
+   "limit": 1
+  }
+ },
+ {
+  "name": "GetMyCertificates",
+  "kind": "query",
+  "cls": "DATA",
+  "detail": "{\"myCertificates\":[]}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query GetMyCertificates { myCertificates { ...CertificateFields } }\nfragment CertificateFields on PayoutCertificateModel { id reference reportId adjudicationId organizationId researcherId researcherUsername reportTitle grossAmount withheldAmount netAmount currency status issuedAt appealClosesAt dueAt isOverdue researcherVerified paymentDueAt voidReason disputeClosesAt graderSide graderUsername criticalReviewOutcome settlement { id attestedById attestedByUsername method reference paidAt note withheldAmount withholdingReason disputedAt disputeReason createdAt proof { id fileName contentType fileSize fileAccess createdAt } } receipt { receivedAt amountReceived differenceReason onBehalf declaredAt confirmsAttestation } expectedAmount openAppealBy }",
+  "variables": {}
+ },
+ {
+  "name": "GetMyInvitedPrograms",
+  "kind": "query",
+  "cls": "SKIP"
+ },
+ {
+  "name": "GetMyKycDocuments",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetMyKycDocuments { myKycDocuments { id type s3Key contentType fileSize fileAccess status reviewedAt rejectionNote createdAt } }",
+  "variables": {}
+ },
+ {
+  "name": "GetMyKycStatus",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:Field KycStatusModel.approvedAt is not available to OAuth cl"
+  ],
+  "iters": 0,
+  "text": "query GetMyKycStatus { myKycStatus { status approvedAt isComplete hasIdDocument hasProofOfAddress documents { id type status createdAt } } }",
+  "variables": {}
+ },
+ {
+  "name": "GetMyOrganizationInvitations",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetMyOrganizationInvitations { myOrganizationInvitations { id organizationId organizationName role token expiresAt createdAt refusal } }",
+  "variables": {}
+ },
+ {
+  "name": "GetMyOrganizations",
+  "kind": "query",
+  "cls": "SCOPE",
+  "detail": " triage:read",
+  "trail": [
+   "stop:This operation requires the scope(s): triage:read"
+  ],
+  "iters": 0,
+  "text": "query GetMyOrganizations { myOrganizations { ...OrganizationFields viewerRole viewerActions members { id userId role joinedAt user { id username email } } createdAt } }\nfragment OrganizationFields on OrganizationModel { id name slug description website logoUrl industry country kycStatus subscriptionTier subscriptionExpiresAt aiTriageAccessEnabled aiGradingEnabled submissionsSuspendedAt createdAt updatedAt }",
+  "variables": {}
+ },
+ {
+  "name": "GetMyProfile",
+  "kind": "query",
+  "cls": "EMPTY",
+  "detail": "{\"myProfile\":{\"id\":\"da7442e3-2ca3-4644-a832-420d26551deb\",\"userId\":\"e3aa51e2-2c87-4b64-a3cb-6d5eb857f40c\",\"reputation\":0",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query GetMyProfile { myProfile { ...ResearcherProfileFields } }\nfragment ResearcherProfileFields on ResearcherProfileModel { id userId reputation level xp totalEarned streak longestStreak bio website country avatarUrl lastActiveDate pgpKey }",
+  "variables": {}
+ },
+ {
+  "name": "GetMyPrograms",
+  "kind": "query",
+  "cls": "SCOPE",
+  "detail": " triage:read",
+  "trail": [
+   "stop:This operation requires the scope(s): triage:read"
+  ],
+  "iters": 0,
+  "text": "query GetMyPrograms($skip: Int, $take: Int) { myPrograms(skip: $skip, take: $take) { ...ProgramCardFields } }\nfragment OrganizationSummaryFields on ProgramOrganizationModel { id name slug }\nfragment ProgramCardFields on ProgramModel { currency id organizationId organization { ...OrganizationSummaryFields } title slug description contentLocale scope rules status visibility rewardGrid rewardRange { min max currency } triageDeadlineBusinessDays startDate endDate createdAt }",
+  "variables": {
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetMySupportConversation",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetMySupportConversation { mySupportConversation { ...SupportConversationFields } }\nfragment SupportMessageFields on SupportMessageModel { id conversationId body author { id username } authorSide createdAt redactedAt attachments { id fileName contentType fileSize fileAccess } }\nfragment SupportConversationFields on SupportConversationModel { id userId user { id username email } status createdAt lastMessageAt closedAt unreadCount lastMessage { ...SupportMessageFields } }",
+  "variables": {}
+ },
+ {
+  "name": "GetMyWebAuthnCredentials",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetMyWebAuthnCredentials { myWebAuthnCredentials { id credentialId deviceName lastUsedAt createdAt } }",
+  "variables": {}
+ },
+ {
+  "name": "GetNotificationPreferences",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetNotificationPreferences { notificationPreferences { ...NotificationPreferenceFields } }\nfragment NotificationPreferenceFields on NotificationPreferenceModel { id emailReportStatus emailPayment emailDigest smsPayment smsSecurity inAppAll updatedAt }",
+  "variables": {}
+ },
+ {
+  "name": "GetNotifications",
+  "kind": "query",
+  "cls": "DATA",
+  "detail": "{\"notifications\":[]}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query GetNotifications($skip: Int, $take: Int, $unreadOnly: Boolean) { notifications(skip: $skip, take: $take, unreadOnly: $unreadOnly) { id type title body data readAt createdAt } }",
+  "variables": {
+   "skip": 1,
+   "take": 1,
+   "unreadOnly": false
+  }
+ },
+ {
+  "name": "GetOrganization",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetOrganization($id: ID!) { organization(id: $id) { ...OrganizationFields } }\nfragment OrganizationFields on OrganizationModel { id name slug description website logoUrl industry country kycStatus subscriptionTier subscriptionExpiresAt aiTriageAccessEnabled aiGradingEnabled submissionsSuspendedAt createdAt updatedAt }",
+  "variables": {
+   "id": "03929cec-174d-4286-bd89-72e4facbaa04"
+  }
+ },
+ {
+  "name": "GetOrganizationCertificates",
+  "kind": "query",
+  "cls": "SCOPE",
+  "detail": " triage:read",
+  "trail": [
+   "stop:This operation requires the scope(s): triage:read"
+  ],
+  "iters": 0,
+  "text": "query GetOrganizationCertificates($orgId: ID!, $status: CertificateStatus, $reportId: ID, $skip: Int, $take: Int) { organizationCertificates(orgId: $orgId, status: $status, reportId: $reportId, skip: $skip, take: $take) { ...CertificateFields } }\nfragment CertificateFields on PayoutCertificateModel { id reference reportId adjudicationId organizationId researcherId researcherUsername reportTitle grossAmount withheldAmount netAmount currency status issuedAt appealClosesAt dueAt isOverdue researcherVerified paymentDueAt voidReason disputeClosesAt graderSide graderUsername criticalReviewOutcome settlement { id attestedById attestedByUsername method reference paidAt note withheldAmount withholdingReason disputedAt disputeReason createdAt proof { id fileName contentType fileSize fileAccess createdAt } } receipt { receivedAt amountReceived differenceReason onBehalf declaredAt confirmsAttestation } expectedAmount openAppealBy }",
+  "variables": {
+   "orgId": "a94f031f-bbb4-4faf-be29-d3bc74998c7f",
+   "status": "ATTESTED",
+   "reportId": "22029b4f-598b-4f41-bc99-f259d8070cdd",
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetOrganizationInterventionUsage",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetOrganizationInterventionUsage($organizationId: ID!, $month: String) { organizationInterventionUsage(organizationId: $organizationId, month: $month) { ...InterventionUsageFields } }\nfragment InterventionUsageFields on InterventionUsageModel { organizationId month subscriptionTier quota used remaining billable }",
+  "variables": {
+   "organizationId": "8a2dc931-5471-4c91-ac1b-2dca023276bc",
+   "month": "bb-test"
+  }
+ },
+ {
+  "name": "GetOrganizationInvitations",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetOrganizationInvitations($organizationId: ID!) { organizationInvitations(organizationId: $organizationId) { id email role token expiresAt createdAt } }",
+  "variables": {
+   "organizationId": "0a5fb9fe-bb9e-414a-975e-b67c3fba1401"
+  }
+ },
+ {
+  "name": "GetOrganizationMembers",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetOrganizationMembers($id: ID!) { organization(id: $id) { id name members { id role joinedAt user { id email username roles status } } } }",
+  "variables": {
+   "id": "ef23f412-e3f4-4205-b8c2-2317cf884a25"
+  }
+ },
+ {
+  "name": "GetOrganizationStanding",
+  "kind": "query",
+  "cls": "SCOPE",
+  "detail": " triage:read",
+  "trail": [
+   "stop:This operation requires the scope(s): triage:read"
+  ],
+  "iters": 0,
+  "text": "query GetOrganizationStanding($orgId: ID!) { organizationStanding(orgId: $orgId) { totalIssued totalSettled currentlyOverdue longestOverdueDays oldestOverdueSince overrideRate submissionsSuspended } }",
+  "variables": {
+   "orgId": "757fd29a-30ab-444d-8baa-306f072e67aa"
+  }
+ },
+ {
+  "name": "GetOrganizations",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetOrganizations($skip: Int, $take: Int, $search: String) { organizations(skip: $skip, take: $take, search: $search) { id name slug description industry country website kycStatus subscriptionTier subscriptionExpiresAt aiTriageAccessEnabled aiGradingEnabled submissionsSuspendedAt createdAt } }",
+  "variables": {
+   "skip": 1,
+   "take": 1,
+   "search": "bb-test"
+  }
+ },
+ {
+  "name": "GetOverdueCertificates",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetOverdueCertificates($organizationId: ID, $skip: Int, $take: Int) { overdueCertificates(organizationId: $organizationId, skip: $skip, take: $take) { ...CertificateFields } }\nfragment CertificateFields on PayoutCertificateModel { id reference reportId adjudicationId organizationId researcherId researcherUsername reportTitle grossAmount withheldAmount netAmount currency status issuedAt appealClosesAt dueAt isOverdue researcherVerified paymentDueAt voidReason disputeClosesAt graderSide graderUsername criticalReviewOutcome settlement { id attestedById attestedByUsername method reference paidAt note withheldAmount withholdingReason disputedAt disputeReason createdAt proof { id fileName contentType fileSize fileAccess createdAt } } receipt { receivedAt amountReceived differenceReason onBehalf declaredAt confirmsAttestation } expectedAmount openAppealBy }",
+  "variables": {
+   "organizationId": "d3ebe608-3bcf-4974-9892-bc4c979df341",
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetPayoutSummary",
+  "kind": "query",
+  "cls": "SKIP"
+ },
+ {
+  "name": "GetPendingKycDocuments",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetPendingKycDocuments($skip: Int, $take: Int) { pendingKycDocuments(skip: $skip, take: $take) { id userId username email type s3Key contentType fileSize fileAccess scanStatus status createdAt } }",
+  "variables": {
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetProgram",
+  "kind": "query",
+  "cls": "EMPTY",
+  "detail": "{\"program\":null}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query GetProgram($id: ID!) { program(id: $id) { ...ProgramDetailFields } }\nfragment OrganizationSummaryFields on ProgramOrganizationModel { id name slug }\nfragment ProgramCardFields on ProgramModel { currency id organizationId organization { ...OrganizationSummaryFields } title slug description contentLocale scope rules status visibility rewardGrid rewardRange { min max currency } triageDeadlineBusinessDays startDate endDate createdAt }\nfragment ProgramDetailFields on ProgramModel { currency ...ProgramCardFields outOfScope updatedAt sentBack { reason sentAt } }",
+  "variables": {
+   "id": "3bbc4189-96a3-4680-acde-ebb1f7d0a35e"
+  }
+ },
+ {
+  "name": "GetProgramBySlug",
+  "kind": "query",
+  "cls": "NOT-FOUND",
+  "detail": "Program not found",
+  "trail": [
+   "stop:Program not found"
+  ],
+  "iters": 0,
+  "text": "query GetProgramBySlug($slug: String!) { programBySlug(slug: $slug) { ...ProgramDetailFields } }\nfragment OrganizationSummaryFields on ProgramOrganizationModel { id name slug }\nfragment ProgramCardFields on ProgramModel { currency id organizationId organization { ...OrganizationSummaryFields } title slug description contentLocale scope rules status visibility rewardGrid rewardRange { min max currency } triageDeadlineBusinessDays startDate endDate createdAt }\nfragment ProgramDetailFields on ProgramModel { currency ...ProgramCardFields outOfScope updatedAt sentBack { reason sentAt } }",
+  "variables": {
+   "slug": "bb-test"
+  }
+ },
+ {
+  "name": "GetProgramStats",
+  "kind": "query",
+  "cls": "SCOPE",
+  "detail": " triage:read",
+  "trail": [
+   "stop:This operation requires the scope(s): triage:read"
+  ],
+  "iters": 0,
+  "text": "query GetProgramStats($programId: ID!) { programStats(programId: $programId) { totalReports reportsByStatus reportsBySeverity averageResolutionTime } }",
+  "variables": {
+   "programId": "d2e05fde-f257-4887-9684-6123b0634ff3"
+  }
+ },
+ {
+  "name": "GetPrograms",
+  "kind": "query",
+  "cls": "DATA",
+  "detail": "{\"programs\":[]}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query GetPrograms($filters: ProgramFilterInput, $skip: Int, $take: Int) { programs(filters: $filters, skip: $skip, take: $take) { ...ProgramCardFields } }\nfragment OrganizationSummaryFields on ProgramOrganizationModel { id name slug }\nfragment ProgramCardFields on ProgramModel { currency id organizationId organization { ...OrganizationSummaryFields } title slug description contentLocale scope rules status visibility rewardGrid rewardRange { min max currency } triageDeadlineBusinessDays startDate endDate createdAt }",
+  "variables": {
+   "filters": {},
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetReport",
+  "kind": "query",
+  "cls": "OTHER",
+  "detail": "You do not have access to this resource",
+  "trail": [
+   "stop:You do not have access to this resource"
+  ],
+  "iters": 0,
+  "text": "query GetReport($id: ID!) { report(id: $id) { id programId reporterId title description stepsToReproduce impact remediation claimedSeverity claimedCvssVector claimedCvssScore status assignedTriageId assignedTriage { id username } duplicateOfId createdAt updatedAt triageDueAt isOverdue awaitingGrade grade { severity side certifiedAmount currency } gridVersionId termsVersionId boundRewardGrid program { ...ReportProgramFields } reporter { id username } attachments { id fileName contentType fileSize scanStatus fileAccess createdAt } } }\nfragment ReportProgramFields on ReportProgramModel { id title slug }",
+  "variables": {
+   "id": "9a128a98-d35d-45f2-9197-d5f31b5e9f60"
+  }
+ },
+ {
+  "name": "GetReportAdjudication",
+  "kind": "query",
+  "cls": "OTHER",
+  "detail": "You do not have access to this resource",
+  "trail": [
+   "stop:You do not have access to this resource"
+  ],
+  "iters": 0,
+  "text": "query GetReportAdjudication($reportId: ID!) { reportAdjudication(reportId: $reportId) { ...AdjudicationFields } }\nfragment CriticalReviewFields on CriticalReviewModel { id adjudicationId outcome reviewerId supersedingAdjudicationId createdAt }\nfragment AdjudicationFields on AdjudicationModel { id reportId severity amount currency taxonomyId taxonomyVersion vrtNodeId vrtBaselinePriority deviationReason cvssVersion cvssVector cvssScore cweId amountBasis amountReason reasoning decisionVector assessorId assessorUsername side awaitingCriticalReview criticalReviewDueAt criticalReview { ...CriticalReviewFields } supersedesId createdAt }",
+  "variables": {
+   "reportId": "4553c9a8-a829-42eb-8a0c-d1c42ec0b448"
+  }
+ },
+ {
+  "name": "GetReportAppeals",
+  "kind": "query",
+  "cls": "OTHER",
+  "detail": "You do not have access to this resource",
+  "trail": [
+   "stop:You do not have access to this resource"
+  ],
+  "iters": 0,
+  "text": "query GetReportAppeals($reportId: ID!) { reportAppeals(reportId: $reportId) { ...AppealFields } }\nfragment AppealFields on SeverityAppealModel { id adjudicationId reportId reportTitle raisedById raisedByUsername raisedBy grounds status assessorId assessorUsername decision decidedAt resultingAdjudicationId createdAt }",
+  "variables": {
+   "reportId": "ca2c0581-b7b6-498e-88fe-3ddb515ce3ed"
+  }
+ },
+ {
+  "name": "GetReportComments",
+  "kind": "query",
+  "cls": "OTHER",
+  "detail": "You do not have access to this resource",
+  "trail": [
+   "stop:You do not have access to this resource"
+  ],
+  "iters": 0,
+  "text": "query GetReportComments($reportId: ID!) { reportComments(reportId: $reportId) { id reportId authorId authorUsername content isInternal createdAt } }",
+  "variables": {
+   "reportId": "e3300190-256e-4463-9b65-40e9b2d23cc6"
+  }
+ },
+ {
+  "name": "GetReportTransitions",
+  "kind": "query",
+  "cls": "OTHER",
+  "detail": "You do not have access to this resource",
+  "trail": [
+   "stop:You do not have access to this resource"
+  ],
+  "iters": 0,
+  "text": "query GetReportTransitions($reportId: ID!) { reportTransitions(reportId: $reportId) { id fromStatus toStatus changedById changedByUsername reason createdAt } }",
+  "variables": {
+   "reportId": "06b52a12-439d-44eb-914a-0225dc1c9367"
+  }
+ },
+ {
+  "name": "GetReportTrends",
+  "kind": "query",
+  "cls": "SCOPE",
+  "detail": " triage:read",
+  "trail": [
+   "stop:This operation requires the scope(s): triage:read"
+  ],
+  "iters": 0,
+  "text": "query GetReportTrends($orgId: ID!, $months: Int) { reportTrends(orgId: $orgId, months: $months) { date count status } }",
+  "variables": {
+   "orgId": "a06a6340-79da-4897-9b7c-b0500505dcc1",
+   "months": 1
+  }
+ },
+ {
+  "name": "GetReports",
+  "kind": "query",
+  "cls": "DATA",
+  "detail": "{\"reports\":[]}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query GetReports($filters: ReportFilterInput, $skip: Int, $take: Int) { reports(filters: $filters, skip: $skip, take: $take) { id programId title claimedSeverity status createdAt triageDueAt isOverdue awaitingGrade grade { severity side certifiedAmount currency } disclosure { revision organizationApproved researcherApproved publishedAt } reporter { id username } assignedTriage { id username } program { ...ReportProgramFields } } }\nfragment ReportProgramFields on ReportProgramModel { id title slug }",
+  "variables": {
+   "filters": {},
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetResearcherActivity",
+  "kind": "query",
+  "cls": "OTHER",
+  "detail": "You can only read your own activity",
+  "trail": [
+   "stop:You can only read your own activity"
+  ],
+  "iters": 0,
+  "text": "query GetResearcherActivity($userId: ID!, $months: Int) { researcherActivity(userId: $userId, months: $months) { date submissions validated } }",
+  "variables": {
+   "userId": "c00e38ca-1a90-44cf-b3a1-e358f04e3752",
+   "months": 1
+  }
+ },
+ {
+  "name": "GetResearcherProfile",
+  "kind": "query",
+  "cls": "EMPTY",
+  "detail": "{\"researcherProfile\":null}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query GetResearcherProfile($userId: ID!) { researcherProfile(userId: $userId) { ...ResearcherProfileFields } }\nfragment ResearcherProfileFields on ResearcherProfileModel { id userId reputation level xp totalEarned streak longestStreak bio website country avatarUrl lastActiveDate pgpKey }",
+  "variables": {
+   "userId": "f3da2946-c2a5-4392-8ec7-55046d04ff9e"
+  }
+ },
+ {
+  "name": "GetResearcherPublicProfile",
+  "kind": "query",
+  "cls": "EMPTY",
+  "detail": "{\"researcherPublicProfile\":null}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query GetResearcherPublicProfile($username: String!) { researcherPublicProfile(username: $username) { id userId username memberSince isAmbassador reputation level xp streak longestStreak reportsSubmitted reportsAccepted badges { id name description icon awardedAt disclosurePath } bio website country avatarUrl } }",
+  "variables": {
+   "username": "bb-test"
+  }
+ },
+ {
+  "name": "GetResearcherStats",
+  "kind": "query",
+  "cls": "EMPTY",
+  "detail": "{\"researcherStats\":null}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query GetResearcherStats($userId: ID!) { researcherStats(userId: $userId) { totalReports validatedReports validationRate reportsBySeverity totalEarned currentStreak longestStreak } }",
+  "variables": {
+   "userId": "b3e7e6cc-962b-4587-b57a-6b5f49c2ed23"
+  }
+ },
+ {
+  "name": "GetResearchers",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetResearchers($search: String, $kycStatus: KycStatus, $skip: Int, $take: Int) { researchers(search: $search, kycStatus: $kycStatus, skip: $skip, take: $take) { id username email kycStatus level reputation totalEarned createdAt } }",
+  "variables": {
+   "search": "bb-test",
+   "kycStatus": "APPROVED",
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetSettlementInstruction",
+  "kind": "query",
+  "cls": "SKIP"
+ },
+ {
+  "name": "GetSeverityDistribution",
+  "kind": "query",
+  "cls": "SCOPE",
+  "detail": " triage:read",
+  "trail": [
+   "stop:This operation requires the scope(s): triage:read"
+  ],
+  "iters": 0,
+  "text": "query GetSeverityDistribution($orgId: ID!) { severityDistribution(orgId: $orgId) { severity count } }",
+  "variables": {
+   "orgId": "4aab0459-b628-43c4-90ae-d99e66db8708"
+  }
+ },
+ {
+  "name": "GetStuckFiles",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetStuckFiles($olderThanMinutes: Int, $skip: Int, $take: Int) { stuckFiles(olderThanMinutes: $olderThanMinutes, skip: $skip, take: $take) { id purpose scanStatus contentType fileSize reportId userId attestationId supportConversationId uploadedAt ageMinutes rescansUsed maxRescans lastRescanAt } }",
+  "variables": {
+   "olderThanMinutes": 1,
+   "skip": 1,
+   "take": 1
+  }
+ },
+ {
+  "name": "GetSupportAttachmentUrl",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetSupportAttachmentUrl($attachmentId: ID!) { supportAttachmentUrl(attachmentId: $attachmentId) }",
+  "variables": {
+   "attachmentId": "e3ba8ad1-b74b-4c58-9969-633b96ec4ca3"
+  }
+ },
+ {
+  "name": "GetSupportConversationForUser",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetSupportConversationForUser($userId: ID!) { supportConversationForUser(userId: $userId) { ...SupportConversationFields } }\nfragment SupportMessageFields on SupportMessageModel { id conversationId body author { id username } authorSide createdAt redactedAt attachments { id fileName contentType fileSize fileAccess } }\nfragment SupportConversationFields on SupportConversationModel { id userId user { id username email } status createdAt lastMessageAt closedAt unreadCount lastMessage { ...SupportMessageFields } }",
+  "variables": {
+   "userId": "bb30775c-3d34-43ae-8f73-d045168afa49"
+  }
+ },
+ {
+  "name": "GetSupportConversations",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetSupportConversations($filter: SupportConversationFilterInput, $cursor: String, $take: Int) { supportConversations(filter: $filter, cursor: $cursor, take: $take) { items { ...SupportConversationFields } nextCursor } }\nfragment SupportMessageFields on SupportMessageModel { id conversationId body author { id username } authorSide createdAt redactedAt attachments { id fileName contentType fileSize fileAccess } }\nfragment SupportConversationFields on SupportConversationModel { id userId user { id username email } status createdAt lastMessageAt closedAt unreadCount lastMessage { ...SupportMessageFields } }",
+  "variables": {
+   "filter": {},
+   "cursor": "bb-test",
+   "take": 1
+  }
+ },
+ {
+  "name": "GetSupportMessages",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query GetSupportMessages($conversationId: ID!, $before: String, $take: Int) { supportMessages(conversationId: $conversationId, before: $before, take: $take) { items { ...SupportMessageFields } nextCursor } }\nfragment SupportMessageFields on SupportMessageModel { id conversationId body author { id username } authorSide createdAt redactedAt attachments { id fileName contentType fileSize fileAccess } }",
+  "variables": {
+   "conversationId": "efd76746-5785-424e-a791-561f2e3eac90",
+   "before": "bb-test",
+   "take": 1
+  }
+ },
+ {
+  "name": "GetTermsDocument",
+  "kind": "query",
+  "cls": "OTHER",
+  "detail": "No such terms version",
+  "trail": [
+   "stop:No such terms version"
+  ],
+  "iters": 0,
+  "text": "query GetTermsDocument($termsVersionId: ID!) { termsDocument(termsVersionId: $termsVersionId) { ...TermsDocumentFields } }\nfragment TermsDocumentFields on TermsDocument { id kind programId version body bodyDigest publishedAt }",
+  "variables": {
+   "termsVersionId": "aef262e3-0182-4bd4-baad-5a052972207e"
+  }
+ },
+ {
+  "name": "GetTermsVersions",
+  "kind": "query",
+  "cls": "EMPTY",
+  "detail": "{\"termsVersions\":[{\"id\":\"9dc17e98-dab2-48be-9f8b-45879bfb7190\",\"kind\":\"PLATFORM_ORGANIZATION\",\"programId\":null,\"version\"",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query GetTermsVersions($kind: TermsKind!, $programId: ID) { termsVersions(kind: $kind, programId: $programId) { ...TermsDocumentFields } }\nfragment TermsDocumentFields on TermsDocument { id kind programId version body bodyDigest publishedAt }",
+  "variables": {
+   "kind": "PLATFORM_ORGANIZATION",
+   "programId": "d984d7d5-17a3-4adf-ab37-0e8e945ab293"
+  }
+ },
+ {
+  "name": "GetUnreadNotificationCount",
+  "kind": "query",
+  "cls": "DATA",
+  "detail": "{\"unreadNotificationCount\":1}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query GetUnreadNotificationCount { unreadNotificationCount }",
+  "variables": {}
+ },
+ {
+  "name": "GithubLinkUrl",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation GithubLinkUrl($returnTo: String) { githubLinkUrl(returnTo: $returnTo) }",
+  "variables": {
+   "returnTo": "bb-test"
+  }
+ },
+ {
+  "name": "HasAcceptedPlatformTerms",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query HasAcceptedPlatformTerms($kind: TermsKind!) { hasAcceptedPlatformTerms(kind: $kind) }",
+  "variables": {
+   "kind": "PLATFORM_ORGANIZATION"
+  }
+ },
+ {
+  "name": "HasAcceptedProgrammeTerms",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query HasAcceptedProgrammeTerms($programId: ID!) { hasAcceptedProgrammeTerms(programId: $programId) }",
+  "variables": {
+   "programId": "a7ca2c7b-bc15-434f-8f69-da47a9c2ffdc"
+  }
+ },
+ {
+  "name": "HasOrganizationAcceptedTerms",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query HasOrganizationAcceptedTerms($organizationId: ID!) { hasOrganizationAcceptedTerms(organizationId: $organizationId) }",
+  "variables": {
+   "organizationId": "a3140cdc-e3c1-4f84-9402-031fdfa0232e"
+  }
+ },
+ {
+  "name": "InviteOrganizationMember",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "KycDocumentUrl",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query KycDocumentUrl($documentId: ID!) { kycDocumentUrl(documentId: $documentId) }",
+  "variables": {
+   "documentId": "40ba3eb3-e1e9-49c1-9f82-76f5e61aa3d8"
+  }
+ },
+ {
+  "name": "MarkAllNotificationsAsRead",
+  "kind": "mutation",
+  "cls": "SCOPE",
+  "detail": " notifications:write",
+  "trail": [
+   "stop:This operation requires the scope(s): notifications:write"
+  ],
+  "iters": 0,
+  "text": "mutation MarkAllNotificationsAsRead($clientRequestId: String) { markAllNotificationsAsRead(clientRequestId: $clientRequestId) }",
+  "variables": {
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "MarkEmailVerified",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill reason:String!",
+   "fill userId:ID!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 2,
+  "text": "mutation MarkEmailVerified($input: MarkEmailVerifiedInput!) { markEmailVerified(input: $input) { ...AdminUserFields } }\nfragment AdminUserFields on AdminUserModel { id email username roles status kycStatus emailVerified approvedAt rejectedAt rejectionReason isAmbassador twoFactorEnabled lastLogin createdAt organizationCount }",
+  "variables": {
+   "input": {
+    "reason": "bb-test",
+    "userId": "5469f123-6c0d-445a-8fd2-39e4d25b5506"
+   }
+  }
+ },
+ {
+  "name": "MarkNotificationAsRead",
+  "kind": "mutation",
+  "cls": "SCOPE",
+  "detail": " notifications:write",
+  "trail": [
+   "stop:This operation requires the scope(s): notifications:write"
+  ],
+  "iters": 0,
+  "text": "mutation MarkNotificationAsRead($id: ID!, $clientRequestId: String) { markNotificationAsRead(id: $id, clientRequestId: $clientRequestId) }",
+  "variables": {
+   "id": "3cebb62b-17e2-4d8b-b7ac-3b4e1bd9b102",
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "MarkSupportConversationRead",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation MarkSupportConversationRead($conversationId: ID!) { markSupportConversationRead(conversationId: $conversationId) }",
+  "variables": {
+   "conversationId": "29b96141-5c38-4df6-8ef8-9195de06596d"
+  }
+ },
+ {
+  "name": "MyAgentApprovals",
+  "kind": "query",
+  "cls": "DATA",
+  "detail": "{\"myAgentApprovals\":[]}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query MyAgentApprovals($statuses: [AgentApprovalStatus!], $take: Int) { myAgentApprovals(statuses: $statuses, take: $take) { id status requiresStepUp createdAt expiresAt decidedAt consumedAt client { name } parts { index operation irreversible audience } } }",
+  "variables": {
+   "statuses": "APPROVED",
+   "take": 1
+  }
+ },
+ {
+  "name": "MyDiscordLink",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query MyDiscordLink { myDiscordLink { discordUsername linkedAt celebrateOptIn needsRelink } }",
+  "variables": {}
+ },
+ {
+  "name": "MyGithubLink",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query MyGithubLink { myGithubLink { githubLogin linkedAt mergedContributions } }",
+  "variables": {}
+ },
+ {
+  "name": "MyOAuthGrants",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query MyOAuthGrants { myOAuthGrants { id client { ...OAuthClientInfoFields } scopes resource createdAt lastUsedAt } }\nfragment OAuthClientInfoFields on OAuthClientInfo { clientId name uri verified redirectHost clientIdHost }",
+  "variables": {}
+ },
+ {
+  "name": "MyOnboarding",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query MyOnboarding { myOnboarding { steps { step done } dismissed } }",
+  "variables": {}
+ },
+ {
+  "name": "MyPayoutMethod",
+  "kind": "query",
+  "cls": "SKIP"
+ },
+ {
+  "name": "OAuthAuthorizationRequest",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query OAuthAuthorizationRequest($id: ID!) { oauthAuthorizationRequest(id: $id) { id client { ...OAuthClientInfoFields } resource requestedScopes { scope title description write } unavailableScopes { scope title description write } triageOrganizations { id name aiTriageAccessEnabled aiGradingEnabled } expiresAt } }\nfragment OAuthClientInfoFields on OAuthClientInfo { clientId name uri verified redirectHost clientIdHost }",
+  "variables": {
+   "id": "47d5b942-ef50-44fb-804f-c13f91013808"
+  }
+ },
+ {
+  "name": "PlanBulkDeletion",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "query PlanBulkDeletion($input: BulkDeletionInput!) { planBulkDeletion(input: $input) { ...BulkDeletionReportFields } }\nfragment BulkDeletionReportFields on BulkDeletionReport { executed hardDeleteCount tombstoneCount refusedCount deletableCount items { kind id label detail outcome refusal retained blockingOrganizationName message } }",
+  "variables": {
+   "input": {}
+  }
+ },
+ {
+  "name": "PresentPlatformTerms",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation PresentPlatformTerms($kind: TermsKind!) { presentPlatformTerms(kind: $kind) { presentationId expiresAt document { id version body bodyDigest publishedAt } } }",
+  "variables": {
+   "kind": "PLATFORM_ORGANIZATION"
+  }
+ },
+ {
+  "name": "PresentProgrammeTerms",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation PresentProgrammeTerms($programId: ID!) { presentProgrammeTerms(programId: $programId) { presentationId expiresAt document { id version body bodyDigest publishedAt } } }",
+  "variables": {
+   "programId": "24db998b-4dc9-4b0a-ae9c-4dc600ddc98e"
+  }
+ },
+ {
+  "name": "PreviewGrade",
+  "kind": "query",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill cvssVector:String!",
+   "fill reportId:ID!",
+   "fill severity:SeverityLevel!",
+   "fill vrtNodeId:String!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 4,
+  "text": "query PreviewGrade($input: PreviewGradeInput!) { previewGrade(input: $input) { reportId side severity currency gridVersionId gridVersion cvssScore impliedSeverity band { min max } payable derivedAmount amount amountBasis deadlineTakeover awaitingCriticalReview certificateWouldIssue reasoningChecked refusal { code message } } }",
+  "variables": {
+   "input": {
+    "cvssVector": "bb-test",
+    "reportId": "ef1ef717-1398-42bf-b378-ac33c742a298",
+    "severity": "CRITICAL",
+    "vrtNodeId": "bb-test"
+   }
+  }
+ },
+ {
+  "name": "PublicProgramActivity",
+  "kind": "query",
+  "cls": "NOT-FOUND",
+  "detail": "Public program not found",
+  "trail": [
+   "stop:Public program not found"
+  ],
+  "iters": 0,
+  "text": "query PublicProgramActivity($slug: String!, $cursor: String) { publicProgramActivity(slug: $slug, cursor: $cursor) { overview { total lastWeek averageCertifiedReward rewardSampleSize confirmedSettlements hallOfFame { username isAmbassador contributions } programTotals { certificatesIssued receiptsConfirmed } } disclosures { id title summary writeup publishedAt username severity certifiedReward settlement } nextCursor } }",
+  "variables": {
+   "slug": "bb-test",
+   "cursor": "bb-test"
+  }
+ },
+ {
+  "name": "PublishRewardGrid",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill grid:JSON!",
+   "fill programId:String!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 2,
+  "text": "mutation PublishRewardGrid($input: PublishRewardGridInput!) { publishRewardGrid(input: $input) }",
+  "variables": {
+   "input": {
+    "grid": "PENDING",
+    "programId": "bb-test"
+   }
+  }
+ },
+ {
+  "name": "PublishTerms",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill body:String!",
+   "fill kind:TermsKind!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 2,
+  "text": "mutation PublishTerms($input: PublishTermsInput!) { publishTerms(input: $input) }",
+  "variables": {
+   "input": {
+    "body": "bb-test",
+    "kind": "PLATFORM_ORGANIZATION"
+   }
+  }
+ },
+ {
+  "name": "RaiseAppeal",
+  "kind": "mutation",
+  "cls": "OTHER",
+  "detail": "grounds must be longer than or equal to 20 characters",
+  "trail": [
+   "fill adjudicationId:String!",
+   "fill grounds:String!",
+   "stop:grounds must be longer than or equal to 20 characters"
+  ],
+  "iters": 2,
+  "text": "mutation RaiseAppeal($input: RaiseAppealInput!, $clientRequestId: String) { raiseAppeal(input: $input, clientRequestId: $clientRequestId) { id adjudicationId status createdAt } }",
+  "variables": {
+   "input": {
+    "adjudicationId": "bb-test",
+    "grounds": "bb-test"
+   },
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "RedactSupportMessage",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation RedactSupportMessage($messageId: ID!, $reason: String!, $clientRequestId: String) { redactSupportMessage(messageId: $messageId, reason: $reason, clientRequestId: $clientRequestId) { ...SupportMessageFields } }\nfragment SupportMessageFields on SupportMessageModel { id conversationId body author { id username } authorSide createdAt redactedAt attachments { id fileName contentType fileSize fileAccess } }",
+  "variables": {
+   "messageId": "d8e6e73c-32af-4e0e-ae6c-c14479162dca",
+   "reason": "bb-test",
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "RejectSettlementClaim",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "RejectUser",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill reason:String!",
+   "fill userId:ID!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 2,
+  "text": "mutation RejectUser($input: RejectUserInput!) { rejectUser(input: $input) { ...AdminUserFields } }\nfragment AdminUserFields on AdminUserModel { id email username roles status kycStatus emailVerified approvedAt rejectedAt rejectionReason isAmbassador twoFactorEnabled lastLogin createdAt organizationCount }",
+  "variables": {
+   "input": {
+    "reason": "bb-test",
+    "userId": "731bbedd-43a8-42a6-b9fd-af7e6a83a44f"
+   }
+  }
+ },
+ {
+  "name": "RemoveOrganizationMember",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation RemoveOrganizationMember($organizationId: ID!, $memberId: ID!) { removeOrganizationMember(organizationId: $organizationId, memberId: $memberId) }",
+  "variables": {
+   "organizationId": "95d169e1-4938-47fa-8a48-28dd8d8e151e",
+   "memberId": "fee7618f-81f1-409c-8161-3e3376ef68e1"
+  }
+ },
+ {
+  "name": "RemoveTotpViaToken",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation RemoveTotpViaToken($token: String!) { removeTotpViaToken(token: $token) }",
+  "variables": {
+   "token": "bb-test"
+  }
+ },
+ {
+  "name": "RemoveWebAuthnCredential",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation RemoveWebAuthnCredential($credentialId: String!) { removeWebAuthnCredential(credentialId: $credentialId) }",
+  "variables": {
+   "credentialId": "bb-test"
+  }
+ },
+ {
+  "name": "ReopenSupportConversation",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation ReopenSupportConversation($conversationId: ID!) { reopenSupportConversation(conversationId: $conversationId) }",
+  "variables": {
+   "conversationId": "06b5c49b-f36a-4d3a-a503-3e4fd8aa4ef0"
+  }
+ },
+ {
+  "name": "ReplaceSettlementProof",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "ReportDisclosureDraft",
+  "kind": "query",
+  "cls": "SCOPE",
+  "detail": " disclosures:write",
+  "trail": [
+   "stop:This operation requires the scope(s): disclosures:write"
+  ],
+  "iters": 0,
+  "text": "query ReportDisclosureDraft($reportId: String!) { reportDisclosureDraft(reportId: $reportId) { ...DisclosureDraftStateFields } }\nfragment DisclosureDraftStateFields on DisclosureDraftStateModel { side draft { severity certifiedReward revision title summary writeup creditResearcher organizationApproved researcherApproved publishedAt isPublic } }",
+  "variables": {
+   "reportId": "bb-test"
+  }
+ },
+ {
+  "name": "RequestEmailChange",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill currentPassword:String!",
+   "fill newEmail:String!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 2,
+  "text": "mutation RequestEmailChange($input: RequestEmailChangeInput!) { requestEmailChange(input: $input) }",
+  "variables": {
+   "input": {
+    "currentPassword": "bb-test",
+    "newEmail": "bb-test"
+   }
+  }
+ },
+ {
+  "name": "RequestUploadUrl",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill fileName:String!",
+   "fill fileSize:Int!",
+   "fill mimeType:String!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 3,
+  "text": "mutation RequestUploadUrl($input: RequestUploadUrlInput!) { requestUploadUrl(input: $input) { uploadUrl s3Key } }",
+  "variables": {
+   "input": {
+    "fileName": "bb-test",
+    "fileSize": 1,
+    "mimeType": "bb-test"
+   }
+  }
+ },
+ {
+  "name": "RequeueFileVerification",
+  "kind": "mutation",
+  "cls": "NOT-FOUND",
+  "detail": "Variable \"$purpose\" got invalid value \"PENDING\"; Value \"PENDING\" does not exist in \"UploadPurpose\" enum.",
+  "trail": [
+   "stop:Variable \"$purpose\" got invalid value \"PENDING\"; Value \"PEND"
+  ],
+  "iters": 0,
+  "text": "mutation RequeueFileVerification($purpose: UploadPurpose!, $fileId: ID!) { requeueFileVerification(purpose: $purpose, fileId: $fileId) { id purpose scanStatus round rescanRequested } }",
+  "variables": {
+   "purpose": "PENDING",
+   "fileId": "c80a967a-53ea-4073-9d4a-379719dcda5b"
+  }
+ },
+ {
+  "name": "ResendVerificationEmail",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation ResendVerificationEmail($email: String!, $captchaToken: String, $next: String) { resendVerificationEmail(email: $email, captchaToken: $captchaToken, next: $next) }",
+  "variables": {
+   "email": "bb-test",
+   "captchaToken": "bb-test",
+   "next": "bb-test"
+  }
+ },
+ {
+  "name": "ResetPassword",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "ResetUserTwoFactor",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill reason:String!",
+   "fill userId:ID!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 2,
+  "text": "mutation ResetUserTwoFactor($input: ResetUserTwoFactorInput!) { resetUserTwoFactor(input: $input) { ...AdminUserFields } }\nfragment AdminUserFields on AdminUserModel { id email username roles status kycStatus emailVerified approvedAt rejectedAt rejectionReason isAmbassador twoFactorEnabled lastLogin createdAt organizationCount }",
+  "variables": {
+   "input": {
+    "reason": "bb-test",
+    "userId": "3afe6f6b-1123-477c-a3f5-cf33c96cb272"
+   }
+  }
+ },
+ {
+  "name": "ReviewCriticalGrade",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill adjudicationId:String!",
+   "fill outcome:CriticalReviewOutcome!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 2,
+  "text": "mutation ReviewCriticalGrade($input: ReviewCriticalGradeInput!) { reviewCriticalGrade(input: $input) { ...AdjudicationFields } }\nfragment CriticalReviewFields on CriticalReviewModel { id adjudicationId outcome reviewerId supersedingAdjudicationId createdAt }\nfragment AdjudicationFields on AdjudicationModel { id reportId severity amount currency taxonomyId taxonomyVersion vrtNodeId vrtBaselinePriority deviationReason cvssVersion cvssVector cvssScore cweId amountBasis amountReason reasoning decisionVector assessorId assessorUsername side awaitingCriticalReview criticalReviewDueAt criticalReview { ...CriticalReviewFields } supersedesId createdAt }",
+  "variables": {
+   "input": {
+    "adjudicationId": "bb-test",
+    "outcome": "CHANGED"
+   }
+  }
+ },
+ {
+  "name": "ReviewKycDocument",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill documentId:ID!",
+   "fill status:KycStatus!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 2,
+  "text": "mutation ReviewKycDocument($input: ReviewKycDocumentInput!) { reviewKycDocument(input: $input) { id status reviewedAt rejectionNote } }",
+  "variables": {
+   "input": {
+    "documentId": "33e46110-f22b-435d-b54b-4e21510fbce1",
+    "status": "APPROVED"
+   }
+  }
+ },
+ {
+  "name": "RevokeCertificateShare",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation RevokeCertificateShare($certificateId: ID!) { revokeCertificateShare(certificateId: $certificateId) }",
+  "variables": {
+   "certificateId": "76f4cb83-b4b1-4157-8df0-dba92099443e"
+  }
+ },
+ {
+  "name": "RevokeOAuthGrant",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "RevokeOrganizationInvitation",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation RevokeOrganizationInvitation($organizationId: ID!, $invitationId: ID!) { revokeOrganizationInvitation(organizationId: $organizationId, invitationId: $invitationId) }",
+  "variables": {
+   "organizationId": "8674513f-c426-4565-a6a3-be8eb2c14616",
+   "invitationId": "f69464bc-c705-4c40-a71c-66fd03640d37"
+  }
+ },
+ {
+  "name": "RevokeStaffBadge",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill badgeSlug:String!",
+   "fill reason:String!",
+   "fill userId:ID!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 3,
+  "text": "mutation RevokeStaffBadge($input: RevokeStaffBadgeInput!) { revokeStaffBadge(input: $input) }",
+  "variables": {
+   "input": {
+    "badgeSlug": "bb-test",
+    "reason": "bb-test",
+    "userId": "015a6025-0645-4e89-8941-9ad0d3a10b41"
+   }
+  }
+ },
+ {
+  "name": "SaveReportDisclosure",
+  "kind": "mutation",
+  "cls": "SCOPE",
+  "detail": " disclosures:write",
+  "trail": [
+   "fill creditResearcher:Boolean!",
+   "fill reportId:String!",
+   "fill revision:Int!",
+   "fill summary:String!",
+   "fill title:String!",
+   "fill writeup:String!",
+   "stop:This operation requires the scope(s): disclosures:write"
+  ],
+  "iters": 6,
+  "text": "mutation SaveReportDisclosure($input: SaveDisclosureInput!, $clientRequestId: String) { saveReportDisclosure(input: $input, clientRequestId: $clientRequestId) { ...DisclosureDraftStateFields } }\nfragment DisclosureDraftStateFields on DisclosureDraftStateModel { side draft { severity certifiedReward revision title summary writeup creditResearcher organizationApproved researcherApproved publishedAt isPublic } }",
+  "variables": {
+   "input": {
+    "creditResearcher": false,
+    "reportId": "bb-test",
+    "revision": 1,
+    "summary": "bb-test",
+    "title": "bb-test",
+    "writeup": "bb-test"
+   },
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "Search",
+  "kind": "query",
+  "cls": "DATA",
+  "detail": "{\"search\":[]}",
+  "trail": [
+   "ok"
+  ],
+  "iters": 0,
+  "text": "query Search($query: String!, $types: [String!], $limit: Int, $offset: Int) { search(query: $query, types: $types, limit: $limit, offset: $offset) { id type title highlight rank slug status contentLocale } }",
+  "variables": {
+   "query": "bb-test",
+   "types": "bb-test",
+   "limit": 1,
+   "offset": 1
+  }
+ },
+ {
+  "name": "SendProgramBackToDraft",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation SendProgramBackToDraft($id: ID!, $reason: String!) { sendProgramBackToDraft(id: $id, reason: $reason) { ...ProgramDetailFields } }\nfragment OrganizationSummaryFields on ProgramOrganizationModel { id name slug }\nfragment ProgramCardFields on ProgramModel { currency id organizationId organization { ...OrganizationSummaryFields } title slug description contentLocale scope rules status visibility rewardGrid rewardRange { min max currency } triageDeadlineBusinessDays startDate endDate createdAt }\nfragment ProgramDetailFields on ProgramModel { currency ...ProgramCardFields outOfScope updatedAt sentBack { reason sentAt } }",
+  "variables": {
+   "id": "e4fcb24d-823a-4dcc-ac91-5aa9c0492e77",
+   "reason": "bb-test"
+  }
+ },
+ {
+  "name": "SendSupportMessage",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation SendSupportMessage($conversationId: ID!, $body: String, $attachmentKeys: [String!], $clientRequestId: String) { sendSupportMessage(conversationId: $conversationId, body: $body, attachmentKeys: $attachmentKeys, clientRequestId: $clientRequestId) { ...SupportMessageFields } }\nfragment SupportMessageFields on SupportMessageModel { id conversationId body author { id username } authorSide createdAt redactedAt attachments { id fileName contentType fileSize fileAccess } }",
+  "variables": {
+   "conversationId": "bdf1a8db-d33f-40c0-ac17-9a7bbf1bae98",
+   "body": "bb-test",
+   "attachmentKeys": "bb-test",
+   "clientRequestId": "bb-test"
+  }
+ },
+ {
+  "name": "SetAmbassador",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill isAmbassador:Boolean!",
+   "fill userId:ID!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 2,
+  "text": "mutation SetAmbassador($input: SetAmbassadorInput!) { setAmbassador(input: $input) { ...AdminUserFields } }\nfragment AdminUserFields on AdminUserModel { id email username roles status kycStatus emailVerified approvedAt rejectedAt rejectionReason isAmbassador twoFactorEnabled lastLogin createdAt organizationCount }",
+  "variables": {
+   "input": {
+    "isAmbassador": false,
+    "userId": "a258ac3f-f1ad-4d02-894e-a9bb07ad4e26"
+   }
+  }
+ },
+ {
+  "name": "SetDiscordCelebration",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation SetDiscordCelebration($optIn: Boolean!) { setDiscordCelebration(optIn: $optIn) { discordUsername linkedAt celebrateOptIn needsRelink } }",
+  "variables": {
+   "optIn": false
+  }
+ },
+ {
+  "name": "SetOrganizationAiGrading",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation SetOrganizationAiGrading($organizationId: ID!, $enabled: Boolean!) { setOrganizationAiGrading(organizationId: $organizationId, enabled: $enabled) { ...OrganizationFields } }\nfragment OrganizationFields on OrganizationModel { id name slug description website logoUrl industry country kycStatus subscriptionTier subscriptionExpiresAt aiTriageAccessEnabled aiGradingEnabled submissionsSuspendedAt createdAt updatedAt }",
+  "variables": {
+   "organizationId": "3f351594-edb1-4991-957a-4b9f33319bf2",
+   "enabled": false
+  }
+ },
+ {
+  "name": "SetOrganizationAiTriageAccess",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 0,
+  "text": "mutation SetOrganizationAiTriageAccess($organizationId: ID!, $enabled: Boolean!) { setOrganizationAiTriageAccess(organizationId: $organizationId, enabled: $enabled) { ...OrganizationFields } }\nfragment OrganizationFields on OrganizationModel { id name slug description website logoUrl industry country kycStatus subscriptionTier subscriptionExpiresAt aiTriageAccessEnabled aiGradingEnabled submissionsSuspendedAt createdAt updatedAt }",
+  "variables": {
+   "organizationId": "f3e83ec3-baa8-4cf6-b273-428a667e14c2",
+   "enabled": false
+  }
+ },
+ {
+  "name": "SetOrganizationSubmissionsSuspended",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill organizationId:ID!",
+   "fill reason:String!",
+   "fill suspended:Boolean!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 3,
+  "text": "mutation SetOrganizationSubmissionsSuspended($input: SetOrganizationSubmissionsSuspendedInput!) { setOrganizationSubmissionsSuspended(input: $input) { ...OrganizationFields } }\nfragment OrganizationFields on OrganizationModel { id name slug description website logoUrl industry country kycStatus subscriptionTier subscriptionExpiresAt aiTriageAccessEnabled aiGradingEnabled submissionsSuspendedAt createdAt updatedAt }",
+  "variables": {
+   "input": {
+    "organizationId": "9cdfc402-bec9-4142-a200-82fa6ebbffeb",
+    "reason": "bb-test",
+    "suspended": false
+   }
+  }
+ },
+ {
+  "name": "SetResearcherPayoutMethod",
+  "kind": "mutation",
+  "cls": "SKIP"
+ },
+ {
+  "name": "SetUserRoles",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill roles:[BountyUserRole!]!",
+   "fill userId:ID!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 2,
+  "text": "mutation SetUserRoles($input: SetUserRolesInput!) { setUserRoles(input: $input) { ...AdminUserFields } }\nfragment AdminUserFields on AdminUserModel { id email username roles status kycStatus emailVerified approvedAt rejectedAt rejectionReason isAmbassador twoFactorEnabled lastLogin createdAt organizationCount }",
+  "variables": {
+   "input": {
+    "roles": "COMPANY_ADMIN",
+    "userId": "53c57e51-f0b9-4d87-a7cd-2c9349c01e8c"
+   }
+  }
+ },
+ {
+  "name": "SetUserStatus",
+  "kind": "mutation",
+  "cls": "OAUTH-BLOCKED",
+  "detail": "",
+  "trail": [
+   "fill status:UserStatus!",
+   "fill userId:ID!",
+   "stop:This operation is not available to OAuth clients"
+  ],
+  "iters": 2,
+  "text": "mutation SetUserStatus($input: SetUserStatusInput!) { setUserStatus(input: $input) { ...AdminUserFields } }\nfragment AdminUserFields on AdminUserModel { id email username roles status kycStatus emailVerified approvedAt rejectedAt rejectionReason isAmbassador twoFactorEnabled lastLogin createdAt organizationCount }",
+  "variables": {
+   "input": {
+    "status": "ACTIVE",
+    "userId": "30bf501f-f1ea-423a-bbf4-39e6a0299fe1"
+   }
+  }
+ }
+]

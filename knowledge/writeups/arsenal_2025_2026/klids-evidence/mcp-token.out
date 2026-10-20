@@ -1,0 +1,26 @@
+catcher indisponible: fetch failed
+(pas de jeton dans le cache du catcher)
+
+=== 1) initialize + tools/list avec le jeton a audience MCP ===
+  initialize (Origin=absent) -> HTTP 401  {"error":"unauthorized"}
+  tools/list -> HTTP 401  {"error":"unauthorized"}
+  initialize (Origin=https://bugsecure.senintel.sn) -> HTTP 403  {"jsonrpc":"2.0","error":{"code":-32000,"message":"Origin not allowed"},"id":null}
+  tools/list -> HTTP 403  {"jsonrpc":"2.0","error":{"code":-32000,"message":"Origin not allowed"},"id":null}
+
+=== 2) les outils d ECRITURE sont-ils proposes a un jeton en lecture seule ? ===
+  outils annonces : 0
+  
+
+  outils d ecriture accessibles : AUCUN
+
+=== 3) appel reel d un outil (l exchange vers l API fonctionne-t-il ?) ===
+  search_programs       HTTP 401  {"error":"unauthorized"}
+  get_leaderboard       HTTP 401  {"error":"unauthorized"}
+  get_my_profile        HTTP 401  {"error":"unauthorized"}
+
+=== 4) quel scope le serveur MCP a-t-il obtenu de l AS ? (via le WWW-Authenticate d un refus) ===
+  grade_report (outil d ecriture) -> HTTP 401  {"error":"unauthorized"}
+
+=== 5) le jeton MCP est-il utilise tel quel contre l API (audience mixing) ? ===
+  API /graphql avec le jeton MCP -> HTTP 200  {"errors":[{"message":"Unauthorized","path":["me"],"locations":[{"line":1,"column":3}],"extensions":{"code":"UNAUTHENTICATED"}}],"data":null} 
+  token-exchange direct (client CLI) -> HTTP 400  {"error":"unauthorized_client","error_description":"client may not use token exchange"}
