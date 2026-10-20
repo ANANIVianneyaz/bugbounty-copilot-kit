@@ -132,7 +132,7 @@ Le chemin CIMD **contourne deux protections structurelles** du chemin d'inscript
 |---|---|
 | `jku` / `x5u` / `jwk` embarqué | refusés — **JWKS figé**, et le `jku` n'est **jamais** fetché (vérifié par log OOB : 0 requête) |
 | `alg:none`, HS256 (confusion RSA/HMAC) | refusés |
-| `epoch` | incrémenté lors de l'activation du 2FA : la session **pré-2FA** est refusée sur tout le contenu sensible |
+| `epoch` | **Reste à 0 dans les 7 jetons de la campagne** (16:31 → 20:15) : l'`epoch` est le mécanisme du correctif « password reset » (il doit incrémenter au **changement de mot de passe**), tandis que l'activation du 2FA invalide la session par un **autre** mécanisme (un état « 2FA vérifiée » côté serveur). Conséquence : l'access token ne porte **aucun** marqueur 2FA → c'est précisément ce que la piste P1 doit trancher |
 | Claims non modifiables | `setUserRoles` refusé ; `ADMIN` n'existe pas dans l'enum `BountyUserRole` |
 | Session fixation | identifiant de session arbitraire → 403/401 ; aucune session sans cookie |
 | `bounty-session` (cookie lisible en JS) | sans effet sur l'API (`Unauthorized`) → simple drapeaux d'UI |
@@ -140,7 +140,7 @@ Le chemin CIMD **contourne deux protections structurelles** du chemin d'inscript
 ### 5.3 MFA / 2FA — les 7 patterns du kit
 | # | Pattern | Résultat |
 |---|---|---|
-| 1 | Saut de l'étape MFA | **CLOS** — `login` renvoie `accessToken:null` + `requiresTwoFactor:true` + `challengeToken` : **aucun jeton avant la 2FA** |
+| 1 | Saut de l'étape MFA | **CLOS** — `login` renvoie `accessToken:null` + `requiresTwoFactor:true` + `challengeToken` : **aucun jeton avant la 2FA**. La session **non vérifiée 2FA** est refusée sur tout le contenu sensible (mécanisme = un état 2FA côté serveur, **pas** l'`epoch`, qui est resté à 0) |
 | 1b | `challengeToken` utilisé comme jeton d'accès | **NON** (`Unauthorized` sur `me`, `reports`, `myKycStatus`, écriture) — audience `mfa-challenge` appliquée |
 | 1c | Downgrade via le flux device-code (CLI) | **CLOS** — `createCliSignInCode` exige une session 2FA-vérifiée |
 | 2 | Rejeu de l'OTP | sans effet (le challenge survit aux échecs) |
@@ -209,6 +209,24 @@ Claims du `challengeToken` (JWT signé, 5 min) : `id`, `requires2fa:true`, `jti`
 | Demande de reset | **invalide immédiatement la session** existante (observé : la session du chercheur est morte juste après la demande) |
 | Intégration Discord (piste annexe) | `discordLinkedRolesUrl` accessible sans 2FA ; `state` = **JWT signé unique par appel** (pas de CSRF) ; callback `302 → ?discord=error` uniforme (aucune fuite) ; `unlinkDiscord` accessible (no-op) |
 | Health endpoint | `/api/health` fuit `uptime`/`memory`/`environment` → **hors périmètre** (pas d'impact) |
+
+### 5.10 Observations de faible impact relevées en cours de campagne (non rapportables, documentées pour le triage)
+
+| Observation | Mesure | Pourquoi ce n'est pas rapportable en l'état |
+|---|---|---|
+| `organizationStanding(orgId)` renvoie un **objet par défaut** à un **non-membre** (`totalIssued:null`, `totalSettled:null`, `currentlyOverdue:0`, `longestOverdueDays:0`, `submissionsSuspended:false`, `oldestOverdueSince:null`) au lieu d'une erreur | mesuré sur l'org KLDS (`0d06701f-…`) | aucune donnée réelle exposée (uniquement des zéros/null) ; l'org est de toute façon publique |
+| `programs(filters:{visibility:PRIVATE})` **ignore le filtre** et renvoie la liste publique | le filtre est sans effet ; aucun programme privé n'apparaît | bug fonctionnel sans impact (la requête ne renvoie que du public) |
+| La recherche globale renvoie `[]` pour tout (y compris `"a"`, `"*"`, `""`) | mesuré | le moteur n'indexe rien pour un chercheur ; pas de fuite, mais à surveiller (le search est protégé par authentification) |
+| `report(id:)` refuse **même le rapport du chercheur** (le compte possède `dca04201-…`) → `Unauthorized` | mesuré | l'API réserve le détail à l'organisation ; le chercheur accède à ses rapports via une autre voie → pas de fuite |
+| `removeTotpViaToken(token)` est joignable **sans session** (renvoie `false` sur token invalide) | mesuré | le token émis par email est le seul facteur ; entropie 256 bits (cf. reset) |
+| `authorization_details` (RAR) et `audience` sont **ignorés** par l'AS | testés sur `/oauth/authorize` | pas de fonctionnalité RAR → pas d'impact |
+| Le `clientDigest` de l'approbation est **plafonné à 43 caractères** (SHA-256 base64url) | `clientDigest must be shorter than or equal to 43 characters` | condensat et non secret → pas de collision exploitable |
+| Le profil public expose l'`userId` interne | `researcherPublicProfile` → `userId` | l'identifiant est déjà public via le leaderboard ; aucune donnée sensible |
+| `POST /oauth/authorize` renvoie `rate_limited` au-delà d'un seuil | observé pendant les tests de taxonomie d'erreurs | contrôle présent, pas de défaut |
+| Le captcha (login, reset) utilise **Turnstile + Private Access Token** | en-têtes vus : `www-authenticate: PrivateToken challenge=…`, 401 sur le endpoint PAT | le PAT lie le captcha au navigateur → validation serveur robuste, et le login est protégé par « Human verification failed » |
+| L'AS supporte les **resource indicators** (RFC 8707) et `iss` (RFC 9207) | métadonnées officielles + claims `aud`/`iss` des jetons | implémentation correcte (audience exclusive vérifiée) |
+| Le finding SSRF a **aussi** été soumis via le formulaire de rapport de la plateforme (`status: NEW`) | visible via `list_my_reports` | — (le rapport est dans la file de triage du vendor, sans payload dans le texte) |
+| `bugsecure-files` (CloudFront) sert des URLs signées ; `Missing Key-Pair-Id` sinon | `server: envoy` / 403 | contrôle correct ; aucune clé privée exposée |
 
 ---
 

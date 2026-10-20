@@ -60,7 +60,7 @@ l'IP de sortie `52.214.90.218`, ou si le filtre d'adresses est contournable sur 
 |---|---|
 | `jku` / `x5u` / `jwk` embarqué | refusés — l'AS utilise un **JWKS figé** et ne suit pas le `jku` (vérifié via log OOB : aucun fetch) |
 | `alg:none`, HS256 (confusion RSA/HMAC) | refusés |
-| `epoch` | incrémenté à l'activation du 2FA : le token de session **pré-2FA** est refusé sur les écritures (`updateResearcherProfile`, `requestUploadUrl`, `createAgentApproval`, `requestEmailChange` → « Unauthorized ») |
+| `epoch` | **resté à 0 dans les 7 jetons de la campagne** (16:31 → 20:15) : l'`epoch` est le mécanisme du correctif « password reset » (il doit incrémenter au **changement de mot de passe**) ; l'activation du 2FA invalide la session par un **autre** mécanisme (état « 2FA vérifiée » côté serveur). L'access token ne porte donc **aucun** marqueur 2FA → l'invalidation de l'access token au reset reste à vérifier (piste P1) |
 | Claims contrôlés | `id`, `email`, `username`, `roles`, `epoch`, `iat`, `exp`, `aud`, `iss`, `sub` — `roles` non modifiables (`setUserRoles` refusé, et `ADMIN` n'existe pas dans l'enum `BountyUserRole`) |
 | Session fixation | `/api/auth/session/refresh` avec un identifiant arbitraire → 403/401 ; pas de session sans cookie |
 | CORS | aucun `Access-Control-Allow-Origin` sur `/graphql`, `/api/auth/session/refresh`, `/oauth/token`, `/oauth/authorize`, `/.well-known/jwks.json` |
@@ -135,6 +135,17 @@ Budget mesuré : **rate-limit après ~3-4 tentatives / 60 s** sur `verify2fa` �
 Claims du `challengeToken` (JWT signé, 5 min) : `id` (user), `requires2fa:true`, `jti` (clé du challenge côté serveur), `epoch`, `aud:"mfa-challenge"`, `iss`, `sub:"klds-bug-bounty-api"`.
 
 Intégration Discord (piste annexe, non protégée par la 2FA) : `discordLinkedRolesUrl` est accessible sans 2FA et renvoie une URL Discord OAuth dont le `state` est un **JWT signé** unique par appel (donc pas de CSRF sur le state) ; le callback `GET /api/discord/linked-roles/callback` répond `302 → /researcher/settings/account?discord=error` pour tout code invalide (taxonomie uniforme, aucune fuite) ; `unlinkDiscord` est accessible (no-op sur un compte non lié).
+
+## 2ter. Observations de faible impact (non rapportables)
+
+`organizationStanding` renvoie un objet par défaut (zéros/null) à un non-membre au lieu d'une erreur ·
+`programs(filters:{visibility:PRIVATE})` ignore le filtre (bug fonctionnel, aucun programme privé exposé) ·
+`search` global renvoie `[]` pour toute requête · `report(id:)` refuse même le rapport du chercheur (le
+détail est réservé à l'organisation) · `removeTotpViaToken` est joignable sans session (le token émis par
+email est le seul facteur, 256 bits) · `authorization_details`/`audience` ignorés par l'AS · `clientDigest`
+plafonné à 43 caractères (SHA-256 base64url, condensat non secret) · `userId` interne exposé par le profil
+public (déjà public via le leaderboard) · captcha login/reset = Turnstile + Private Access Token (lié au
+navigateur) · `bugsecure-files` = URLs signées CloudFront.
 
 ## 3. Restes à tester (il faut une action du chercheur)
 
