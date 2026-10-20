@@ -60,8 +60,6 @@
 - **Weak Rate Limiting Controls in the (LOGIN) page Expose System to Brute Force and DoS Attacks** · [HackerOne](https://hackerone.com/reports/3085889) · `2025-05-15` · **Critical** · *Lichess* · ▲73
   > The login page lacks proper rate limiting, allowing an attacker to easily perform a brute-force attack. This vulnerability enables the attacker to systematically try different username and password combinations until they successf
 - **[Xenoblade Chronicles X: Definitive Edition] Unrestricted RPCs allow DoS and writing arbitrary flags remotely** · [HackerOne](https://hackerone.com/reports/3062122) · `2025-05-15` · **Critical** · *Nintendo* · ▲65
-- **Netlify Authentication Token Exposed in Public Mozilla CI Logs** · [HackerOne](https://hackerone.com/reports/2915647) · `2025-05-13` · **Critical** · *Mozilla* · ▲123
-  > The leaked authentication token provides full access to the Netlify account, leading to the following risks: 1. Financial Theft: - Change the billing email to divert all payouts to an attacker-controlled account. 2. Site Compromis
 - **Denial of Service by memory exhaustion in net/imap** · [HackerOne](https://hackerone.com/reports/3108869) · `2025-04-27` · **Medium** · *Internet Bug Bounty* · ▲23
   > There is a possibility for denial of service by memory exhaustion when net-imap reads server responses. At any time while the client is connected, a malicious server can send can send a "literal" byte count, which is automatically
 - **Possible DoS by memory exhaustion in net/imap** · [HackerOne](https://hackerone.com/reports/2987782) · `2025-04-27` · **Medium** · *Internet Bug Bounty* · ▲18
@@ -73,5 +71,7 @@
 - **low-level p2p ping + tcp flooding leads to a remote crash in monerod** · [HackerOne](https://hackerone.com/reports/2858802) · `2025-04-14` · **Critical** · *Monero* · ▲97
 - **Possible ReDoS vulnerability in query parameter filtering in Action Dispatch** · [HackerOne](https://hackerone.com/reports/2872502) · `2025-03-07` · **Medium** · *Internet Bug Bounty* · ▲44 · CVE-2024-41128
   > Carefully crafted query parameters can cause query parameter filtering to take an unexpected amount of time, possibly resulting in a DoS vulnerability. All users running an affected release should either upgrade or apply the relev
+- **Deadlock in x86 HVM standard VGA handling** · [HackerOne](https://hackerone.com/reports/2921724) · `2025-03-07` · **Medium** · $2,162 · *Internet Bug Bounty* · ▲87 · CVE-2024-45818
+  > An attacker executing code in ring0 inside of an unprivileged x86-HVM-DomU can trigger a deadlock in the host hypervisor, resulting in a Denial of Service of all other Domains running under the Hypervisor, including the hypervisor
 - **Unsufficent input verification leads to DoS and resource consumption** · [HackerOne](https://hackerone.com/reports/2818147) · `2025-02-26` · **Low** · $300 · *Sorare* · ▲108
   > This vulnerability affects the endpoint at api.sorare.com/api/v1/users/ where weakness in verifying the length of the email parameter can lead to partial DoS of the backend component. Steps To Reproduce: This endpoint accepts an e

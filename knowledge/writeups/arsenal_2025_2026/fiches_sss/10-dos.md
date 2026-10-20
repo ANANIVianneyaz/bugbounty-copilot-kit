@@ -4,53 +4,45 @@
 
 ---
 
-### Netlify Authentication Token Exposed in Public Mozilla CI Logs
+### DOS of RSKJ server
 
 **📄 Cas réel**
-sévérité : critical · [source](https://hackerone.com/reports/2915647)
+sévérité : high · [source](https://hackerone.com/reports/2105808)
 
-Un token d'authentification Netlify du compte « Mozilla IT Web SRE » a été trouvé dans un log CI public de Mozilla (`live.log`, task `d5NRF8FdQamV9XdPO_mTBQ`, mot-clé `auth:`). Le token, valide pour l'API Netlify, portait les rôles Owner, Developer, Billing Admin, Reviewer, Publisher et Content Editor, donnant un contrôle complet sur les sites (dont `https://crash-pings.mozilla.org`), le déploiement, les variables d'environnement, les logs et la facturation. Le rapport liste comme risques le détournement de l'email de facturation, la compromission de sites, l'exposition de données et la perte définitive de contrôle. La valeur du token est masquée (`███`) dans le rapport.
+Un attaquant paralyse un nœud RSKJ (Rootstock) avec un paquet UDP malformé. Le serveur est lancé depuis le jar officiel `rskj-core-5.0.0-FINGERROOT-all.jar`, qui ouvre le port `UDPv6` `5050`. Le client exécute ensuite un script Python (`poc.py`) contre ce port : l'`UDPServer` traite alors *un seul* paquet UDP à jamais et cesse de traiter ceux des autres nœuds ; au bout de quelques minutes, l'application plante en `Out of memory`. Le décodage RLP est en cause : `bytesToLength` renvoie `-5`, la longueur devient `0` et la position reste inchangée. La fonction vulnérable `decode2` étant utilisée partout, d'autres points d'entrée du service peuvent être affectés. Rapport publié le 2025-06-13, bounty $5 000, 120 votes.
 
-**Cause racine :** un pipeline CI a écrit un token d'authentification vivant dans des logs de build accessibles publiquement, sans masquage — exposition de credential dans un artefact public.
+**Cause racine :** décodage RLP invalide — `bytesToLength` renvoie `-5`, longueur `0`, position inchangée (`RLP.java`) : un paquet UDP malformé bloque définitivement l'`UDPServer`, puis provoque un `Out of memory`.
 
 **Preuve technique (verbatim depuis la source) :**
 
+```text
+bytesToLength returns -5 and length becomes 0
+https://github.com/rsksmart/rskj/blob/master/rskj-core/src/main/java/org/ethereum/util/RLP.java#L432
+this is legal
+https://github.com/rsksmart/rskj/blob/master/rskj-core/src/main/java/org/ethereum/util/RLP.java#L440
+and position is unchangeable
 ```
-curl -X GET https://api.netlify.com/api/v1/accounts -H "Authorization: Bearer ████" -s | jq
-
-    "roles_allowed": [
-      "Owner",
-      "Developer",
-      "Billing Admin",
-      "Reviewer",
-      "Publisher",
-      "Content Editor"
-    ],
-
-   - Search for the keyword `auth:` in the log file.
-   - Extract the Netlify token (e.g., `███`).
+```text
+the `UDPServer` is going to process *only* one UDP packet forever and it prevents to process other packages received from different nodes. In a while (some minutes left) the application crashes.
 ```
 
 **Rejouer / exploiter (dérivé de la source) :**
-- Prérequis : aucun compte — la page de log est publique : `https://firefox-ci-tc.services.mozilla.com/tasks/d5NRF8FdQamV9XdPO_mTBQ/runs/0/logs/public/logs/live.log`. Le token réel est masqué dans le rapport (non rejouable tel quel).
-- Étapes : 1. Ouvrir l'URL du log public. 2. Chercher le mot-clé `auth:` et extraire le token Netlify. 3. Vérifier sa validité : `curl -X GET https://api.netlify.com/api/v1/accounts -H "Authorization: Bearer <token>" -s | jq` → réponse contenant les infos du compte (name, role, billing_email, roles_allowed, saml_config…). 4. Confirmer l'accès complet via les autres endpoints de l'API Netlify (déployer, supprimer, modifier des sites ; lire variables d'environnement et logs) — la documentation référence est `https://open-api.netlify.com`.
-- Pièges / limites : le token est intégralement masqué (`███`) et a vraisemblablement été révoqué ; le rejeu nécessite un log équivalent non nettoyé. La source recommande révocation, audit des pipelines (masquage) et scopes OAuth/IP allowlisting.
+- Prérequis : jar `rskj-core-5.0.0-FINGERROOT-all.jar` (release publique) ; côté client Python 3 avec `pip install pysha3` ; le script `poc.py` est une pièce jointe (`{F2591198}`, 427 octets) absente du texte.
+- Étapes : 1. Télécharger le jar. 2. Côté serveur : `java -classpath rskj-core-5.0.0-FINGERROOT-all.jar -Drpc.providers.web.cors=* -Drpc.providers.web.ws.enabled=true co.rsk.Start` → ouvre le port UDPv6 5050. 3. Côté client : installer `pysha3`, récupérer `poc.py`, modifier `HOST`, lancer le script contre le serveur. 4. Observer l'`UDPServer` bloqué sur un seul paquet, puis le crash `Out of memory`.
+- Pièges / limites : `poc.py` est une pièce jointe (`{F2591198}`) non incluse dans le texte ; le rapport consolide la fermeture d'un autre rapport (`#2102315`) ; `decode2` étant utilisée partout, d'autres entrées peuvent être vulnérables (non détaillées).
 
-**Reproductibilité :** basse — le credential est masqué dans la source et la révocation n'est qu'une recommandation du rapport (non confirmée) ; seule la technique (fouille de logs CI publics) est rejouable, pas l'artefact.
+**Reproductibilité :** moyenne — jar public et étapes complètes, mais le script d'attaque reste une pièce jointe et le blocage dépend d'un paquet RLP malformé précis.
 
-**Techniques :** secrets in public ci logs, token leak, public build logs, api token abuse, credential exposure, log mining
+**Techniques :** dos, uncontrolled resource consumption, udp packet stall, rlp decoding flaw, out of memory, java node
 
-**Correspond aux classes qualifiantes :** information disclosure, credential leak, ato (account/site takeover)
+**Correspond aux classes qualifiantes :** dos (availability), resource accounting (uncontrolled resource consumption)
 
 **Signal (endpoints/fonctions observés) :**
-- log public `…/tasks/d5NRF8FdQamV9XdPO_mTBQ/runs/0/logs/public/logs/live.log` (mot-clé `auth:`)
-- `https://api.netlify.com/api/v1/accounts` avec `Authorization: Bearer`
-- compte « Mozilla IT Web SRE », site `https://crash-pings.mozilla.org`
+- port `UDPv6` `5050` (`UDPServer`)
+- décodage RLP : `bytesToLength`, `decode2` (`org/ethereum/util/RLP.java` L403/L405/L432/L440)
+- point d'entrée : `co.rsk.Start` (jar `rskj-core-5.0.0-FINGERROOT-all.jar`)
 
-**Paramètres impliqués :** `Authorization: Bearer`, `billing_email`, `selected_access_site_ids`, `roles_allowed`
-
----
-
+**Paramètres impliqués :** `HOST` (dans `poc.py`), charge UDP malformée (RLP), port `5050`
 ### Denial of Service (DoS) Vulnerability in Drafts Creation Endpoint
 
 **📄 Cas réel**

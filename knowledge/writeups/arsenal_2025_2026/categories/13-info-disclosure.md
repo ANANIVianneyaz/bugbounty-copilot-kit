@@ -1,6 +1,6 @@
 # Information Disclosure & Credential Leaks
 
-*113 entrées — corpus 2025-2026 de l'arsenal (voir `../INDEX.md` pour les stats et `../fiches_sss/` pour les fiches détaillées).*
+*115 entrées — corpus 2025-2026 de l'arsenal (voir `../INDEX.md` pour les stats et `../fiches_sss/` pour les fiches détaillées).*
 
 - **IPI Black: $300K in bounties for prompt-injecting agents in the Gray Swan Arena, open through Nov 5** · [r/bugbounty](https://reddit.com/r/bugbounty/comments/1x8mpmh/ipi_black_300k_in_bounties_for_promptinjecting) · `2026-10-17`
   > (Disclosure: I work at Gray Swan, where I run the Frontier Lab Safety team and the Arena) We just launched our largest-ever AI red teaming challenge, at the request of Anthropic, Meta, Google DeepMind, Reflection, and our other la
@@ -59,6 +59,7 @@
 - **IBM Aspera HTTP Gateway stores sensitive information in clear text in easily obtainable files which can be read by an unauthenticated user.** · [HackerOne](https://hackerone.com/reports/3340797) · `2026-04-27` · **High** · *IBM* · ▲46
 - **Benchmarking Neo's Black-Box DAST Capabilities** · [ProjectDiscovery](https://projectdiscovery.io/blog/neo-black-box-dast-capabilities) · `2026-04-27`
   > Since the launch of Neo, we've been steadily expanding what it can do. Neo has found 33+ real CVEs across open-source projects, performed well on white-box security testing where source code is available, and generally proven itse
+- **Memory leak in gem decode logic can allow attacker to take down Rubygems.org application** · [HackerOne](https://hackerone.com/reports/3079931) · `2026-04-09` · **Medium** · *RubyGems* · ▲33
 - **Information Disclosure — Unauthenticated API Exposes PII of 500+ Employees and Enterprise Clients** · [LogicalBreach](https://academy.logicalbreach.com/writeups/information-disclosure-unauthenticated-api-exposes-pii-of-500-employees-and-enterprise-clients-852b28b3) · `2026-04-01`
   > A hardcoded backend URL found in a JavaScript bundle exposed an unauthenticated API endpoint that returned 500+ records containing employee full names, enterprise client details, and internal database IDs. The writeup walks throug
 - **Session Cookie Leakage via Static Header Field in WebViewerFragment** · [HackerOne](https://hackerone.com/reports/3475626) · `2026-03-17` · **High** · *LinkedIn* · ▲130
@@ -152,6 +153,8 @@
   > Summary: An adversary can enumerate permissions of compromised credentials for the lakeformation and m2 service without logging to CloudTrail.
 - **Non-Production API Endpoints for the Route 53 Service Fail to Log to CloudTrail Resulting in Silent Permission Enumeration** · [HackerOne](https://hackerone.com/reports/3092085) · `2025-05-27` · **Medium** · *AWS VDP* · ▲14
   > Summary: An adversary can enumerate permissions of compromised credentials for the redshift-data service without logging to CloudTrail.
+- **Netlify Authentication Token Exposed in Public Mozilla CI Logs** · [HackerOne](https://hackerone.com/reports/2915647) · `2025-05-13` · **Critical** · *Mozilla* · ▲123
+  > The leaked authentication token provides full access to the Netlify account, leading to the following risks: 1. Financial Theft: - Change the billing email to divert all payouts to an attacker-controlled account. 2. Site Compromis
 - **Users Data Exposure via Insecure Endpoint** · [HackerOne](https://hackerone.com/reports/2828608) · `2025-05-12` · **Medium** · *Mars* · ▲40
 - **debug.log leaked [█████████]** · [HackerOne](https://hackerone.com/reports/3063026) · `2025-05-12` · **Low** · *Mars* · ▲40
 - **massive PII leakage for ███████** · [HackerOne](https://hackerone.com/reports/2887506) · `2025-05-12` · **Medium** · *Mars* · ▲36

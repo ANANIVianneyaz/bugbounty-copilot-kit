@@ -1,6 +1,6 @@
 # Arsenal 2025-2026 — index général
 
-*Corpus collecté le 2026-10-19 · 1699 entrées 2025-2026 classées en 24 catégories + 6525 entrées historiques (2021-2024).*
+*Corpus collecté le 2026-10-20 · 1699 entrées 2025-2026 classées en 24 catégories + 6525 entrées historiques (2021-2024).*
 
 ## Statistiques
 
@@ -19,17 +19,17 @@
 | [Command Injection](categories/06-command-injection.md) | 3 | 5 | 0 | **8** |
 | [Kubernetes & Conteneurs](categories/07-kubernetes.md) | 2 | 1 | 0 | **3** |
 | [Cookie Injection / Supercookies](categories/08-cookie-injection.md) | 0 | 3 | 0 | **3** |
-| [CVE Deep Dives](categories/09-cve-deep-dives.md) | 217 | 358 | 0 | **575** |
+| [CVE Deep Dives](categories/09-cve-deep-dives.md) | 216 | 358 | 0 | **574** |
 | [Denial of Service](categories/10-dos.md) | 19 | 20 | 0 | **39** |
 | [GraphQL](categories/11-graphql.md) | 5 | 5 | 0 | **10** |
 | [HTTP Request Smuggling](categories/12-http-smuggling.md) | 4 | 7 | 0 | **11** |
-| [Information Disclosure & Credential Leaks](categories/13-info-disclosure.md) | 63 | 50 | 0 | **113** |
+| [Information Disclosure & Credential Leaks](categories/13-info-disclosure.md) | 64 | 51 | 0 | **115** |
 | [Injection (SQLi / XXE / Code / Argument)](categories/14-injection.md) | 15 | 35 | 0 | **50** |
 | [Memory Corruption](categories/15-memory-corruption.md) | 4 | 17 | 0 | **21** |
 | [Open Redirect Chains](categories/16-open-redirect.md) | 7 | 10 | 0 | **17** |
 | [Path Traversal](categories/17-path-traversal.md) | 12 | 15 | 0 | **27** |
 | [Race Conditions](categories/18-race-condition.md) | 9 | 4 | 0 | **13** |
-| [Resource Accounting / Abus de coûts](categories/19-resource-accounting.md) | 5 | 6 | 0 | **11** |
+| [Resource Accounting / Abus de coûts](categories/19-resource-accounting.md) | 5 | 5 | 0 | **10** |
 | [SSRF & Cache Attacks](categories/20-ssrf-cache.md) | 18 | 20 | 0 | **38** |
 | [SSTI & Désérialisation](categories/21-ssti-deserialization.md) | 4 | 2 | 0 | **6** |
 | [Supply Chain — Dependency Confusion, CI/CD](categories/22-supply-chain.md) | 0 | 10 | 0 | **10** |

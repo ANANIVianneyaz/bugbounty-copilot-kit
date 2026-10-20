@@ -61,7 +61,7 @@ RULES = [
     ("command-injection", r"command injection|os command|shell injection|argument injection|arbitrary command|code execution on the server"),
     ("ssrf-cache", r"\bssrf\b|server[- ]side request forgery|web cache|cache poison|cache deception|cache key|cache purge"),
     ("cookie-injection", r"cookie (injection|toss|bomb|jar|shadow)|supercookie|domain[- ]wide cookie|cookie fixat"),
-    ("open-redirect", r"open redirect|unvalidated redirect|redirect (chain|bypass)|\bredirect_uri\b|url redirection"),
+    ("open-redirect", r"open redirect|unvalidated redirect|redirect (chain|bypass)|redirect_uri (manipulat|attacker|arbitrar|craft|controll)|url redirection"),
     ("memory-corruption", r"memory corruption|buffer overflow|use[ -]after[ -]free|double free|heap overflow|stack overflow|out[ -]of[ -]bounds|integer overflow|type confusion|uaf\b"),
     ("injection", r"\bsqli\b|sql injection|\bxxe\b|xml external entit|\bldap\b|nosql injection|code injection|eval injection|expression language injection|crlf injection|header injection|\bssi\b|template syntax|\bcsti\b"),
     ("xss", r"\bxss\b|cross[ -]site scripting|html injection|dom clobbering|client[ -]side (template|injection)|javascript injection"),
@@ -70,8 +70,8 @@ RULES = [
     ("auth-bypass", r"\bmfa\b|\b2fa\b|two[ -]factor|otp (bypass|reuse|brute)|oauth|saml|\bsso\b|clickjack|authentication bypass|auth bypass|login bypass|password reset|forgot password|session fixation|account takeover|\bato\b|email verification|verification bypass|passkey|password policy|signup"),
     ("access-control-idor", r"\bidor\b|bola\b|bopla|object level|access control|authorization|unauthori[sz]ed|privilege escalation|privesc|missing (authorization|permission)|permission bypass|tenant|cross[ -](account|user|tenant|organi)|other users|admin (page|panel|access|area)|role (manip|escalat)|export (data|users)|broken access"),
     ("dos", r"denial of service|\bdos\b|crash|recursion|resource exhaustion|billion laughs|decompression bomb|zip bomb|infinite loop"),
-    ("resource-accounting", r"resource (abuse|accounting|consumption|exhaust)|cost (abuse|incur)|billing|quota|rate limit bypass|sms (flood|bomb|abuse)|email (flood|bomb)|push notification (flood|abuse)"),
     ("info-disclosure", r"information disclosure|info (leak|disclosure)|credential|leak|exposed|disclos|\bpii\b|api key|token (leak|expos)|source code|\.env|backup file|debug (endpoint|info|page)|sensitive (data|info|file)|enumerat"),
+    ("resource-accounting", r"resource (abuse|accounting|consumption|exhaust)|cost (abuse|incur)|billing|quota|rate limit bypass|sms (flood|bomb|abuse)|email (flood|bomb)|push notification (flood|abuse)"),
     ("api-mobile", r"\bapi\b|android|\bios\b|\bapk\b|mobile app|\bjwt\b|json web token|rest api|swagger|openapi|websocket|grpc"),
 ]
 
@@ -81,12 +81,27 @@ LIB_PROGRAMS = {"curl", "mariadb", "openjdk", "php", "python", "ruby", "linux ke
                 "chromium", "firefox", "node.js", "wordpress"}
 
 
+# URLs et emails : les URLs de domaine contiennent des mots-clés trompeurs
+# (ex : https://crash-pings.mozilla.org → "crash" → dos).
+RE_URL = re.compile(r"https?://\S+|www\.\S+|[\w.+-]+@[\w.-]+\.\w+", re.I)
+# Négation XSS : "no HTML injection" / "without XSS" = surface fermée, pas un bug.
+RE_NEG_XSS = re.compile(r"\b(?:no|not|without|never)\s+(?:[\w-]+\s+){0,3}"
+                        r"(?:xss|html injection|cross[- ]site scripting)\b", re.I)
+
+
+def clean_text(text):
+    """Neutralise les faux positifs connus du classifieur avant le matching."""
+    text = RE_URL.sub(" ", text)
+    text = RE_NEG_XSS.sub(" ", text)
+    return text
+
+
 def classify(e):
     text = " ".join(str(x) for x in (
         e.get("title"), e.get("weakness"), e.get("summary"),
         (e.get("extra") or {}).get("bugs") if isinstance((e.get("extra") or {}).get("bugs"), list) else " ".join((e.get("extra") or {}).get("bugs") or []),
     ) if x)
-    text = text.lower()
+    text = clean_text(text.lower())
     prog = (e.get("program") or "").lower()
 
     if prog in LIB_PROGRAMS and not any(k in text for k in ("xss", "sql", "ssrf")):

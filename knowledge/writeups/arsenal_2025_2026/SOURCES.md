@@ -12,7 +12,6 @@
 | Trail of Bits / Doyensec / SonarSource / ProjectDiscovery / Detectify | labs | RSS | ✅ actifs |
 | r/bugbounty · r/netsec | communauté | RSS | ✅ actifs |
 | pentester.land | agrégateur (gelé fin 2024) | JSON complet | 🧊 historique seulement |
-| Writeup externe « Making Self-XSS Great Again » (kazama.in) | writeup complète (rapports H1 #3423950 / #3321406) | page intégrée `data/raw/pages/kazama/` | ✅ utilisé par les fiches 08 |
 | Assetnote | lab | feed gelé janv. 2024 | ❌ ignoré |
 | securitybreached.org | devenu blog perso (SPA) | — | ❌ ignoré |
 
