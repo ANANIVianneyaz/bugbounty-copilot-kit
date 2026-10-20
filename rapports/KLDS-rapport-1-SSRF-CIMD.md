@@ -1,46 +1,188 @@
-# Rapport 1 — SSRF non authentifié sur le serveur d'autorisation OAuth (chemin CIMD)
+# SSRF non authentifié sur le serveur d'autorisation OAuth (`client_id` de type URL) — permet à un tiers de faire émettre des requêtes HTTP depuis l'infrastructure de BugSecure
 
-**Programme** : KLDS — Web & API (BugSecure Africa)
-**Cible** : `https://bugsecure-api.senintel.sn` (serveur d'autorisation OAuth 2.1)
-**Classe** : CWE-918 — SSRF (Server-Side Request Forgery) / fetch non sollicité d'une URL distante
-**CVSS 3.1** : `AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N` → **5.3 (Medium)**
+## 1. Détails
+
+| Champ | Valeur |
+|---|---|
+| **Programme** | KLDS — Web & API (BugSecure Africa) |
+| **Composant** | Serveur d'autorisation OAuth 2.1 — `https://bugsecure-api.senintel.sn` |
+| **Endpoint** | `GET /oauth/authorize` (paramètre `client_id`) et `POST /oauth/register` (paramètre `client_uri`) |
+| **Type** | SSRF — CWE-918 (fetch serveur d'une URL fournie par l'appelant) |
+| **Authentification requise** | **Aucune** |
+| **CVSS 3.1** | `AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N` → **5.3 (Medium)** |
+| **Date de la découverte** | 2026-10-20 |
+| **Compte utilisé** | Compte de test du chercheur uniquement (`william_root`) |
+
+**Titre court** : `SSRF via le paramètre client_id de /oauth/authorize — un appelant non authentifié fait fetch serveur de n'importe quelle URL, sans quota, depuis l'IP de la plateforme`
 
 ---
 
-## 1. Résumé
+## 2. Vulnérabilité
 
-Le point d'entrée OAuth `GET /oauth/authorize` accepte un `client_id` qui est une **URL HTTP(S)**
-(mécanisme *Client ID Metadata Document*). Lorsque `client_id` est une URL, le serveur
-d'autorisation **effectue lui-même une requête HTTP GET vers cette URL** pour y lire le document
-de métadonnées client.
+### 2.1 Ce qui se passe
 
-Cette requête :
-- est déclenchée **sans aucune authentification** (ni token, ni cookie, ni en-tête d'auth) ;
-- porte sur une **URL entièrement choisie par l'attaquant** (schéma, hôte, port, chemin, query) ;
-- part de l'**infrastructure cloud de la plateforme** (IP source observée : `52.214.90.218`, plage AWS) ;
-- **n'est pas soumise à un quota** : aucune inscription préalable n'est nécessaire (contrairement à
-  `POST /oauth/register`, qui est limité en débit) et un fetch a lieu **à chaque** requête
-  d'autorisation (25 fetches observés pour 25 URL distinctes) ;
-- **est analysée** : le contenu téléchargé sert à définir l'identité du client
-  (`client_id`, `client_name`, `redirect_uris`, `grant_types`, `scope`), et l'issue de cette analyse
-  est **observable par l'attaquant** (voir §3, oracle).
+`GET /oauth/authorize` accepte un `client_id` qui est une **URL HTTP(S)** (mécanisme *Client ID Metadata
+Document*). Dans ce cas, le serveur d'autorisation **effectue lui-même une requête HTTP GET vers
+cette URL** pour y lire le document de métadonnées client, puis construit l'identité du client à
+partir de ce document.
 
-Le même comportement existe sur `POST /oauth/register` via le champ `client_uri`.
+Cette requête sort de l'infrastructure de BugSecure. Voici ce que j'ai mesuré sur le serveur
+d'autorisation (`https://bugsecure-api.senintel.sn`) :
 
-## 2. Reproduction
+- **Aucune authentification** n'est requise (ni token, ni cookie, ni en-tête `Authorization`) ;
+- **L'URL est entièrement choisie par l'appelant** (schéma, hôte, port, chemin, query string) ;
+- **Aucun quota, aucune inscription** : contrairement à `POST /oauth/register` (qui répond
+  `429 temporarily_unavailable` après une dizaine d'appels), le chemin CIMD n'exige **aucune
+  création de client** et **aucun rate-limit** — j'ai observé **25 requêtes émises** par le
+  serveur d'autorisation pour 25 `authorize` distincts ;
+- **La réponse distante est analysée** : le contenu téléchargé définit `client_id`, `client_name`,
+  `redirect_uris`, `grant_types`, `scope`, et l'issue de l'analyse est **observable par l'appelant**
+  (voir 2.3) ;
+- **La requête part de l'IP de la plateforme**, pas de celle de l'appelant : dans mon journal de
+  réception, l'IP source est `52.214.90.218` (plage AWS), et l'agent utilisateur identifie le
+  composant émetteur : `BugSecure-OAuth/1 (+client-id-metadata-document)`.
 
-### 2.1 Serveur d'écoute (attaquant)
+### 2.2 Preuve
 
-Un service qui journalise les requêtes reçues (ici `webhook.site`, avec un **chemin unique par
-essai** pour provinguer qu'il s'agit bien de la requête du serveur d'autorisation et non de la nôtre).
+Journal de mon service d'écoute (chaque entrée correspond à un `authorize` distinct) :
 
-### 2.2 Document de métadonnées client contrôlé
+```
+GET /imp-1792509314546-kdvj            <- chemin unique publié par moi
+Host: webhook.site
+User-Agent: BugSecure-OAuth/1 (+client-id-metadata-document)
+ip: 52.214.90.218                       <- IP de sortie de l'infrastructure BugSecure
+```
 
-Servi sur `https://webhook.site/<UUID>/<chemin-unique>` :
+La réponse du serveur d'autorisation pour un document valide — la demande de consentement est
+créée **à partir du document distant** :
 
-```json
+```
+HTTP/2 302
+location: https://bugsecure.senintel.sn/oauth/consent?request=8fca8bd1-7c21-4bab-9bb1-7e06d3f71470
+```
+
+### 2.3 Oracle sur la cible (reconnaissance)
+
+Le contenu distant modifie le comportement du serveur d'autorisation, et la différence est visible
+dans la réponse. Relevé effectué avec un **chemin unique par cas** (donc sans intervention du cache
+de client du serveur d'autorisation) — voir la pièce jointe P3 :
+
+| Document distant servi sur l'URL du `client_id` | Réponse de l'AS |
+|---|---|
+| document valide (`client_id` = URL, `redirect_uris` https, nom neutre) | **302 → `/oauth/consent?request=…`** (client accepté, identité construite depuis le document) |
+| corps non JSON (texte) | 302 → `/oauth/error?code=invalid_client` |
+| JSON invalide | 302 → `/oauth/error?code=invalid_client` |
+| JSON sans `client_id` | 302 → `/oauth/error?code=invalid_client` |
+| JSON avec un `client_id` différent de l'URL | refusé |
+| JSON sans `redirect_uris` | 302 → `/oauth/error?code=invalid_client` |
+| `redirect_uris` vers un hôte de la plateforme (`https://bugsecure.senintel.sn/...`) | 302 → `/oauth/error?code=invalid_client` |
+| `redirect_uris` vers un IP littéral (`https://1.2.3.4/cb`) | 302 → `/oauth/error?code=invalid_client` |
+| `redirect_uris` = `javascript:alert(1)` | 302 → `/oauth/error?code=invalid_client` |
+| `redirect_uris` en `http` non-loopback | 302 → `/oauth/error?code=invalid_client` |
+| `client_name` imitant la plateforme (`BugSecure Africa`) | 302 → `/oauth/error?code=invalid_client` |
+| `grant_types` non autorisés (`password`, `implicit`) | 302 → `/oauth/error?code=invalid_client` |
+| `token_endpoint_auth_method` = `client_secret_basic` | 302 → `/oauth/error?code=invalid_client` |
+| `scope` hors périmètre (`admin:all triage:write`) | **302 → `/oauth/consent?request=…`** (client accepté) |
+
+Deux points à retenir :
+
+- l'appelant distingue « document conforme » de « document non conforme » : il dispose d'un
+  **oracle binaire** sur la cible atteinte, à raison d'une requête par cible ;
+- le `scope` déclaré dans le document distant **n'est pas filtré au moment de la construction du
+  client** (contrairement à `POST /oauth/register`, qui refuse un `scope` hors périmètre avec
+  `invalid_client_metadata`) — le filtrage n'intervient qu'au moment de l'émission du token
+  (j'ai vérifié : `triage:read` demandé par le client `bugsecure-mcp-cli` est retiré du token).
+
+### 2.4 Ce que j'ai vérifié et qui ne fonctionne pas (je le signale explicitement)
+
+Je n'ai pas trouvé de contournement vers les plages internes :
+
+| Test | Résultat |
+|---|---|
+| Loopback `127.0.0.1` (ports 80, 3000, 9200, 11211) | refusé — latence minimale identique à celle d'une adresse non routable (125-170 ms) |
+| RFC1918 `10.0.0.1`, link-local `169.254.169.254` (IMDS) | refusés (min 125-131 ms) |
+| Contournement par résolution DNS (`localtest.me`, `127.0.0.1.nip.io` → 127.0.0.1) | le filtre couvre l'IP **résolue** : profil de latence identique à l'IP directe |
+| IPv4-mapped IPv6 `::ffff:127.0.0.1`, NAT64 local-use `64:ff9b:1::7f00:1` | refusés |
+| Suivi des redirections (redirecteur public vers une cible interne) | **non suivies** — le second saut n'atteint jamais la cible |
+| Filtrage des IP par nom de plateforme / IP littéral dans `redirect_uris` | appliqué, y compris sur le chemin CIMD |
+| Usurpation du nom de client (`BugSecure`, `BugSecure Africa`, …) | refusée sur **les deux** chemins (DCR et CIMD) |
+
+Je ne revendique donc **aucune** lecture de donnée interne : le fetch est borné aux hôtes externes
+par le filtre d'adresses mis en place, et je documente cette limite dans le rapport.
+
+### 2.5 Impact
+
+1. **Le serveur d'autorisation est un relais HTTP sortant, non authentifié et sans quota.** Un
+   tiers fait émettre par l'infrastructure de BugSecure une requête GET vers n'importe quelle URL
+   externe, **depuis l'IP de la plateforme**. Conséquences directes :
+   - contournement des listes d'autorisation d'IP de services tiers (paiement, vérification de
+     domaine, scan, reporting) ;
+   - usage de l'identité réseau et de la réputation de BugSecure pour des requêtes à l'attribut
+     potentiellement abusif ;
+   - débit illimité du côté de l'appelant (aucune inscription, aucun quota) : la plateforme peut
+     être transformée en proxy de requêtes sortantes.
+2. **Reconnaissance d'infrastructure** via l'oracle décrit en 2.3 : un appelant peut探测 l'existence
+   et le type de réponse de services joignables depuis l'IP de la plateforme.
+3. **Fuite d'information d'infrastructure** : l'IP de sortie du serveur d'autorisation
+   (`52.214.90.218`) et l'existence du mécanisme de fetch distant sont révélés.
+4. **Élévation de sévérité possible** (à confirmer côté BugSecure, je n'ai pas pu l'établir) : si une
+   ressource de la plateforme ou d'un partenaire **autorise l'IP de sortie de BugSecure**, ou si le
+   filtre d'adresses peut être contourné (autre résolveur DNS, résolution côté serveur non
+   re-vérifiée), l'impact passe de « relais externe » à « accès aux services internes / métadonnées
+   d'instance ».
+
+---
+
+## 3. Remédiation
+
+1. **Supprimer par défaut l'usage d'un `client_id` qui est une URL.** Le mécanisme *Client ID
+   Metadata Document* n'apporte rien à un client public classique (le client public `bugsecure-mcp-cli`
+   du dépôt `kulinda-sec/bugsecure-mcp` s'enregistre via `/oauth/register`) et il introduit un
+   fetch serveur sur une entrée non authentifiée. Si le mécanisme doit être conservé, l'AS doit :
+   - n'accepter que `https`, et refuser les IP littérales et les plages internes **après résolution**
+     (loopback, `127.0.0.0/8`, `0.0.0.0/8`, RFC1918, `169.254.0.0/16`, IPv6 ULA `fc00::/7`,
+     NAT64 local-use `64:ff9b:1::/48`, IPv4-mapped IPv6) ;
+   - **désactiver le suivi des redirections** (ou re-valider l'IP de chaque saut) ;
+   - imposer un délai maximal court et **ne jamais restituer** le résultat (ni en contenu, ni via
+     une latence distinguant deux réponses).
+2. **Aligner le chemin CIMD sur le contrôle de débit de `/oauth/register`** (actuellement
+   `/oauth/register` limite les créations, le chemin CIMD n'en a pas).
+3. **Journaliser** les URL distantes récupérées avec l'IP résolue, et alerter sur toute cible interne
+   ou tout volume anormal de fetch.
+4. En complément : vérifier périodiquement que les noms de clients imitant la plateforme sont
+   refusés **sur les deux** chemins d'enregistrement (c'est le cas aujourd'hui, je l'ai vérifié).
+
+---
+
+## 4. Pièces jointes
+
+| # | Fichier | Contenu |
+|---|---|---|
+| P1 | `P1-journal-reception-ssr.md` | Extrait de mon journal de réception : chemin unique demandé, `User-Agent: BugSecure-OAuth/1 (+client-id-metadata-document)`, IP source `52.214.90.218` (25 entrées) |
+| P2 | `P2-poc.sh` | Script de reproduction autonome ( publication du document + `authorize` + lecture du journal) |
+| P3 | `P3-oracle-contenu.md` | Tableau de l'oracle : 13 contenus distants distincts → réponses de l'AS (erreur ou création de la demande de consentement) |
+| P4 | `P4-perimetre-latences.md` | Mesures de latence côté AS (min et médiane de 5 échantillons) : loopback, RFC1918, IMDS, contournement DNS, IPv4-mapped, NAT64, témoin externe — et le test de non-suivi des redirections |
+| P5 | `P5-dcr-vs-cimd.md` | Comparaison `POST /oauth/register` (inscription + quota + validation du nom) vs chemin CIMD (aucune inscription, aucun quota) |
+
+Captures d'écran : le journal de réception (P1) est la capture de la preuve serveur ; le contenu
+exact de chaque requête y est visible avec l'IP source.
+
+---
+
+## 5. Vérification
+
+**Comment reproduire (compte de test uniquement)**
+
+```bash
+# 1) Un service qui journalise les requêtes reçues, sur un chemin unique
+#    (j'ai utilisé webhook.site ; n'importe quel listener convient)
+#    Exemple d'URL de base : https://webhook.site/<UUID>
+
+# 2) Le document de métadonnées client, publié sur ce service
+#    (le chemin DOIT être unique par essai)
+#    -> contenu servi :
 {
-  "client_id": "https://webhook.site/<UUID>/<chemin-unique>",
+  "client_id": "https://webhook.site/<UUID>/<CHEMIN-UNIQUE>",
   "client_name": "bb-cimd-research (document de test)",
   "redirect_uris": ["https://webhook.site/<UUID>/cb"],
   "grant_types": ["authorization_code", "refresh_token"],
@@ -48,140 +190,49 @@ Servi sur `https://webhook.site/<UUID>/<chemin-unique>` :
   "token_endpoint_auth_method": "none",
   "scope": "programs:read profile:read reports:read reports:write"
 }
-```
 
-### 2.3 Requête — **aucune authentification**
-
-```bash
+# 3) L'appel non authentifié qui déclenche le fetch
 curl -sS -D- -o/dev/null \
   "https://bugsecure-api.senintel.sn/oauth/authorize?response_type=code\
-&client_id=https%3A%2F%2Fwebhook.site%2F<UUID>%2F<chemin-unique>\
+&client_id=https%3A%2F%2Fwebhook.site%2F<UUID>%2F<CHEMIN-UNIQUE>\
 &redirect_uri=https%3A%2F%2Fwebhook.site%2F<UUID>%2Fcb\
 &scope=programs%3Aread%20profile%3Aread\
 &state=bb-test&code_challenge=E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM\
 &code_challenge_method=S256\
 &resource=https%3A%2F%2Fbugsecure-api.senintel.sn"
+
+# 4) Observation : dans le journal du listener, une requête
+#    GET /<CHEMIN-UNIQUE>
+#    User-Agent: BugSecure-OAuth/1 (+client-id-metadata-document)
+#    ip: 52.214.90.218
+#    -> la requête a été émise par le serveur d'autorisation, pas par le client.
 ```
 
-### 2.4 Preuve
+**Résultat attendu après correction** : `GET /oauth/authorize` avec un `client_id` de type URL doit
+être rejeté (`invalid_client` / `invalid_request`) **sans** émettre de requête sortante ; ou, si le
+mécanisme est conservé, la réponse doit être refusée pour toute URL dont l'IP résolue est interne,
+et un quota doit s'appliquer comme sur `/oauth/register`.
 
-Journal du serveur d'écoute (25 entrées, une par `authorize`) :
+**Vérifications complémentaires effectuées de mon côté (aucune n'a été contournée)**
 
-```
-GET /imp-1792509314546-kdvj            ← chemin unique choisi par l'attaquant
-Host: webhook.site
-User-Agent: BugSecure-OAuth/1 (+client-id-metadata-document)
-ip: 52.214.90.218                       ← IP de sortie de l'infrastructure BugSecure (AWS)
-```
+- PKCE : `code_challenge_method=S256` obligatoire (`PKCE with code_challenge_method=S256 is
+  required`), `code_challenge` absent ou malformé → `invalid_request` ; `plain` → refusé ;
+  `response_type` strictement `code` ; `scope`/`resource` non dupliquables ; `redirect_uri`
+  comparé **exactement** (slash final, query, fragment, userinfo, sous-domaine → refusés) ;
+  `iss` (RFC 9207) toujours émis par l'AS ; `prompt=none` et `request_uri` (RFC 9101) non
+  implémentés ; code d'autorisation à usage unique ; refresh token à rotation stricte avec révocation
+  de la famille en cas de rejeu ; `client_credentials` et `token-exchange` refusés aux clients
+  CIMD ; scopes hors périmètre non accordés (`triage:read` retiré du token).
+- Autorisations : `decideAgentApproval` et `decideOAuthAuthorization` refusés aux clients OAuth
+  (« not available to OAuth clients ») ; `createAgentApproval` exige le scope d'écriture de
+  l'opération ; `requestEmailChange` exige `currentPassword` + `newEmail` ; `verify2fa`,
+  `removeTotpViaToken`, `confirmEmailChange`, `verifyEmail` sont limités en débit.
+- Injection : `search`, `programs.filters.search`, `reports.filters.search`, `leaderboard`,
+  `researcherPublicProfile` testés avec des charges utiles (classiques et variantes contournant le
+  WAF) et un différentiel booléen (`' AND 1 LIKE 1--` vs `' AND 1 LIKE 2--`) → aucun écart de
+  résultat : les requêtes sont paramétrées.
+- JWT : `jku`, `x5u`, `jwk` embarqué, `alg:none` et HS256 (confusion RSA/HMAC) tous refusés — le
+  serveur utilise un JWKS figé et ne suit pas l'en-tête `jku`.
 
-- Le `User-Agent` identifie le composant émetteur.
-- Le chemin demandé est celui publié par l'attaquant : la requête est bien émise par le serveur
-  d'autorisation.
-- **L'IP source n'est pas celle du chercheur** : la requête sort du réseau de la plateforme.
-
-Réponse de l'AS pour un document valide — la demande de consentement est créée **à partir du
-document distant** :
-
-```
-HTTP/2 302
-location: https://bugsecure.senintel.sn/oauth/consent?request=8fca8bd1-7c21-4bab-9bb1-7e06d3f71470
-```
-
-## 3. Le contenu distant est interprété (oracle)
-
-Le corps téléchargé n'est pas ignoré : il détermine la **validation** du client, et le résultat est
-lisible dans la réponse de l'AS.
-
-| Document servi sur l'URL du `client_id` | Réponse de l'AS |
-|---|---|
-| document valide (`client_id` cohérent, `redirect_uris` https non-plateforme) | **302 → `/oauth/consent?request=…`** (client accepté, identité construite depuis le document distant) |
-| `redirect_uris` vers un hôte de la plateforme (`https://bugsecure.senintel.sn/...`) | 302 → `/oauth/error?code=invalid_client` |
-| `redirect_uris` vers un IP littéral (`https://1.2.3.4/cb`) | 302 → `/oauth/error?code=invalid_client` |
-| `redirect_uris` = `javascript:alert(1)` | 302 → `/oauth/error?code=invalid_client` |
-| `client_name` imitant la plateforme (`"BugSecure Africa"`, `"BugSecure"`, `"SSO BugSecure"`) | 302 → `/oauth/error?code=invalid_client` (contrôle anti-usurpation bien appliqué, cf. §6) |
-| corps non JSON / JSON invalide / JSON sans `client_id` | 302 → `/oauth/error?code=invalid_client` |
-
-L'attaquant dispose donc d'un **oracle binaire** : il sait si la ressource distante a été atteinte
-et si son contenu correspond au format attendu. Il peut ainsi **sonder l'infrastructure** (présence
-d'un service, type de réponse) à raison d'une requête par cible.
-
-## 4. Périmètre réel mesuré (et ce qui n'a pas pu l'être)
-
-Mesures effectuées côté AS, en prenant le **minimum** de 5 échantillons par cible (le minimum retire
-le bruit de file d'attente) :
-
-| Cible | latence min | médiane | lecture |
-|---|---|---|---|
-| témoin externe (webhook du chercheur) | 237 ms | 260 ms | fetch réellement effectué (aller-retour réseau) |
-| `http://127.0.0.1:3000` | 137 ms | 1724 ms | refusé/échec rapide, comme les non-routables |
-| `http://127.0.0.1:9200` | 169 ms | 430 ms | idem |
-| `http://127.0.0.1:11211` | 137 ms | 170 ms | idem |
-| `http://127.0.0.1/` | 132 ms | 153 ms | idem |
-| `http://192.0.2.1/` (non routable) | 127 ms | 136 ms | témoin |
-| `http://10.0.0.1/` (privé) | 127 ms | 129 ms | témoin |
-| `http://169.254.169.254/` (IMDS) | 125 ms | 131 ms | témoin |
-
-**Conclusion honnête** : le serveur d'autorisation dispose d'un filtre d'adresses qui **écarte les
-plages internes** (loopback, RFC1918, link-local/métadonnées) : aucune portée interne n'a pu être
-établie. De même, les **redirections ne sont pas suivies** (test avec un redirecteur public : le
-second saut n'a jamais atteint la cible) — le contournement classique par redirection ne fonctionne
-pas.
-
-**Ce qui reste démontré et exploitable** : un **relais GET non authentifié, sans quota, depuis
-l'IP de la plateforme**, vers **n'importe quelle URL externe**, avec un oracle sur la réponse.
-
-## 5. Impact
-
-1. **Le serveur d'autorisation devient un relais HTTP sortant** : un attaquant non authentifié peut
-   faire émettre par l'infrastructure de BugSecure une requête GET vers n'importe quelle URL
-   externe, **depuis l'IP de la plateforme** (et non la sienne).
-   - contournement des listes d'autorisation d'IP chez des tiers (services de paiement, de
-     vérification, de scan, de reporting) ;
-   - usage de l'identité réseau et de la réputation de BugSecure pour des requêtes à l'attribut
-     potentially abusif ;
-   - aucune inscription n'est nécessaire (contrairement à `/oauth/register`, limité en débit) et
-     **aucun quota** n'est appliqué : le débit est celui du chercheur.
-2. **Fuite d'information d'infrastructure** : l'IP de sortie de l'AS est revealed
-   (`52.214.90.218`) et l'existence du mécanisme de fetch est confirmée.
-3. **Reconnaissance via oracle** : la réponse de l'AS révèle si la cible a répondu et si son
-   contenu correspond au format attendu (présence d'un service, type de réponse) — un scanner
-   d'infrastructure à la requête.
-4. **Élévation possible à High/Critical** si l'une de ces conditions est satisfaite chez BugSecure :
-   - une ressource interne (ou un service tiers) **autorise l'IP de la plateforme** ;
-   - le filtre d'IP peut être contourné (résolution DNS côté serveur non re-vérifiée, IPv6/NAT64,
-     redirect non suivi mais vérifié au moment du fetch, DNS rebinding) ;
-   - le contenu distant peut être exploité au-delà du format « document client ».
-
-## 6. Contrôle déjà en place (signalé au vendor, non contourné)
-
-Le contrôle d'usurpation d'identité est **appliqué de façon cohérente** sur les deux chemins
-d'enregistrement : `POST /oauth/register` **et** le chemin CIMD refusent tous un `client_name`
-imposant la plateforme (`BugSecure`, `BugSecure Africa`, `SSO BugSecure`, `Senintel BugSecure`,
-`MCP BugSecure officiel`, `bugsecure-mcp`). Cette vérification a été confirmée par les deux voies :
-la protection n'est pas contournable par le fetch distant.
-
-## 7. Recommandation
-
-1. **Désactiver par défaut** l'usage d'un `client_id` qui est une URL : le mécanisme CIMD n'apporte
-   rien à un client public classique et introduit un fetch serveur sur une entrée non authentifiée.
-   Si CIMD doit être conservé, l'AS doit résoudre l'URL et **valider l'IP résolue** (refuser
-   loopback, link-local `169.254.0.0/16`, RFC1918, ULA, `64:ff9b:1::/48`, IPv4-mapped IPv6),
-   **re-vérifier après chaque redirection** et **désactiver la suite des redirections**.
-2. **Ne jamais exécuter de fetch sur une URL fournie par un appelant non authentifié.** À défaut :
-   liste blanche de schémas stricte (`https` uniquement), délai maximal très court, et **jamais de
-   restitution** du résultat (ni en contenu, ni en temps distinguant deux réponses).
-3. **Appliquer un quota** par IP et par `client_id` sur `/oauth/authorize`, et aligner le chemin CIMD
-   sur le quota de `/oauth/register`.
-4. **Journaliser** les URL distantes récupérées (avec l'IP résolue) et alerter sur toute cible interne
-   ou sur un volume anormal de fetch.
-
-## 8. Conformité / périmètre
-
-- Aucun accès aux données d'un autre utilisateur ; aucun compte réel utilisé (compte de test du
-  chercheur uniquement).
-- **Aucune donnée exfiltrée** : la lecture de réponses internes n'a pas été réalisée et n'est pas
-  revendiquée.
-- Aucun impact sur la disponibilité ; les essais ont été espacés (≈ 1 requête / 3,5 s) et limités à
-  une centaines de requêtes au total.
-- Safe harbor : les tests ne portent que sur l'hôte de l'AS du programme, avec un service d'écoute
-  détenu par le chercheur.
+**Conformité** : aucun compte réel, aucune donnée d'un autre utilisateur, aucune exfiltration,
+aucun impact sur la disponibilité, essais espacés (≈ 1 requête / 3,5 s).
