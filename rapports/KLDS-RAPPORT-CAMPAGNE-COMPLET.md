@@ -19,8 +19,8 @@ individuellement.
 | **Surclaims retirés** | **2** (qualification « SSRF » ; écart de validation de `scope`) — retirés à la suite des deux revues croisées et de la réponse du triage |
 | **Vulnérabilités exploitables confirmées** | **0** — aucune n'a été démontrée sur la surface testée |
 | **Contrôles vérifiés conformes** | **~65**, dont 2 correctifs déjà acceptés par le programme **re-vérifiés conformes** (invalidation des access tokens au reset de mot de passe ; rotation des refresh tokens avec révocation de famille) |
-| **Observations à signaler au vendor** (non exploitables) | **6** : auto-inscription ouverte sur l'instance analytics, exigence d'`User-Agent` côté MCP, saisie d'un `logo_uri` non validée par l'AS, rechargement des tokens de session web sans `epoch`, dérive du schéma du client MCP publié, message d'erreur trompeur sur l'écran de consentement |
-| **Pistes fermées avec preuve** | **9** (entropie des tokens emailed, `jwks_uri` de second ordre, fédération/alias/batching, confusion d'audience, oracle de timing, échappement de l'API de lecture analytics, confusion d'en-têtes, traversée de chemin, IP-littéraux) |
+| **Observations à signaler au vendor** (non exploitables) | **7** : auto-inscription ouverte sur l'instance analytics, exigence d'`User-Agent` côté MCP, saisie d'un `logo_uri` non validée par l'AS, rechargement des tokens de session web sans `epoch`, dérive du schéma du client MCP publié, message d'erreur trompeur sur l'écran de consentement, **soft-fail + oracle d'existence sur `organizationStanding`** |
+| **Pistes fermées avec preuve** | **10** (entropie des tokens emailed, `jwks_uri` de second ordre, fédération/alias/batching, confusion d'audience, oracle de timing, échappement de l'API de lecture analytics, confusion d'en-têtes, traversée de chemin, IP-littéraux, **IDOR inter-comptes — testé avec un vrai second compte `COMPANY_ADMIN` → négatif**) |
 | **Point ouvert principal** | invalidation **partielle** des access tokens OAuth au changement de mot de passe (les access tokens OAuth ne portent pas le claim `epoch` que portent les jetons de session web) |
 
 > **Position honnête** : la plateforme a résisté à l'ensemble de la campagne. Les seuls points
@@ -193,6 +193,14 @@ que je contrôle) → **ni SSRF de second ordre, ni usurpation de client par cl�
 `"INVALID"` / `false` / « Invalid or expired sign-in code » : **oracle de statut**, mais les tokens
 impliqués sont des tokens 256 bits → sans impact.
 
+### 5.9 IDOR inter-comptes → **clos, négatif (avec un vrai second compte)**
+Un second compte `COMPANY_ADMIN` a été obtenu pour lever le blocage. Matrice complète : `report(id)`,
+`reportComments`, `reportTransitions` du rapport d'un autre compte → « You do not have access to this
+report » ; `researcherActivity` → « You can only read your own activity » ; `reports` et `search`
+globaux → vides. → **aucun IDOR**, y compris pour un administrateur d'entreprise. C'est aussi la
+première fois qu'un contrôle d'autorisation **inter-comptes** est validé par une mesure (et non par
+une extrapolation).
+
 ---
 
 ## 6. Points ouverts
@@ -203,10 +211,15 @@ réutiliser l'**ancien** access token. Le refresh token est bien révoqué (mesu
 porte pas `epoch` → **il faut trancher s'il survit** (fenêtre résiduelle de 10 min après un reset).
 *Nécessite* : un changement de mot de passe supplémentaire par le chercheur.
 
-### 6.2 Logique de médiation/paiements avec un compte organisation non vérifié
-22 resolvers `orgId`/`organizationId` sont prêts à être comparés entre le contexte « compte
-personnel » et le contexte « membre d'une organisation non vérifiée » (script `org-sweep.mjs`, mode
-lecture seule par défaut). *Nécessite* : un jeton de session du compte organisation.
+### 6.2 Logique de médiation/paiements — **partiellement close**
+Testé avec un second compte `COMPANY_ADMIN` **non membre d'aucune organisation** (le pire cas) :
+`payoutSummary`, `reportTrends`, `organizationCertificates`, `severityDistribution` → « You are not a
+member of this organization » (message uniforme, y compris pour une organisation inexistante) ;
+`organizationStanding` → objet par défaut pour une organisation existante mais « Organization not
+found » pour une inexistante → **un seul résolveur fuit l'existence d'une organisation**, sans aucune
+donnée sensible et sans intérêt pratique (scope `triage:read` requis, UUID non devinables).
+*Il reste à tester* : le cas « membre d'une organisation non vérifiée » (le compte de test n'est
+membre d'aucune organisation : l'organisation du programme est gérée par le vendor).
 
 ### 6.3 Test multi-A-record du filtre d'IP du chemin CIMD
 Le nom de test public (certificat Let's Encrypt valide) et la **baseline** sont en place : le

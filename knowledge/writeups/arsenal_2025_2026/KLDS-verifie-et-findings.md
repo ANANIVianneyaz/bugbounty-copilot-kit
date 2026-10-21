@@ -584,6 +584,54 @@ commande au LLM. → le vendor a traité l'injection de prompt **côté serveur*
 aucune fuite de données d'un tiers ; le binding approbation↔arguments est appliqué **aussi** du côté
 serveur MCP (« Nothing was sent yet »).
 
+## 2terquies.i — Second compte (COMPANY_ADMIN) : **IDOR inter-comptes CLOS (négatif)** + soft-fail ★
+
+Un **deuxième compte** a été mis à disposition (rôle `COMPANY_ADMIN`, `aud=bounty-api-auth`), ce qui
+permet enfin le test d'IDOR inter-comptes (jusqu'ici abandonné faute de second compte).
+
+### Matrice IDOR (compte ORG → ressources du compte PERSONNEL)
+
+| Ressource visée | Réponse du compte ORG | Lecture |
+|---|---|---|
+| `report(id)` du rapport de l'autre compte | « **You do not have access to this report** » | cloisonné |
+| `reportComments(reportId)` de l'autre | « You do not have access to this report » | cloisonné |
+| `reportTransitions(reportId)` de l'autre | « You do not have access to this report » | cloisonné |
+| `researcherActivity(userId)` de l'autre | « **You can only read your own activity** » | cloisonné |
+| `reports` (surface globale) | `[]` | aucune fuite |
+| `search` global | `[]` | aucune fuite |
+| `programs` | le programme KLDS (public) | normal |
+
+→ **aucun IDOR** : même un compte `COMPANY_ADMIN` ne peut pas lire le rapport, les commentaires, les
+transitions ni l'activité d'un autre compte. **Piste IDOR close, négativement.**
+
+### Soft-fail / oracle d'existence sur la surface organisation
+
+Le compte ORG n'est membre d'**aucune** organisation (`myOrganizations` → `[]`) : c'est le pire cas
+pour l'isolation, et il est très bien traité. Résolvers testés avec 3 cibles (organisation réelle KLDS,
+UUID inexistant, identifiant malformé) :
+
+| Resolver | org réelle | UUID inexistant | malformé | verdict |
+|---|---|---|---|---|
+| `organizationStanding` | **objet par défaut** `{totalIssued:null, currentlyOverdue:0, submissionsSuspended:false}` | « **Organization not found** » | « Organization not found » | ⚠️ **soft-fail + oracle d'existence** |
+| `payoutSummary` | « You are not a member of this organization » | idem | idem | cloisonné (message uniforme) |
+| `reportTrends` | idem | idem | idem | cloisonné |
+| `organizationCertificates` | idem | idem | idem | cloisonné |
+| `severityDistribution` | idem | idem | idem | cloisonné |
+| les 5 résolvers, **compte personnel** | « This operation requires the scope(s): triage:read » | idem | idem | le scope est vérifié **avant** l'existence |
+
+**Latence** (5 échantillons × 3 cibles × 5 résolveurs, compte personnel) : min 165-180 ms, médiane
+169-186 ms sur **toutes** les combinaisons → **aucun oracle temporel** (les maxima de 372-800 ms sont
+des pics ponctuels, répartis aléatoirement).
+
+→ **Portée réelle de l'oracle** : il ne révèle qu'**l'existence** d'une organisation, et uniquement
+pour un jeton disposant déjà de `triage:read` — donc pour un administrateur d'organisation qui
+connaît déjà ses organisations. Les identifiants d'organisation sont des UUID (non devinables) et
+l'objet renvoyé ne contient aucune donnée (`null`, `0`, `false`). → **à signaler comme observation
+(soft-fail et traitement incohérent entre résolveurs), pas comme vulnérabilité**. Le cas « membre
+d'une organisation non vérifiée » reste non testable : le compte de test n'est membre d'aucune
+organisation (l'organisation du programme est gérée par le vendor).
+
+
 ### Reste bloqué (besoin du chercheur)
 
 1. ~~Un échantillon du token de suppression du 2FA~~ → **OBTENU et analysé** (§2sexies.a) : hex 64,
