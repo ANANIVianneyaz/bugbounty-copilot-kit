@@ -233,6 +233,159 @@ révèle d'information (ni l'existence d'une clé, ni l'audience attendue, ni un
 `/mcp` ?) reste **à tester** : il exige un jeton OAuth vivant (P2/§3).
 
 
+## 2quinquies. Nouveaux contrôles du 21/10 (après les deux revues croisées) — 7 angles ouverts, 6 clos
+
+Contexte : le 2FA et le mot de passe du compte de test ont été changés → les refresh tokens OAuth ont été
+révoqués par le vendor (**comportement correct**, voir §Invalidation) et le `login` API exige désormais une
+vérification humaine. Les contrôles ci-dessous ont donc été faits **sans jeton** ou **avec un jeton
+re-créé** ; les blocages restants sont listés explicitement.
+
+### 2quinquies.a — `removeTotpViaToken` : un oracle AVEUGLE, NON AUTHENTIFIÉ, sans validation de forme  ★ piste ouverte
+
+La mutation `removeTotpViaToken(token: String!)` s'appelle **sans aucune authentification** et renvoie un
+**booléen** (`{"removeTotpViaToken": false}`) — contrairement à `disableTotp`, `generateBackupCodes`,
+`generateTotpSecret`, `acceptOrganizationInvitation` qui répondent `Unauthorized`.
+
+| Forme de token testée (16) | Réponse | Latence |
+|---|---|---|
+| vide, `A`, `123456`, `12345678`, `1234567890` | `false` | 218-238 ms |
+| 16 / 32 / 64 hex, 64 × `g` (hors hex), 64 majuscules | `false` | 206-242 ms |
+| base64url 43, `aaaa.bbbb.cccc`, UUID, espaces, 200 caractères | `false` | 219-268 ms |
+
+→ **aucune validation de longueur ni de charset** : le token peut être n'importe quelle chaîne. Le seul
+signal est le booléen. **Pas d'oracle temporel** (latences 206-268 ms, aucun écart entre formes).
+
+**Rate-limit mesuré (et il est PAR IP)** — 2 mesures simultanées, 2 IP distinctes :
+
+| Mesure | IP locale | IP contabo |
+|---|---|---|
+| 1ʳᵉ appel refusé | n°6 | n°6 |
+| appels OK après 65 s | **5 / 8** | **5 / 8** |
+| même token re-testé | toujours refusé | toujours refusé |
+
+→ le quota est de **~5 essais / 60 s par IP** (les deux IP ont obtenu leur plein quota en parallèle →
+ce n'est pas un quota global) ; le compteur n'est pas remis à zéro par un nouveau token.
+
+**Pourquoi c'est important** : la seule barrière à la désactivation du 2FA d'un compte tiers est
+l'**entropie du token envoyé par email**. Avec 5 essais/min/IP, un code à 6 chiffres = 10⁶ essais ≈
+200 000 min ≈ **139 jours par IP** (≈ 14 jours avec 10 IP) ; un code à 4 chiffres = **33 h par IP** ;
+un code à 8 caractères hexadécimaux = 4,3·10⁸ essais = **inaudible**. → **la longueur du token est
+décisive** et je ne peux pas la déduire sans un échantillon (blocage : l'email du 2FA que le chercheur
+vient de déclencher). *Piste la plus vivante de la campagne.*
+
+Autres mutations à token non authentifiées, mesurées :
+
+| Mutation | Réponse sans jeton | Lecture |
+|---|---|---|
+| `verifyEmail` | `{"verifyEmail":"INVALID"}` (enum) | oracle de statut, non authentifié |
+| `confirmEmailChange` | `false` | non authentifié |
+| `exchangeCliSignInCode` | « Invalid or expired sign-in code » | non authentifié |
+| `resetPassword` | contrôle d'abord la **longueur du mot de passe** (« 8 to 72 characters »), puis le token | non authentifié (attendu) |
+| `forgotPassword` | « **Human verification failed** » | protégé par une vérification humaine (Turnstile) |
+| `login` | « **Human verification failed** » | le mot de passe ne suffit pas : vérification humaine exigée |
+| `disableTotp` / `generateBackupCodes` / `generateTotpSecret` | `Unauthorized` | authentifiés |
+| `acceptOrganizationInvitation` | `Unauthorized` | authentifié |
+
+### 2quinquies.b — `jwks_uri` de second ordre (SSRF) → **CLOS : le mécanisme n'existe pas** ★
+
+Hypothèse : le document CIMD peut déclarer un `jwks_uri` ; si l'AS le fetch au moment de valider une
+assertion `private_key_jwt`, ce serait une SSRF de second ordre (filtre IP différent) **et** une
+primitive d'usurpation de client (je fournis la clé publique).
+
+| Document CIMD | Résultat |
+|---|---|
+| `token_endpoint_auth_method: none` (témoin) | **accepté** → page de consentement |
+| `token_endpoint_auth_method: private_key_jwt` **avec** `jwks_uri` valide | **rejeté** → `invalid_client` |
+| `token_endpoint_auth_method: private_key_jwt` **sans** `jwks_uri` | **rejeté** → `invalid_client` |
+| `token_endpoint_auth_method: none` + `jwks_uri` = `http://169.254.169.254/…` | **accepté** (consentement) |
+| `token_endpoint_auth_method: none` + `jwks_uri` = `http://10.255.255.1/…` / `http://localhost:8099/…` / `http://127.0.0.1:1/…` | **acceptés** |
+
+→ **`private_key_jwt` n'est pas supporté** : l'AS rejette le document, n'enregistre pas le client
+(« unknown client » au `/oauth/token`) et **ne fetch jamais de `jwks_uri`** (0 requête reçue par mon
+serveur pendant 11 appels au `/oauth/token`, dans 5 configurations). → **pas de SSRF de second ordre,
+pas d'usurpation de client par clé.** Réserve : un document portant un `jwks_uri` **interne** est
+*accepté* (le champ est lu mais pas validé) — sans effet tant que `private_key_jwt` n'est pas implémenté.
+
+### 2quinquies.c — Fédération / alias / batching / GET GraphQL → **CLOS**
+
+| Test | Résultat | Lecture |
+|---|---|---|
+| `{ _service { sdl } }` | « Cannot query field "_service" on type "Query" » | **l'API n'est pas fédérée** (pas de bypass `_entities`) |
+| `{ _entities(representations:[…]) }` | « Cannot query field "_entities" » + « Unknown type "User" » | idem |
+| alias multiples `{ a: me {id} b: me {id} }` | `200` + `Unauthorized` (identique à une requête simple) | pas de contournement par alias |
+| 3 opérations dans un tableau JSON | « Syntax Error: Unexpected "[" » | batching **désactivé** |
+| 2 opérations dans un même corps | « This anonymous operation must be the only defined operation » | idem |
+| `GET /graphql?query={ me { id email } }` | « blocked as a potential Cross-Site Request Forgery (CSRF) » | GET bloqué (prévention CSRF d'Apollo) → pas de cache deception |
+| `__schema` / `__type` | « introspection is not allowed by Apollo Server » | introspection désactivée |
+
+### 2quinquies.d — Audience du serveur MCP → **CLOS et conforme**
+
+| Jeton | `/graphql` (API) | `/mcp` (serveur MCP) |
+|---|---|---|
+| `aud=https://bugsecure-api.senintel.sn` | 200 `me=william_root` | **401** `invalid_token` (« token failed validation ») |
+| `aud=https://bugsecure-mcp.senintel.sn/mcp` | **Unauthorized** | **200** (`initialize` + `tools/list`) |
+| aucun | `Unauthorized` | 401 + `WWW-Authenticate: Bearer scope="…", resource_metadata="…"` (conforme) |
+
+→ **aucune confusion d'audience** dans les deux sens. Le serveur MCP expose en revanche une **liste
+d'outils de 77 Ko** (donc une surface d'outils bien plus large que le sous-ensemble du client) :
+**l'enforcement des scopes par outil reste à tester** (bloqué : il faut un jeton `aud=MCP` vivant).
+
+### 2quinquies.e — PostHog : auto-inscription ouverte (mais throttlée globalement) ★
+
+| Sonde | Résultat |
+|---|---|
+| `POST /ingest/api/signup` (email neuf) | **201 Created** → utilisateur (id 386563, uuid, distinct_id) **+ organisation** créés, **sans authentification** |
+| `POST /ingest/api/signup` (email déjà utilisé) | 400 `unique` (« There is already an account with this email address ») |
+| `POST /ingest/api/signup` (IP et email différents, 2ᵉ tentative) | **429** `throttled` « Expected available in 86220 seconds » (≈ 24 h) → le throttle est **global à l'instance**, pas par IP ni par email |
+| `POST /ingest/api/login` avec le compte créé | 401 `verify_email_pending` → le compte exige une **validation par email** |
+| `POST /ingest/api/login` (email/passe inexistants) | 400 `invalid_credentials` |
+
+→ l'auto-inscription n'est **pas désactivée** sur l'instance self-hosted (PostHog la désactive par
+défaut en déploiement propre) : c'est une voie d'accès non approuvée à un système qui héberge les
+analytics. **Mais** : (1) le throttle global de 24 h supprime l'abus de masse et le spam ; (2) le
+compte créé est bloqué jusqu'à la validation par email → **l'impact démontré s'arrête à la création de
+comptes et d'organisations** (pas de lecture des données du projet). → **faible**, à signaler comme
+misconfiguration, pas comme fuite.
+
+### 2quinquies.f — PostHog : confusion d'en-têtes et version → **CLOS**
+
+| Variante | Réponse |
+|---|---|
+| `Authorization: Api <phc_…>` (format attendu par PostHog) | 401 `not_authenticated` |
+| `Authorization: Bearer <phc_…>` | 401 `authentication_failed` « **Personal API key found in request Authorization header is invalid** » |
+| `Authorization: Bearer null` / `Bearer undefined` | 401 idem (même message) |
+| `X-PostHog-Token: <phc_…>` (sans Authorization) | 401 `not_authenticated` |
+| double en-tête `Api` + `X-PostHog-Token` | 401 `not_authenticated` |
+| chemin encodé `%2f`, double slash, `/./` | 401 `not_authenticated` (normalisé) |
+| `/ingest/api/instance_status/version`, `/ingest/api/version`, `/ingest/api/status` | **404** → aucune version divulguée |
+| `/ingest/shared_dashboard/<token court>` (8 hex, 12 car., UUID) | 404 (PostHog) |
+| projet **valide** vs `phc_000…` vs `xyz` vs vide | **401 uniforme** → aucune énumération de projet |
+| HogQL `SELECT count() FROM events` / `SELECT 1` / `SELECT * … LIMIT 1` | **403** `not_authenticated` |
+
+→ seul signal : le message discriminant « Personal API key … is invalid » révèle la **forme** attendue
+(une clé personnelle `phx_`), sans rien divulguer d'exploitable.
+
+### 2quinquies.g — Observations diverses
+
+- **Le refresh token est rotatif** (preuve involontaire) : mes propres diagnostics ont consommé le RT
+  courant ; le nouveau RT.rotationnel n'est utilisable qu'une fois → `invalid_grant` au second usage.
+  Contrôle **conforme**.
+- **Transitoire** : `POST /mcp` a répondu `404 {"error":"not_found"}` pendant ~60 s (fenêtre de
+  déploiement), puis 30/30 et 20/20 en `200` ensuite → **ce n'est pas un finding** (à signaler au
+  vendor comme observation de déploiement).
+- `POST /ingest/api/users` → 401 ; `GET /ingest/api/login` → 405 ; `POST /ingest/api/login` → 401/400
+  (voir §e).
+
+### Reste bloqué (besoin du chercheur)
+
+1. **Un échantillon du token de suppression du 2FA** (l'email que le chercheur vient de déclencher) →
+   donne la longueur/alphabet et tranche l'impact de §2quinquies.a.
+2. **Un jeton OAuth vivant** (nouvelle autorisation : le RT a été révoqué par le changement de mot de
+   passe) → pour l'enforcement des scopes par outil MCP (§d) et la fin du sweep des 198 opérations.
+3. **Un domaine contrôlable** → pour le test multi-A-record / DNS rebinding du filtre d'IP du CIMD
+   (le tunnel ngrok ne permet qu'un nom public à A unique).
+
+
 ## 3. Restes à tester (il faut une action du chercheur)
 
 1. ~~Bypass MFA~~ → **CLOS**, voir §2bis (les 7 patterns).

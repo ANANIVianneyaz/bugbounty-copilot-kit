@@ -1,0 +1,26 @@
+[jwks] en ecoute sur 8099 | KID=bb-probe-key-1
+2026-10-21T09:35:30.394Z | GET /doc/j1.json?jwks=https%3A//3b3a-41-138-89-158.ngrok-free.app/jwks.json | ip=41.138.89.158 | ua=BugSecure-OAuth/1 (+client-id-metadata-document)
+[jwks] en ecoute sur 8099 | KID=bb-probe-key-1
+2026-10-21T09:36:29.762Z | GET /doc/check.json | ip=41.138.89.158 | ua=curl/8.5.0
+2026-10-21T09:36:30.932Z | GET /doc/probe.json?jwks=https%3A%2F%2F3b3a-41-138-89-158.ngrok-free.app%2Fjwks.json | ip=52.214.90.218 | ua=BugSecure-OAuth/1 (+client-id-metadata-document)
+2026-10-21T09:36:32.654Z | GET /doc/probe.json?jwks=http%3A%2F%2F127.0.0.1%3A1%2Fjwks.json | ip=52.214.90.218 | ua=BugSecure-OAuth/1 (+client-id-metadata-document)
+2026-10-21T09:36:34.298Z | GET /doc/probe.json?jwks=http%3A%2F%2F169.254.169.254%2Flatest%2Fmeta-data%2F | ip=52.214.90.218 | ua=BugSecure-OAuth/1 (+client-id-metadata-document)
+2026-10-21T09:36:35.983Z | GET /doc/probe.json?jwks=http%3A%2F%2Flocalhost%3A8099%2Fjwks.json | ip=52.214.90.218 | ua=BugSecure-OAuth/1 (+client-id-metadata-document)
+2026-10-21T09:36:37.604Z | GET /doc/probe.json | ip=52.214.90.218 | ua=BugSecure-OAuth/1 (+client-id-metadata-document)
+[jwks] en ecoute sur 8099 | KID=bb-probe-key-1
+2026-10-21T09:37:16.512Z | GET /doc/nojwks.json | ip=41.138.89.158 | ua=curl/8.5.0
+2026-10-21T09:37:17.224Z | GET /doc/jwks-mine.json | ip=41.138.89.158 | ua=curl/8.5.0
+2026-10-21T09:37:17.887Z | GET /doc/jwks-dead.json | ip=41.138.89.158 | ua=curl/8.5.0
+2026-10-21T09:37:18.569Z | GET /doc/jwks-cloud.json | ip=41.138.89.158 | ua=curl/8.5.0
+2026-10-21T09:37:19.329Z | GET /doc/jwks-localhost.json | ip=41.138.89.158 | ua=curl/8.5.0
+2026-10-21T09:37:20.064Z | GET /doc/jwks-private-key.json | ip=41.138.89.158 | ua=curl/8.5.0
+2026-10-21T09:37:42.196Z | GET /doc/nojwks.json | ip=52.214.90.218 | ua=BugSecure-OAuth/1 (+client-id-metadata-document)
+2026-10-21T09:37:43.918Z | GET /doc/jwks-mine.json | ip=52.214.90.218 | ua=BugSecure-OAuth/1 (+client-id-metadata-document)
+2026-10-21T09:37:45.534Z | GET /doc/jwks-dead.json | ip=52.214.90.218 | ua=BugSecure-OAuth/1 (+client-id-metadata-document)
+2026-10-21T09:37:47.153Z | GET /doc/jwks-cloud.json | ip=52.214.90.218 | ua=BugSecure-OAuth/1 (+client-id-metadata-document)
+2026-10-21T09:37:48.780Z | GET /doc/jwks-localhost.json | ip=52.214.90.218 | ua=BugSecure-OAuth/1 (+client-id-metadata-document)
+2026-10-21T09:37:50.419Z | GET /doc/jwks-private.json | ip=52.214.90.218 | ua=BugSecure-OAuth/1 (+client-id-metadata-document)
+2026-10-21T09:38:02.256Z | GET /doc/jwks-private-key.json | ip=52.214.90.218 | ua=BugSecure-OAuth/1 (+client-id-metadata-document)
+[jwks] en ecoute sur 8099 | KID=bb-probe-key-1
+2026-10-21T09:38:49.351Z | GET /doc/jwks-pk.json | ip=52.214.90.218 | ua=BugSecure-OAuth/1 (+client-id-metadata-document)
+2026-10-21T09:38:50.916Z | GET /doc/pk-nojwks.json | ip=52.214.90.218 | ua=BugSecure-OAuth/1 (+client-id-metadata-document)
