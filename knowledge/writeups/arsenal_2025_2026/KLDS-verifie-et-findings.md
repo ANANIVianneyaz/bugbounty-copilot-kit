@@ -376,6 +376,24 @@ misconfiguration, pas comme fuite.
 - `POST /ingest/api/users` → 401 ; `GET /ingest/api/login` → 405 ; `POST /ingest/api/login` → 401/400
   (voir §e).
 
+### 2quinquies.h — L'écran de consentement de l'app échoue sur une ressource non-app (message trompeur)
+
+Constat reproductible : `GET /oauth/authorize?...&resource=https://bugsecure-mcp.senintel.sn/mcp`
+avec un client OAuth connu → l'AS répond **302 vers `https://bugsecure.senintel.sn/oauth/consent?request=…`**
+(c'est le serveur d'autorisation qui répond, pas l'app). Mais **la page de consentement côté app**
+échoue ensuite et redirige vers `https://bugsecure.senintel.sn/oauth/error?code=invalid_client`
+→ « *BugSecure ne reconnaît pas cette application. Revenez à l'application que vous connectiez et
+réessayez. Code d'erreur : invalid_client* ».
+
+→ le message est **trompeur** : le client est parfaitement reconnu (l'AS a Construct la demande de
+consentement) ; c'est le rendu de l'écran de consentement pour une **ressource qui n'est pas celle de
+l'app** qui échoue. Même lien, ressource = l'API de l'app → le consentement s'affiche normalement
+(autorisation validée, code capté par le catcher). → **observation à signaler au vendor** (UX cassée +
+message qui accuse le client alors que le client est valide) ; pas un finding de sécurité en soi, mais
+c'est un indice sur la gestion des ressources côté app (à re-tester si un second écran de consentement
+apparaît pour d'autres ressources).
+
+
 ### Reste bloqué (besoin du chercheur)
 
 1. **Un échantillon du token de suppression du 2FA** (l'email que le chercheur vient de déclencher) →
