@@ -57,7 +57,7 @@ l'IP de sortie `52.214.90.218`, ou si le filtre d'adresses est contournable sur 
 | `client_credentials` | `unsupported_grant_type` (y compris via un document CIMD) |
 | Usurpation de nom de client | refusée **sur les deux** chemins (DCR et CIMD) : `BugSecure`, `BugSecure Africa`, `SSO BugSecure`, `Senintel BugSecure`, `MCP BugSecure officiel`, `bugsecure-mcp` |
 | `redirect_uris` non conformes (plateforme, IP littéral, `javascript:`, http non-loopback) | refusés sur les deux chemins |
-| CIMD : `scope` hors périmètre | accepté **au niveau client** (filtré seulement à l'émission du token) → écart mineur vs DCR |
+| CIMD : `scope` **demandé dans la requête** | **validé à l'identique du DCR** : `admin:all` et `profiles:write` → refusés (« scope contains unsupported values ») ; `triage:read/write`, `grade:write` acceptés (ce sont des scopes de la plateforme) ; le `scope` du *document* distant est **inutilisé** → **pas d'escalade** (affirmation retirée après test) |
 | TLS de la ressource distante | certificat auto-signé refusé |
 | DCR | `429 rate limit exceeded` après ~10 inscriptions |
 

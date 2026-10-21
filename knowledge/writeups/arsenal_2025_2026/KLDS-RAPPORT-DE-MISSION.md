@@ -16,7 +16,7 @@ La mission visait à trouver, sur le programme KLDS de BugSecure Africa, des vul
 
 | | |
 |---|---|
-| **Vulnérabilités soumises** | **1** — SSRF non authentifié sur le serveur d'autorisation OAuth (chemin Client ID Metadata Document), CVSS **5.3 (Medium)** |
+| **Vulnérabilités soumises** | **1** — fetch serveur non authentifié via `client_id` (chemin Client ID Metadata Document), initialement CVSS **5.3 (Medium)**, **amendé après relecture croisée** → réclamation réduite (le fetch est normatif + mitigé) et **sévérité proposée abaissée à Faible** ; seul écart maintenu : **absence de quota d'enregistrement sur le chemin CIMD** (mesuré apparié : DCR 0/12 créés, CIMD 12/12) |
 | **Vulnérabilités en cours de triage** | 1 (celle-ci, soumise sur la plateforme, `status: NEW`) |
 | **Hypothèses fermées avec preuve** | **~45 contrôles** documentés comme non exploitables (OAuth/AS, JWT, MFA, autorisation, injection, fichiers, XSS, serveur MCP, web app, infrastructure, dépôt `bugsecure-mcp`) |
 | **Correctifs antérieurs re-vérifiés** | 4 (consent-injection, invalidation de session au reset, rotation du refresh token, codes OAuth dans l'analytics) |
@@ -71,6 +71,12 @@ Deux points du dossier ont été **repris et corrigés** après relecture par de
 3. Une piste proposée en relecture (les outils d'écriture seraient annoncés malgré un jeton lecture-seule)
    a été **vérifiée puis écartée** : le README du dépôt documente que « *Every tool is listed whatever you
    granted* » et que le masquage total ne concerne que le mode local `--read-only` → **aucun défaut**.
+4. **Une affirmation de mon propre rapport a été retirée** : le chemin CIMD appliquerait une validation
+   de `scope` différente du DCR. Test.apparié : la validation est **identique** (`admin:all` et
+   `profiles:write` refusés sur les deux chemins) → **pas d'escalade de privilèges**. C'est ce test qui a
+   évité de soumettre un faux positif.
+5. Le caractère **normatif** du fetch CIMD (draft IETF) a été vérifié et acté : le rapport est donc
+   **amendé** (reclassement + demande de retrait possible), et non laissé en l'état.
 
 ### 3.2 Outils sur mesure développés (tous conservés et réutilisables)
 | Script | Rôle |
