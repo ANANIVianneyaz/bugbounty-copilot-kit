@@ -542,30 +542,47 @@ nginx) est prêt et redémarre proprement : **il suffit d'ouvrir le port 443** d
 fournisseur.
 
 
-### 2terquies.f — Serveur MCP : le 404 est bien une fenêtre de déploiement (et non un artefact de test) ★
+### 2terquies.f — Serveur MCP : **correction** — les « fenêtres 404 » étaient un bug de mon script ★
 
-Le `404 {"error":"not_found"}` sur **toutes** les méthodes JSON-RPC a été qualifier à tort de
-« transitoire » puis de « différence de client ». Contrôle méthodique (script minimal identique, même
-jeton, requêtes strictement identiques) :
+J'avais conclu à des « fenêtres de 404 » du serveur MCP (rolling deploy sans readiness probe).
+**C'était faux** : mon script interrogeait `https://bugsecure-mcp.senintel.sn/mcp/mcp` (la constante
+`MCP` contenait déjà `/mcp` et j'ajoutais `/mcp` à l'appel) → `404` sur une route inexistante, à
+chaque fois. Preuve : un serveur d'écho local a enregistré la requête réelle → `POST /mcp/mcp`.
+Après correction de l'URL : **33 appels consécutifs en `200`**, et l'ensemble de la surface d'outils
+répond normalement. → **aucun défaut de disponibilité du serveur MCP** ; la conclusion précédente était
+une surinterprétation de mon propre outillage (exactement le genre d'erreur que le kit signale :
+« ne jamais conclure d'un artefact de test »).
 
-| Moment | Requête via le nom | IP `52.18.227.46` en direct | IP `52.18.30.12` en direct |
-|---|---|---|---|
-| fenêtre A | 404 × 30 (3 min d'affilée) | — | — |
-| fenêtre B | 404 × 6 | — | — |
-| hors fenêtre | 200 × 20 | 200 × 10 | 200 × 10 |
-| hors fenêtre (script minimal) | 200 × 15 | — | — |
+Un contrôle réel, lui, ressort de cette histoire : **le serveur MCP renvoie `403` (nginx) si la
+requête n'a pas d'en-tête `User-Agent`** (vérifié : sans UA → 403 HTML ; avec `User-Agent: node` →
+200). C'est **conforme** à la spec MCP, qui impose au client d'envoyer un `User-Agent` → à documenter
+comme un contrôle positif, pas comme un défaut.
 
-→ le même script, la même requête et le même jeton **alternent** entre 404 (raisons vides) et 200, et les
-**deux IP répondent 200 en direct** hors fenêtre. La métadonnée de ressource
-(`/.well-known/oauth-protected-resource/mcp`) reste 200 pendant les fenêtres → **ce n'est pas un
-problème de routage mais l'application MCP elle-même** qui n'expose pas ses routes pendant le
-redéploiement (rolling deploy **sans readiness probe**).
+### 2terquies.g — Serveur MCP : enforcement des scopes **par outil** (33 outils) → **CLOS, conforme** ★
 
-→ **observation à signaler au vendor** (disponibilité + message trompeur : un client MCP ne peut pas
-distinguer « instance pas prête » d'« endpoint inexistante »). Ce n'est pas une vulnérabilité de
-sécurité ; en revanche c'est ce qui rend **non fiable toute campagne de tests MCP** → les payloads par
-outil doivent être réessayés (budget de retry : 60 × 5 s).
+Le serveur MCP annonce **33 outils** (`tools/list`, 77 Ko de JSON Schema). Test avec un jeton
+`aud=MCP` portant les scopes minimaux `programs:read profile:read reports:read reports:write` et des
+**arguments valides** pour chaque outil :
 
+| Résultat | Outils | Lecture |
+|---|---|---|
+| **12 outils exécutés** | `get_my_kyc_status`, `get_my_profile`, `get_program`, `get_report`, `get_researcher_profile`, `get_taxonomy`, `list_badges`, `list_my_certificates`, `list_my_reports`, `list_notifications`, `search`, `search_programs` | tous de niveau « chercheur » ; **données uniquement personnelles** |
+| **12 outils refusés en nommant le scope manquant** | `add_triage_comment` (*profile:read triage:write*), `assign_report` (*profile:read triage:read triage:write*), `check_duplicates` (*triage:read*), `get_org_report` (*triage:read*), `get_org_report_stats` (*triage:read*), `get_program_stats` (*triage:read*), `list_my_organizations` (*triage:read*), `list_org_certificates` (*profile:read triage:read*), `list_org_programs` (*triage:read*), `list_org_reports` (*triage:read*), `update_my_profile` (*profile:write*), `update_report_status` (*profile:read triage:read triage:write*) | **l'enforcement est par outil et nomme le scope manquant** → aucune escalade possible |
+| `mark_notifications_read` | `insufficient_scope` | refus net |
+| `add_report_comment` | « **Nothing was sent yet. This change needs the user's approval on BugSecure**… » | le **circuit d'approbation** est appliqué côté outil (l'écriture n'a pas eu lieu) |
+| `raise_appeal` | « that grade is not the one in force on this report » | message métier, pas de fuite |
+| `verify_certificate` | « No certificate matches that verification token » | outil public, pas de fuite |
+| 6 autres | erreurs de validation d'arguments (« Too small: … », « Invalid option: … ») | validation d'entrée stricte |
+
+**Contrôle positif majeur — neutralisation du prompt injection** : toutes les chaînes non fiables
+renvoyées par les outils sont **encapsulées** par le serveur :
+`<untrusted-content-e5c36495b72ab39c source="user:e3aa51e2-…:username">…</untrusted-content-…>`.
+Un titre de rapport, un nom d'utilisateur ou un titre de notification ne peuvent donc pas passer
+commande au LLM. → le vendor a traité l'injection de prompt **côté serveur**, ce qui est rare.
+
+→ **CLOS** : aucune escalade de privilège possible via les outils MCP avec un jeton de scopes minimaux ;
+aucune fuite de données d'un tiers ; le binding approbation↔arguments est appliqué **aussi** du côté
+serveur MCP (« Nothing was sent yet »).
 
 ### Reste bloqué (besoin du chercheur)
 
