@@ -28,7 +28,7 @@ export async function ensureToken(resource) {
   return { token: j.access_token, source: "refresh", exp: c2.exp };
 }
 
-if (import.meta.url.endsWith(process.argv[1].split("/").pop())) {
+if (process.argv[1] && import.meta.url.endsWith(process.argv[1].split("/").pop())) {
   for (const r of [process.argv[2] || "https://bugsecure-api.senintel.sn", process.argv[3] || "https://bugsecure-mcp.senintel.sn/mcp"]) {
     const t = await ensureToken(r);
     console.log(r, "->", t.source, "| exp", t.exp, t.error ? JSON.stringify(t.error) : "");
