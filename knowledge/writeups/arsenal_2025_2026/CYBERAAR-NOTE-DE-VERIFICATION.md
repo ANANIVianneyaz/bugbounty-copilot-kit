@@ -268,6 +268,34 @@ chercheur et l'avatar, `POST` pour le reste).
   (le mot de passe ne suffit pas : il faut prouver être le propriétaire de l'adresse).
 
 
+### Le vecteur SSRF (URL de profil) → **CLOS : le serveur ne récupère aucune URL**
+
+Le champ `profile` (à l'inscription) est la **seule URL acceptée** par la plateforme. Test complet :
+
+| Étape | Résultat |
+|---|---|
+| inscription avec `profile` = `https://<tunnel OOB>/ssrf-registration-probe` | `200 {"success":true}` → le compte est créé |
+| **le serveur a-t-il récupéré l'URL ?** | **NON** — **0 requête** reçue sur mon écouteur OOB (seul mon `GET /ping` de contrôle y figure) |
+| l'URL du profil est-elle reprise dans la page publique `/h/<handle>` ? | **NON** (elle n'apparaît pas dans le HTML) |
+| `PATCH /account/profile {handle:"bb-probe-ssrf"}` | `200 {"success":true}` → le profil public existe (`GET /h/bb-probe-ssrf` → 200) |
+| après création du profil public | **toujours 0 requête OOB** → pas de fetch au rendu non plus |
+
+→ **pas de SSRF** : la plateforme ne va pas chercher l'URL déclarée par un chercheur, ni à l'inscription, ni au
+rendu. L'angle « `admin.aarme.cyberaar.io` en IP privée, atteignable par SSRF » est donc **fermé**.
+
+### Le XSS stocké sur les pages publiques → **CLOS par trois verrous**
+
+| Verrou | Mesure |
+|---|---|
+| **1) validation serveur des champs affichés publiquement** | `PATCH /account/profile` avec un payload HTML dans `display_name` → **`{"error":"invalid_name"}`** ; dans `country` → **`{"error":"invalid_country"}`** (3 payloads XSS testés, dont `<!--><svg onload='top[/al/.source+/ert/.source](document.cookie)'>` et `</textarea><svg onload=alert(1)>`) → **aucune injection possible dans le profil public** |
+| **2) pas de fetch d'URL** | cf. §SSRF ci-dessus |
+| **3) CSP stricte sur la page publique** | `default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'` → **pas de `'unsafe-inline'` dans `script-src`** → les gestionnaires d'événements en attribut (`<svg onload=…>`, `<img onerror=…>`) **ne sont pas exécutés**, même si le contenu était stocké brut. Seule uneCharge `same-origin` (`<script src="/…">`) passerait → il resterait donc à trouver un point d'injection brut **et** un fichier JS servi sur leur origine. |
+
+→ le payload « contournement WAF Akamai » est donc **sans effet ici** : le filtre de l'API rejette le
+contenu à l'entrée, et la CSP bloquerait de toute façon l'exécution inline. Le seul vecteur XSS encore
+ouvert est **le fichier lui-même** (avatar / pièce jointe) servi sur leur origine → en cours de test.
+
+
 ---
 
 *Chaque ligne de ce document renvoie à une mesure reproductible (scripts + journaux dans le kit).*

