@@ -108,6 +108,60 @@ Bcc:` injecté, l'attaquant reçoit une copie de l'e-mail de notification — et
 | Longueurs / formats | tous | validation d'entrée stricte (déjà partially true) |
 
 
+### Le périmètre exact (lu dans l'API `/api/aarme/programmes`) et une correction
+
+```json
+{"programmes":[{"key":"cyberaar","name":"CyberAar","org":"CyberAar","assets":[
+  {"key":"aarme","name":"Plateforme AarMe","class":"Critique","match":["aarme.cyberaar.io","admin.aarme.cyberaar.io"]},
+  {"key":"api","name":"API formulaires","class":"Standard","match":["cyberaar.io/api"]},
+  {"key":"site","name":"Site principal","class":"Standard","match":["cyberaar.io","www.cyberaar.io"]}]}]}
+```
+
+→ **l'actif Critique inclut `admin.aarme.cyberaar.io`** (j'avais d'abord conclu le contraire : rectification).
+**Mais** : `admin.aarme.cyberaar.io` **résout vers `10.9.0.10`** → une adresse **privée RFC1918** →
+**l'interface d'administration n'est pas joignable depuis l'Internet** (connect timeout, aucune route) :
+elle n'est accessible que depuis leur réseau interne.
+
+Double enseignement :
+1. **divulgation d'information** : un enregistrement DNS public révèle leur adressage interne
+   (`10.9.0.10`) → à signaler (faible, mais c'est une fuite d'info réelle) ;
+2. **l'angle à fort rendement** : si un endpoint public **récupère une URL fournie par l'utilisateur**
+   (avatar, `website`, aperçu de lien, soumission de rapport, en-tête de webhook d'organisation…), alors
+   `http://admin.aarme.cyberaar.io/…` est une **cible SSRF interne** → l'API d'admin, **non
+   authentifiée depuis l'intérieur**, sur l'actif **Critique** (225 000-300 000 FCFA). C'est l'angle que
+   je qualifie de prioritaire.
+
+### La carte réelle de la surface API (différentiel 404/405/401, 40 sondes)
+
+| Route | Réponse | Lecture |
+|---|---|---|
+| `GET /api/aarme/account/me` | **401** `{"error":"unauthenticated"}` | existe, **protégée** |
+| `POST /api/aarme/account/profile` | 405 | mise à jour du profil (le schéma porte `website`, `avatarUrl`, `country`, `bio` → **champs d'URL à tester en SSRF**) |
+| `POST /api/aarme/report` | 405 | soumission d'un rapport |
+| `POST /api/aarme/org` | 405 | proposition d'organisation |
+| `POST /api/aarme/account/register` | 405 | inscription (avec pot de miel) |
+| `POST /api/aarme/account/login` | 405 | connexion |
+| `POST /api/aarme/account/logout` | 405 | déconnexion |
+| `GET /api/aarme/account/session` | 200 `{"authenticated":false}` | sonde de session (cookie same-origin) |
+| `GET /api/aarme/{stats,programmes,leaderboard}` | 200 | publics par design |
+| 30 autres chemins (`/api/aarme/{reports,orgs,members,payouts,settlements,certificates,invitations,notifications,search,taxonomy,badges,admin/*}`…) | 404 `{"error":"not_found"}` | **n'existent pas** |
+
+→ **aucune API d'administration sur l'hôte public** : elle est sur `admin.` (privé). La surface publique
+est volontairement **très étroite** : 11 endpoints, 3 publics, 8 sur session.
+
+### Contrôles déjà prouvés sur cette surface
+
+| Contrôle | Mesure | Verdict |
+|---|---|---|
+| **Enumeration de compte au login** | 8 variantes (email existant / inexistant / absent / champ `login` / password en tableau / mass assignment) → **toujours `401 {"error":"invalid_credentials"}`**, latences 224-580 ms | **aucun oracle** (ni par message, ni par timing) |
+| Normalisation de chemin | `/api/aarme/./account/session` et `//account/session` → 200 ; `..%2f..%2f`, `/API/AARME/…`, `//api.aarme.cyberaar.io/…` → 404 | pas d'échappement |
+| Confusion de méthode | `PUT`/`PATCH`/`DELETE`/`POST` → **405 `method_not_allowed`** ; `OPTIONS`/`HEAD` → 200 | seuls GET/POST sont routés |
+| Paramètres cachés | `?limit=1000`, `?all=true`, `?include=email`, `?verbose=true`, `?debug=1`, `?include=internal` → réponses **identiques octet pour octet** | aucun amplificateur d'énumération |
+| Profil public `/h/<handle>` | aucun email, aucun UUID, aucun montant | pas de fuite |
+| Pages SSR | les seuls emails présents sont les placeholders de formulaire (`vous@email.com`) | pas de fuite au rendu |
+| Leaderboard | 1 chercheur : `accepted, avatar, badges, handle, highest, name, points, position, rank` | pas de donnée sensible |
+
+
 ---
 
 *Chaque ligne de ce document renvoie à une mesure reproductible (scripts + journaux dans le kit).*

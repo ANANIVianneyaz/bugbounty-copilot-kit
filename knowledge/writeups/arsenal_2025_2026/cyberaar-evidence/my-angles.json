@@ -1,0 +1,394 @@
+[
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/leaderboard",
+  "m": "GET",
+  "s": 200,
+  "ct": "application/json",
+  "len": 288,
+  "body": "{\"leaderboard\":[{\"accepted\":3,\"avatar\":false,\"badges\":3,\"handle\":\"trixx\",\"highest\":\"medium\",\"name\":\"trixx\",\"points\":110,\"position\":1,\"rank\":\"recrue\",\"rank_en\":\"Recruit\",\"rank_fr\":\"Recrue\"}],\"period\":\"all\",\"programme\":null,\"programmes\":[{\"key\":\"cyberaar\",\"name\":\"CyberAar\"}],\"since\":null}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/h/trixx",
+  "m": "GET",
+  "s": 200,
+  "ct": "text/html",
+  "len": 12388,
+  "body": "<!DOCTYPE html><html lang=\"fr\" dir=\"ltr\" data-astro-cid-nmcsnurg> <head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"Profil public d'un hacker AarMe : rang, réputation et distinctions obtenues sur la plateforme de bug bounty souveraine.\"><meta name=\"robots\" content=\"index, follow\"><title>Profil hacker - AarMe CyberAar</title><link rel=\"canonical\" href=\"https://aarme.cyberaar.io/h/\"><link rel=\"alternate\" hreflang=\"fr\" href=\"https://aarme.cyberaar.io/h/\"><link rel=\"alternate\" hreflang=\"en\" href=\"https://aarme.cyberaar.io/en/h/\"><link rel=\"preload\" href=\"/fonts/space-grotesk-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"preload\" href=\"/fonts/manrope-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"icon\" href=\"/favicon.ico?v=850fa558\" sizes=\"48x48\"><link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/aarme-favicon-32.png?v=e88f2f9c\"><link rel=\"icon\" type=\"image/png\" sizes=\"192x192\" href=\"/aarme-favicon-192.png?v=c9b6c0bc\"><link rel=\"apple-touch-icon\" href=\"/aarme-apple-touch-icon.png?v=72f21dba\"><script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Organization\",\"@id\":\"https://cyberaar.io/#organization\",\"name\":\"CyberAar\",\"url\":\"https://cyberaar.io\",\"address\":{\"@type\":\"PostalAddress\",\"addressLocality\":\"Dakar\",\"addressCountry\":\"SN\"},\"sameAs\":[\"https://linkedin.com/company/cyberaar\",\"https://github.com/cyberaar\",\"https://x.com/CyberAarHQ\"]},{\"@type\":\"WebSite\",\"@id\":\"https://aarme.cyberaar.io/#website\",\"url\":\"https://aarme.cyberaar.io\",\"name\":\"AarMe\",\"description\":\"Profil public d'un hacker AarMe : rang, réputation et distinctions obtenues sur la plateforme de bug bounty souveraine.\",\"inLanguage\":\"fr\",\"publisher\":{\"@id\":\"https://cyberaar.io/#organization\"}},{\"@type\":\"Service\",\"@id\":\"https://aarme.cyberaar.io/#service\",\"name\":\"AarMe\",\"serviceType\":\"Plateforme de bug bounty\",\"description\":\"Profil public d'un hacker AarMe : rang, réputation et distinctions obtenues sur la plateforme de bug bounty souveraine.\",\"provider\":{\"@id\":\"https://cyberaar.io/#organization\"},\"areaServed\":{\"@type\":\"Place\",\"name\":\"Monde entier\"},\"availableChannel\":{\"@type\":\"ServiceChannel\",\"serviceUrl\":\"https://aarme.cyberaar.io\"}}]}</script><link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DCZ3LDeO.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DmXe7M_M.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.JFDSkuKD.css\">\n<link rel=\"stylesheet\" href=\"/_astro/index.aRsussXD.css\"></head> <body style=\"font-family: var(--font-body);\" data-astro-cid-nmcsnurg>  <header style=\"background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 40;\" data-astro-cid-nmcsnurg> <nav style=\"max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; height: 64px; display: flex; align-items: center; justify-content: space-between;\" data-astro-cid-nmcsnurg>  <a href=\"https://aarme.cyberaar.io/\" "
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/h/trixx",
+  "m": "GET",
+  "s": 404,
+  "ct": "application/json",
+  "len": 22,
+  "body": "{\"error\":\"not_found\"}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/researcher/trixx",
+  "m": "GET",
+  "s": 404,
+  "ct": "application/json",
+  "len": 22,
+  "body": "{\"error\":\"not_found\"}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/hackers/trixx",
+  "m": "GET",
+  "s": 404,
+  "ct": "application/json",
+  "len": 22,
+  "body": "{\"error\":\"not_found\"}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/handle/trixx",
+  "m": "GET",
+  "s": 404,
+  "ct": "application/json",
+  "len": 22,
+  "body": "{\"error\":\"not_found\"}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/user/trixx",
+  "m": "GET",
+  "s": 404,
+  "ct": "application/json",
+  "len": 22,
+  "body": "{\"error\":\"not_found\"}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/leaderboard?handle=trixx",
+  "m": "GET",
+  "s": 200,
+  "ct": "application/json",
+  "len": 288,
+  "body": "{\"leaderboard\":[{\"accepted\":3,\"avatar\":false,\"badges\":3,\"handle\":\"trixx\",\"highest\":\"medium\",\"name\":\"trixx\",\"points\":110,\"position\":1,\"rank\":\"recrue\",\"rank_en\":\"Recruit\",\"rank_fr\":\"Recrue\"}],\"period\":\"all\",\"programme\":null,\"programmes\":[{\"key\":\"cyberaar\",\"name\":\"CyberAar\"}],\"since\":null}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/leaderboard",
+  "m": "GET",
+  "s": 200,
+  "ct": "application/json",
+  "len": 288,
+  "body": "{\"leaderboard\":[{\"accepted\":3,\"avatar\":false,\"badges\":3,\"handle\":\"trixx\",\"highest\":\"medium\",\"name\":\"trixx\",\"points\":110,\"position\":1,\"rank\":\"recrue\",\"rank_en\":\"Recruit\",\"rank_fr\":\"Recrue\"}],\"period\":\"all\",\"programme\":null,\"programmes\":[{\"key\":\"cyberaar\",\"name\":\"CyberAar\"}],\"since\":null}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/stats",
+  "m": "GET",
+  "s": 200,
+  "ct": "application/json",
+  "len": 93,
+  "body": "{\"accepted\":3,\"avg_response_days\":0.4,\"open\":0,\"paused\":false,\"reports\":35,\"researchers\":27}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/programmes",
+  "m": "GET",
+  "s": 200,
+  "ct": "application/json",
+  "len": 385,
+  "body": "{\"programmes\":[{\"assets\":[{\"class\":\"Critique\",\"key\":\"aarme\",\"match\":[\"aarme.cyberaar.io\",\"admin.aarme.cyberaar.io\"],\"name\":\"Plateforme AarMe\"},{\"class\":\"Standard\",\"key\":\"api\",\"match\":[\"cyberaar.io/api\"],\"name\":\"API formulaires\"},{\"class\":\"Standard\",\"key\":\"site\",\"match\":[\"cyberaar.io\",\"www.cyberaar.io\"],\"name\":\"Site principal\"}],\"key\":\"cyberaar\",\"name\":\"CyberAar\",\"org\":\"CyberAar\"}]}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/palmares/",
+  "m": "GET",
+  "s": 200,
+  "ct": "text/html",
+  "len": 17088,
+  "body": "<!DOCTYPE html><html lang=\"fr\" dir=\"ltr\" data-astro-cid-nmcsnurg> <head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"Palmarès et Hall of Fame du programme AarMe : les hackers qui ont découvert et divulgué des vulnérabilités de manière responsable.\"><meta name=\"robots\" content=\"index, follow\"><title>Palmarès AarMe - CyberAar</title><link rel=\"canonical\" href=\"https://aarme.cyberaar.io/palmares/\"><link rel=\"alternate\" hreflang=\"fr\" href=\"https://aarme.cyberaar.io/palmares/\"><link rel=\"alternate\" hreflang=\"en\" href=\"https://aarme.cyberaar.io/en/hall-of-fame/\"><link rel=\"preload\" href=\"/fonts/space-grotesk-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"preload\" href=\"/fonts/manrope-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"icon\" href=\"/favicon.ico?v=850fa558\" sizes=\"48x48\"><link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/aarme-favicon-32.png?v=e88f2f9c\"><link rel=\"icon\" type=\"image/png\" sizes=\"192x192\" href=\"/aarme-favicon-192.png?v=c9b6c0bc\"><link rel=\"apple-touch-icon\" href=\"/aarme-apple-touch-icon.png?v=72f21dba\"><script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Organization\",\"@id\":\"https://cyberaar.io/#organization\",\"name\":\"CyberAar\",\"url\":\"https://cyberaar.io\",\"address\":{\"@type\":\"PostalAddress\",\"addressLocality\":\"Dakar\",\"addressCountry\":\"SN\"},\"sameAs\":[\"https://linkedin.com/company/cyberaar\",\"https://github.com/cyberaar\",\"https://x.com/CyberAarHQ\"]},{\"@type\":\"WebSite\",\"@id\":\"https://aarme.cyberaar.io/#website\",\"url\":\"https://aarme.cyberaar.io\",\"name\":\"AarMe\",\"description\":\"Palmarès et Hall of Fame du programme AarMe : les hackers qui ont découvert et divulgué des vulnérabilités de manière responsable.\",\"inLanguage\":\"fr\",\"publisher\":{\"@id\":\"https://cyberaar.io/#organization\"}},{\"@type\":\"Service\",\"@id\":\"https://aarme.cyberaar.io/#service\",\"name\":\"AarMe\",\"serviceType\":\"Plateforme de bug bounty\",\"description\":\"Palmarès et Hall of Fame du programme AarMe : les hackers qui ont découvert et divulgué des vulnérabilités de manière responsable.\",\"provider\":{\"@id\":\"https://cyberaar.io/#organization\"},\"areaServed\":{\"@type\":\"Place\",\"name\":\"Monde entier\"},\"availableChannel\":{\"@type\":\"ServiceChannel\",\"serviceUrl\":\"https://aarme.cyberaar.io\"}}]}</script><link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DCZ3LDeO.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DmXe7M_M.css\">\n<link rel=\"stylesheet\" href=\"/_astro/palmares.CWSeRac3.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.JFDSkuKD.css\"></head> <body style=\"font-family: var(--font-body);\" data-astro-cid-nmcsnurg>  <header style=\"background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 40;\" data-astro-cid-nmcsnurg> <nav style=\"max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; height: 64px; display: flex; align-items: center; justify-content: space-between;\" data-as"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/en/hall-of-fame/",
+  "m": "GET",
+  "s": 200,
+  "ct": "text/html",
+  "len": 17067,
+  "body": "<!DOCTYPE html><html lang=\"en\" dir=\"ltr\" data-astro-cid-nmcsnurg> <head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"Hall of Fame for the AarMe bug bounty programme - hackers who discovered and responsibly disclosed vulnerabilities in partner organisations.\"><meta name=\"robots\" content=\"index, follow\"><title>Leaderboard and Hall of Fame - AarMe by CyberAar</title><link rel=\"canonical\" href=\"https://aarme.cyberaar.io/en/hall-of-fame/\"><link rel=\"alternate\" hreflang=\"fr\" href=\"https://aarme.cyberaar.io/palmares/\"><link rel=\"alternate\" hreflang=\"en\" href=\"https://aarme.cyberaar.io/en/hall-of-fame/\"><link rel=\"preload\" href=\"/fonts/space-grotesk-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"preload\" href=\"/fonts/manrope-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"icon\" href=\"/favicon.ico?v=850fa558\" sizes=\"48x48\"><link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/aarme-favicon-32.png?v=e88f2f9c\"><link rel=\"icon\" type=\"image/png\" sizes=\"192x192\" href=\"/aarme-favicon-192.png?v=c9b6c0bc\"><link rel=\"apple-touch-icon\" href=\"/aarme-apple-touch-icon.png?v=72f21dba\"><script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Organization\",\"@id\":\"https://cyberaar.io/#organization\",\"name\":\"CyberAar\",\"url\":\"https://cyberaar.io\",\"address\":{\"@type\":\"PostalAddress\",\"addressLocality\":\"Dakar\",\"addressCountry\":\"SN\"},\"sameAs\":[\"https://linkedin.com/company/cyberaar\",\"https://github.com/cyberaar\",\"https://x.com/CyberAarHQ\"]},{\"@type\":\"WebSite\",\"@id\":\"https://aarme.cyberaar.io/#website\",\"url\":\"https://aarme.cyberaar.io\",\"name\":\"AarMe\",\"description\":\"Hall of Fame for the AarMe bug bounty programme - hackers who discovered and responsibly disclosed vulnerabilities in partner organisations.\",\"inLanguage\":\"en\",\"publisher\":{\"@id\":\"https://cyberaar.io/#organization\"}},{\"@type\":\"Service\",\"@id\":\"https://aarme.cyberaar.io/#service\",\"name\":\"AarMe\",\"serviceType\":\"Bug bounty platform\",\"description\":\"Hall of Fame for the AarMe bug bounty programme - hackers who discovered and responsibly disclosed vulnerabilities in partner organisations.\",\"provider\":{\"@id\":\"https://cyberaar.io/#organization\"},\"areaServed\":{\"@type\":\"Place\",\"name\":\"Worldwide\"},\"availableChannel\":{\"@type\":\"ServiceChannel\",\"serviceUrl\":\"https://aarme.cyberaar.io\"}}]}</script><link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DCZ3LDeO.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DmXe7M_M.css\">\n<link rel=\"stylesheet\" href=\"/_astro/hall-of-fame.D16hoTH-.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.JFDSkuKD.css\"></head> <body style=\"font-family: var(--font-body);\" data-astro-cid-nmcsnurg>  <header style=\"background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 40;\" data-astro-cid-nmcsnurg> <nav style=\"max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; height: 64px; display: flex; align"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/organisations/",
+  "m": "GET",
+  "s": 200,
+  "ct": "text/html",
+  "len": 18629,
+  "body": "<!DOCTYPE html><html lang=\"fr\" dir=\"ltr\" data-astro-cid-nmcsnurg> <head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"Soumettez votre programme de bug bounty à AarMe. Candidature revue par CyberAar, récompenses validées avant ouverture.\"><meta name=\"robots\" content=\"index, follow\"><title>Proposer un programme - AarMe</title><link rel=\"canonical\" href=\"https://aarme.cyberaar.io/organisations/\"><link rel=\"alternate\" hreflang=\"fr\" href=\"https://aarme.cyberaar.io/organisations/\"><link rel=\"alternate\" hreflang=\"en\" href=\"https://aarme.cyberaar.io/en/organisations/\"><link rel=\"preload\" href=\"/fonts/space-grotesk-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"preload\" href=\"/fonts/manrope-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"icon\" href=\"/favicon.ico?v=850fa558\" sizes=\"48x48\"><link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/aarme-favicon-32.png?v=e88f2f9c\"><link rel=\"icon\" type=\"image/png\" sizes=\"192x192\" href=\"/aarme-favicon-192.png?v=c9b6c0bc\"><link rel=\"apple-touch-icon\" href=\"/aarme-apple-touch-icon.png?v=72f21dba\"><script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Organization\",\"@id\":\"https://cyberaar.io/#organization\",\"name\":\"CyberAar\",\"url\":\"https://cyberaar.io\",\"address\":{\"@type\":\"PostalAddress\",\"addressLocality\":\"Dakar\",\"addressCountry\":\"SN\"},\"sameAs\":[\"https://linkedin.com/company/cyberaar\",\"https://github.com/cyberaar\",\"https://x.com/CyberAarHQ\"]},{\"@type\":\"WebSite\",\"@id\":\"https://aarme.cyberaar.io/#website\",\"url\":\"https://aarme.cyberaar.io\",\"name\":\"AarMe\",\"description\":\"Soumettez votre programme de bug bounty à AarMe. Candidature revue par CyberAar, récompenses validées avant ouverture.\",\"inLanguage\":\"fr\",\"publisher\":{\"@id\":\"https://cyberaar.io/#organization\"}},{\"@type\":\"Service\",\"@id\":\"https://aarme.cyberaar.io/#service\",\"name\":\"AarMe\",\"serviceType\":\"Plateforme de bug bounty\",\"description\":\"Soumettez votre programme de bug bounty à AarMe. Candidature revue par CyberAar, récompenses validées avant ouverture.\",\"provider\":{\"@id\":\"https://cyberaar.io/#organization\"},\"areaServed\":{\"@type\":\"Place\",\"name\":\"Monde entier\"},\"availableChannel\":{\"@type\":\"ServiceChannel\",\"serviceUrl\":\"https://aarme.cyberaar.io\"}}]}</script><link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DCZ3LDeO.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DmXe7M_M.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.JFDSkuKD.css\"></head> <body style=\"font-family: var(--font-body);\" data-astro-cid-nmcsnurg>  <header style=\"background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 40;\" data-astro-cid-nmcsnurg> <nav style=\"max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; height: 64px; display: flex; align-items: center; justify-content: space-between;\" data-astro-cid-nmcsnurg>  <a href=\"https://aarme.cyberaar.io/\" style=\"display: flex; alig"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/en/organisations/",
+  "m": "GET",
+  "s": 200,
+  "ct": "text/html",
+  "len": 18372,
+  "body": "<!DOCTYPE html><html lang=\"en\" dir=\"ltr\" data-astro-cid-nmcsnurg> <head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"Submit your bug bounty programme to AarMe. Reviewed by CyberAar, rewards validated before opening.\"><meta name=\"robots\" content=\"index, follow\"><title>Propose a programme - AarMe</title><link rel=\"canonical\" href=\"https://aarme.cyberaar.io/en/organisations/\"><link rel=\"alternate\" hreflang=\"fr\" href=\"https://aarme.cyberaar.io/organisations/\"><link rel=\"alternate\" hreflang=\"en\" href=\"https://aarme.cyberaar.io/en/organisations/\"><link rel=\"preload\" href=\"/fonts/space-grotesk-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"preload\" href=\"/fonts/manrope-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"icon\" href=\"/favicon.ico?v=850fa558\" sizes=\"48x48\"><link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/aarme-favicon-32.png?v=e88f2f9c\"><link rel=\"icon\" type=\"image/png\" sizes=\"192x192\" href=\"/aarme-favicon-192.png?v=c9b6c0bc\"><link rel=\"apple-touch-icon\" href=\"/aarme-apple-touch-icon.png?v=72f21dba\"><script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Organization\",\"@id\":\"https://cyberaar.io/#organization\",\"name\":\"CyberAar\",\"url\":\"https://cyberaar.io\",\"address\":{\"@type\":\"PostalAddress\",\"addressLocality\":\"Dakar\",\"addressCountry\":\"SN\"},\"sameAs\":[\"https://linkedin.com/company/cyberaar\",\"https://github.com/cyberaar\",\"https://x.com/CyberAarHQ\"]},{\"@type\":\"WebSite\",\"@id\":\"https://aarme.cyberaar.io/#website\",\"url\":\"https://aarme.cyberaar.io\",\"name\":\"AarMe\",\"description\":\"Submit your bug bounty programme to AarMe. Reviewed by CyberAar, rewards validated before opening.\",\"inLanguage\":\"en\",\"publisher\":{\"@id\":\"https://cyberaar.io/#organization\"}},{\"@type\":\"Service\",\"@id\":\"https://aarme.cyberaar.io/#service\",\"name\":\"AarMe\",\"serviceType\":\"Bug bounty platform\",\"description\":\"Submit your bug bounty programme to AarMe. Reviewed by CyberAar, rewards validated before opening.\",\"provider\":{\"@id\":\"https://cyberaar.io/#organization\"},\"areaServed\":{\"@type\":\"Place\",\"name\":\"Worldwide\"},\"availableChannel\":{\"@type\":\"ServiceChannel\",\"serviceUrl\":\"https://aarme.cyberaar.io\"}}]}</script><link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DCZ3LDeO.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DmXe7M_M.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.JFDSkuKD.css\"></head> <body style=\"font-family: var(--font-body);\" data-astro-cid-nmcsnurg>  <header style=\"background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 40;\" data-astro-cid-nmcsnurg> <nav style=\"max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; height: 64px; display: flex; align-items: center; justify-content: space-between;\" data-astro-cid-nmcsnurg>  <a href=\"https://aarme.cyberaar.io/en/\" style=\"display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: "
+ },
+ {
+  "url": "https://aarme.cyberaar.io/compte/",
+  "m": "GET",
+  "s": 200,
+  "ct": "text/html",
+  "len": 12866,
+  "body": "<!DOCTYPE html><html lang=\"fr\" dir=\"ltr\" data-astro-cid-nmcsnurg> <head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"Votre espace hacker AarMe : compte, double authentification et vérification d'identité chiffrée.\"><meta name=\"robots\" content=\"index, follow\"><title>Mon compte - AarMe CyberAar</title><link rel=\"canonical\" href=\"https://aarme.cyberaar.io/compte/\"><link rel=\"alternate\" hreflang=\"fr\" href=\"https://aarme.cyberaar.io/compte/\"><link rel=\"alternate\" hreflang=\"en\" href=\"https://aarme.cyberaar.io/en/account/\"><link rel=\"preload\" href=\"/fonts/space-grotesk-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"preload\" href=\"/fonts/manrope-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"icon\" href=\"/favicon.ico?v=850fa558\" sizes=\"48x48\"><link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/aarme-favicon-32.png?v=e88f2f9c\"><link rel=\"icon\" type=\"image/png\" sizes=\"192x192\" href=\"/aarme-favicon-192.png?v=c9b6c0bc\"><link rel=\"apple-touch-icon\" href=\"/aarme-apple-touch-icon.png?v=72f21dba\"><script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Organization\",\"@id\":\"https://cyberaar.io/#organization\",\"name\":\"CyberAar\",\"url\":\"https://cyberaar.io\",\"address\":{\"@type\":\"PostalAddress\",\"addressLocality\":\"Dakar\",\"addressCountry\":\"SN\"},\"sameAs\":[\"https://linkedin.com/company/cyberaar\",\"https://github.com/cyberaar\",\"https://x.com/CyberAarHQ\"]},{\"@type\":\"WebSite\",\"@id\":\"https://aarme.cyberaar.io/#website\",\"url\":\"https://aarme.cyberaar.io\",\"name\":\"AarMe\",\"description\":\"Votre espace hacker AarMe : compte, double authentification et vérification d'identité chiffrée.\",\"inLanguage\":\"fr\",\"publisher\":{\"@id\":\"https://cyberaar.io/#organization\"}},{\"@type\":\"Service\",\"@id\":\"https://aarme.cyberaar.io/#service\",\"name\":\"AarMe\",\"serviceType\":\"Plateforme de bug bounty\",\"description\":\"Votre espace hacker AarMe : compte, double authentification et vérification d'identité chiffrée.\",\"provider\":{\"@id\":\"https://cyberaar.io/#organization\"},\"areaServed\":{\"@type\":\"Place\",\"name\":\"Monde entier\"},\"availableChannel\":{\"@type\":\"ServiceChannel\",\"serviceUrl\":\"https://aarme.cyberaar.io\"}}]}</script><link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DCZ3LDeO.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DmXe7M_M.css\">\n<link rel=\"stylesheet\" href=\"/_astro/compte.NpXya-zd.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.JFDSkuKD.css\"></head> <body style=\"font-family: var(--font-body);\" data-astro-cid-nmcsnurg>  <header style=\"background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 40;\" data-astro-cid-nmcsnurg> <nav style=\"max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; height: 64px; display: flex; align-items: center; justify-content: space-between;\" data-astro-cid-nmcsnurg>  <a href=\"https://aarme.cyberaar.io/\" style=\"display: flex; align-items: center; gap: 10px; t"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/soumettre/",
+  "m": "GET",
+  "s": 200,
+  "ct": "text/html",
+  "len": 34923,
+  "body": "<!DOCTYPE html><html lang=\"fr\" dir=\"ltr\" data-astro-cid-nmcsnurg> <head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"Soumettez une vulnérabilité découverte dans le cadre du programme AarMe. Rapport structuré, réponse sous 5 jours ouvrés.\"><meta name=\"robots\" content=\"index, follow\"><title>Soumettre une vulnérabilité - AarMe par CyberAar</title><link rel=\"canonical\" href=\"https://aarme.cyberaar.io/soumettre/\"><link rel=\"alternate\" hreflang=\"fr\" href=\"https://aarme.cyberaar.io/soumettre/\"><link rel=\"alternate\" hreflang=\"en\" href=\"https://aarme.cyberaar.io/en/submit/\"><link rel=\"preload\" href=\"/fonts/space-grotesk-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"preload\" href=\"/fonts/manrope-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"icon\" href=\"/favicon.ico?v=850fa558\" sizes=\"48x48\"><link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/aarme-favicon-32.png?v=e88f2f9c\"><link rel=\"icon\" type=\"image/png\" sizes=\"192x192\" href=\"/aarme-favicon-192.png?v=c9b6c0bc\"><link rel=\"apple-touch-icon\" href=\"/aarme-apple-touch-icon.png?v=72f21dba\"><script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Organization\",\"@id\":\"https://cyberaar.io/#organization\",\"name\":\"CyberAar\",\"url\":\"https://cyberaar.io\",\"address\":{\"@type\":\"PostalAddress\",\"addressLocality\":\"Dakar\",\"addressCountry\":\"SN\"},\"sameAs\":[\"https://linkedin.com/company/cyberaar\",\"https://github.com/cyberaar\",\"https://x.com/CyberAarHQ\"]},{\"@type\":\"WebSite\",\"@id\":\"https://aarme.cyberaar.io/#website\",\"url\":\"https://aarme.cyberaar.io\",\"name\":\"AarMe\",\"description\":\"Soumettez une vulnérabilité découverte dans le cadre du programme AarMe. Rapport structuré, réponse sous 5 jours ouvrés.\",\"inLanguage\":\"fr\",\"publisher\":{\"@id\":\"https://cyberaar.io/#organization\"}},{\"@type\":\"Service\",\"@id\":\"https://aarme.cyberaar.io/#service\",\"name\":\"AarMe\",\"serviceType\":\"Plateforme de bug bounty\",\"description\":\"Soumettez une vulnérabilité découverte dans le cadre du programme AarMe. Rapport structuré, réponse sous 5 jours ouvrés.\",\"provider\":{\"@id\":\"https://cyberaar.io/#organization\"},\"areaServed\":{\"@type\":\"Place\",\"name\":\"Monde entier\"},\"availableChannel\":{\"@type\":\"ServiceChannel\",\"serviceUrl\":\"https://aarme.cyberaar.io\"}}]}</script><link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DCZ3LDeO.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DmXe7M_M.css\">\n<style>.sev-opt[data-astro-cid-qnyoqjav]{display:block;padding:1rem 1.125rem;border:1px solid var(--border);border-radius:8px;cursor:pointer;background:var(--surface);text-align:left;transition:border-color .15s,background .15s;width:100%}.sev-opt[data-astro-cid-qnyoqjav]:hover{border-color:var(--sev-c)}.sev-opt[data-astro-cid-qnyoqjav][data-selected=true]{border-color:var(--sev-c);background:var(--sev-bg)}.step-ind[data-astro-cid-qnyoqjav]{display:flex;align-items:center;gap:0;padding:.875rem 1.25rem;background:"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/account/session/../../aarme/admin",
+  "m": "GET",
+  "s": 404,
+  "ct": "application/json",
+  "len": 22,
+  "body": "{\"error\":\"not_found\"}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/./account/session",
+  "m": "GET",
+  "s": 200,
+  "ct": "application/json",
+  "len": 24,
+  "body": "{\"authenticated\":false}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme//account/session",
+  "m": "GET",
+  "s": 200,
+  "ct": "application/json",
+  "len": 24,
+  "body": "{\"authenticated\":false}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/account/session%2f..%2f..%2fadmin",
+  "m": "GET",
+  "s": 404,
+  "ct": "application/json",
+  "len": 22,
+  "body": "{\"error\":\"not_found\"}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/API/AARME/ACCOUNT/SESSION",
+  "m": "GET",
+  "s": 404,
+  "ct": "text/html",
+  "len": 14139,
+  "body": "<!DOCTYPE html><html lang=\"fr\" dir=\"ltr\" data-astro-cid-nmcsnurg> <head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"Cette page n'existe pas ou a été déplacée.\"><meta name=\"robots\" content=\"index, follow\"><title>Page introuvable - AarMe</title><link rel=\"canonical\" href=\"https://aarme.cyberaar.io/404/\"><link rel=\"alternate\" hreflang=\"fr\" href=\"https://aarme.cyberaar.io/404/\"><link rel=\"alternate\" hreflang=\"en\" href=\"https://aarme.cyberaar.io/en/404/\"><link rel=\"preload\" href=\"/fonts/space-grotesk-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"preload\" href=\"/fonts/manrope-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"icon\" href=\"/favicon.ico?v=850fa558\" sizes=\"48x48\"><link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/aarme-favicon-32.png?v=e88f2f9c\"><link rel=\"icon\" type=\"image/png\" sizes=\"192x192\" href=\"/aarme-favicon-192.png?v=c9b6c0bc\"><link rel=\"apple-touch-icon\" href=\"/aarme-apple-touch-icon.png?v=72f21dba\"><script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Organization\",\"@id\":\"https://cyberaar.io/#organization\",\"name\":\"CyberAar\",\"url\":\"https://cyberaar.io\",\"address\":{\"@type\":\"PostalAddress\",\"addressLocality\":\"Dakar\",\"addressCountry\":\"SN\"},\"sameAs\":[\"https://linkedin.com/company/cyberaar\",\"https://github.com/cyberaar\",\"https://x.com/CyberAarHQ\"]},{\"@type\":\"WebSite\",\"@id\":\"https://aarme.cyberaar.io/#website\",\"url\":\"https://aarme.cyberaar.io\",\"name\":\"AarMe\",\"description\":\"Cette page n'existe pas ou a été déplacée.\",\"inLanguage\":\"fr\",\"publisher\":{\"@id\":\"https://cyberaar.io/#organization\"}},{\"@type\":\"Service\",\"@id\":\"https://aarme.cyberaar.io/#service\",\"name\":\"AarMe\",\"serviceType\":\"Plateforme de bug bounty\",\"description\":\"Cette page n'existe pas ou a été déplacée.\",\"provider\":{\"@id\":\"https://cyberaar.io/#organization\"},\"areaServed\":{\"@type\":\"Place\",\"name\":\"Monde entier\"},\"availableChannel\":{\"@type\":\"ServiceChannel\",\"serviceUrl\":\"https://aarme.cyberaar.io\"}}]}</script><link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DCZ3LDeO.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DmXe7M_M.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.JFDSkuKD.css\"></head> <body style=\"font-family: var(--font-body);\" data-astro-cid-nmcsnurg>  <header style=\"background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 40;\" data-astro-cid-nmcsnurg> <nav style=\"max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; height: 64px; display: flex; align-items: center; justify-content: space-between;\" data-astro-cid-nmcsnurg>  <a href=\"https://aarme.cyberaar.io/\" style=\"display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0;\" data-astro-cid-nmcsnurg> <img src=\"/aarme-mark.png?v=12bc45a6\" alt=\"\" width=\"34\" height=\"34\" style=\"height: 34px; width: 34px; border-radius: 8px;\" data-astro-cid-nmcsnurg> <span style=\"font-weig"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/account/session/",
+  "m": "GET",
+  "s": 404,
+  "ct": "application/json",
+  "len": 22,
+  "body": "{\"error\":\"not_found\"}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/account/session?x=1",
+  "m": "GET",
+  "s": 200,
+  "ct": "application/json",
+  "len": 24,
+  "body": "{\"authenticated\":false}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io//api.aarme.cyberaar.io/api/aarme/account/session",
+  "m": "GET",
+  "s": 404,
+  "ct": "text/html",
+  "len": 14139,
+  "body": "<!DOCTYPE html><html lang=\"fr\" dir=\"ltr\" data-astro-cid-nmcsnurg> <head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"Cette page n'existe pas ou a été déplacée.\"><meta name=\"robots\" content=\"index, follow\"><title>Page introuvable - AarMe</title><link rel=\"canonical\" href=\"https://aarme.cyberaar.io/404/\"><link rel=\"alternate\" hreflang=\"fr\" href=\"https://aarme.cyberaar.io/404/\"><link rel=\"alternate\" hreflang=\"en\" href=\"https://aarme.cyberaar.io/en/404/\"><link rel=\"preload\" href=\"/fonts/space-grotesk-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"preload\" href=\"/fonts/manrope-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"icon\" href=\"/favicon.ico?v=850fa558\" sizes=\"48x48\"><link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/aarme-favicon-32.png?v=e88f2f9c\"><link rel=\"icon\" type=\"image/png\" sizes=\"192x192\" href=\"/aarme-favicon-192.png?v=c9b6c0bc\"><link rel=\"apple-touch-icon\" href=\"/aarme-apple-touch-icon.png?v=72f21dba\"><script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Organization\",\"@id\":\"https://cyberaar.io/#organization\",\"name\":\"CyberAar\",\"url\":\"https://cyberaar.io\",\"address\":{\"@type\":\"PostalAddress\",\"addressLocality\":\"Dakar\",\"addressCountry\":\"SN\"},\"sameAs\":[\"https://linkedin.com/company/cyberaar\",\"https://github.com/cyberaar\",\"https://x.com/CyberAarHQ\"]},{\"@type\":\"WebSite\",\"@id\":\"https://aarme.cyberaar.io/#website\",\"url\":\"https://aarme.cyberaar.io\",\"name\":\"AarMe\",\"description\":\"Cette page n'existe pas ou a été déplacée.\",\"inLanguage\":\"fr\",\"publisher\":{\"@id\":\"https://cyberaar.io/#organization\"}},{\"@type\":\"Service\",\"@id\":\"https://aarme.cyberaar.io/#service\",\"name\":\"AarMe\",\"serviceType\":\"Plateforme de bug bounty\",\"description\":\"Cette page n'existe pas ou a été déplacée.\",\"provider\":{\"@id\":\"https://cyberaar.io/#organization\"},\"areaServed\":{\"@type\":\"Place\",\"name\":\"Monde entier\"},\"availableChannel\":{\"@type\":\"ServiceChannel\",\"serviceUrl\":\"https://aarme.cyberaar.io\"}}]}</script><link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DCZ3LDeO.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DmXe7M_M.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.JFDSkuKD.css\"></head> <body style=\"font-family: var(--font-body);\" data-astro-cid-nmcsnurg>  <header style=\"background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 40;\" data-astro-cid-nmcsnurg> <nav style=\"max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; height: 64px; display: flex; align-items: center; justify-content: space-between;\" data-astro-cid-nmcsnurg>  <a href=\"https://aarme.cyberaar.io/\" style=\"display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0;\" data-astro-cid-nmcsnurg> <img src=\"/aarme-mark.png?v=12bc45a6\" alt=\"\" width=\"34\" height=\"34\" style=\"height: 34px; width: 34px; border-radius: 8px;\" data-astro-cid-nmcsnurg> <span style=\"font-weig"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/account/session",
+  "m": "OPTIONS",
+  "s": 200,
+  "ct": "text/html; charset=utf-8",
+  "len": 0,
+  "body": ""
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/stats",
+  "m": "HEAD",
+  "s": 200,
+  "ct": "application/json",
+  "len": 0,
+  "body": ""
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/account/session",
+  "m": "PUT",
+  "s": 405,
+  "ct": "application/json",
+  "len": 31,
+  "body": "{\"error\":\"method_not_allowed\"}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/stats",
+  "m": "PATCH",
+  "s": 405,
+  "ct": "application/json",
+  "len": 31,
+  "body": "{\"error\":\"method_not_allowed\"}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/stats",
+  "m": "DELETE",
+  "s": 405,
+  "ct": "application/json",
+  "len": 31,
+  "body": "{\"error\":\"method_not_allowed\"}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/stats",
+  "m": "POST",
+  "s": 405,
+  "ct": "application/json",
+  "len": 31,
+  "body": "{\"error\":\"method_not_allowed\"}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/leaderboard?limit=1000",
+  "m": "GET",
+  "s": 200,
+  "ct": "application/json",
+  "len": 288,
+  "body": "{\"leaderboard\":[{\"accepted\":3,\"avatar\":false,\"badges\":3,\"handle\":\"trixx\",\"highest\":\"medium\",\"name\":\"trixx\",\"points\":110,\"position\":1,\"rank\":\"recrue\",\"rank_en\":\"Recruit\",\"rank_fr\":\"Recrue\"}],\"period\":\"all\",\"programme\":null,\"programmes\":[{\"key\":\"cyberaar\",\"name\":\"CyberAar\"}],\"since\":null}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/leaderboard?all=true",
+  "m": "GET",
+  "s": 200,
+  "ct": "application/json",
+  "len": 288,
+  "body": "{\"leaderboard\":[{\"accepted\":3,\"avatar\":false,\"badges\":3,\"handle\":\"trixx\",\"highest\":\"medium\",\"name\":\"trixx\",\"points\":110,\"position\":1,\"rank\":\"recrue\",\"rank_en\":\"Recruit\",\"rank_fr\":\"Recrue\"}],\"period\":\"all\",\"programme\":null,\"programmes\":[{\"key\":\"cyberaar\",\"name\":\"CyberAar\"}],\"since\":null}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/leaderboard?include=email",
+  "m": "GET",
+  "s": 200,
+  "ct": "application/json",
+  "len": 288,
+  "body": "{\"leaderboard\":[{\"accepted\":3,\"avatar\":false,\"badges\":3,\"handle\":\"trixx\",\"highest\":\"medium\",\"name\":\"trixx\",\"points\":110,\"position\":1,\"rank\":\"recrue\",\"rank_en\":\"Recruit\",\"rank_fr\":\"Recrue\"}],\"period\":\"all\",\"programme\":null,\"programmes\":[{\"key\":\"cyberaar\",\"name\":\"CyberAar\"}],\"since\":null}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/stats?verbose=true",
+  "m": "GET",
+  "s": 200,
+  "ct": "application/json",
+  "len": 93,
+  "body": "{\"accepted\":3,\"avg_response_days\":0.4,\"open\":0,\"paused\":false,\"reports\":35,\"researchers\":27}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/stats?debug=1",
+  "m": "GET",
+  "s": 200,
+  "ct": "application/json",
+  "len": 93,
+  "body": "{\"accepted\":3,\"avg_response_days\":0.4,\"open\":0,\"paused\":false,\"reports\":35,\"researchers\":27}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/programmes?all=true",
+  "m": "GET",
+  "s": 200,
+  "ct": "application/json",
+  "len": 385,
+  "body": "{\"programmes\":[{\"assets\":[{\"class\":\"Critique\",\"key\":\"aarme\",\"match\":[\"aarme.cyberaar.io\",\"admin.aarme.cyberaar.io\"],\"name\":\"Plateforme AarMe\"},{\"class\":\"Standard\",\"key\":\"api\",\"match\":[\"cyberaar.io/api\"],\"name\":\"API formulaires\"},{\"class\":\"Standard\",\"key\":\"site\",\"match\":[\"cyberaar.io\",\"www.cyberaar.io\"],\"name\":\"Site principal\"}],\"key\":\"cyberaar\",\"name\":\"CyberAar\",\"org\":\"CyberAar\"}]}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/programmes?include=internal",
+  "m": "GET",
+  "s": 200,
+  "ct": "application/json",
+  "len": 385,
+  "body": "{\"programmes\":[{\"assets\":[{\"class\":\"Critique\",\"key\":\"aarme\",\"match\":[\"aarme.cyberaar.io\",\"admin.aarme.cyberaar.io\"],\"name\":\"Plateforme AarMe\"},{\"class\":\"Standard\",\"key\":\"api\",\"match\":[\"cyberaar.io/api\"],\"name\":\"API formulaires\"},{\"class\":\"Standard\",\"key\":\"site\",\"match\":[\"cyberaar.io\",\"www.cyberaar.io\"],\"name\":\"Site principal\"}],\"key\":\"cyberaar\",\"name\":\"CyberAar\",\"org\":\"CyberAar\"}]}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/account/login",
+  "m": "GET",
+  "s": 405,
+  "ct": "application/json",
+  "len": 31,
+  "body": "{\"error\":\"method_not_allowed\"}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/account/signin",
+  "m": "GET",
+  "s": 404,
+  "ct": "application/json",
+  "len": 22,
+  "body": "{\"error\":\"not_found\"}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/login",
+  "m": "GET",
+  "s": 404,
+  "ct": "application/json",
+  "len": 22,
+  "body": "{\"error\":\"not_found\"}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/auth",
+  "m": "GET",
+  "s": 404,
+  "ct": "application/json",
+  "len": 22,
+  "body": "{\"error\":\"not_found\"}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/session",
+  "m": "GET",
+  "s": 404,
+  "ct": "application/json",
+  "len": 22,
+  "body": "{\"error\":\"not_found\"}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/_actions/login",
+  "m": "GET",
+  "s": 404,
+  "ct": "text/html",
+  "len": 14139,
+  "body": "<!DOCTYPE html><html lang=\"fr\" dir=\"ltr\" data-astro-cid-nmcsnurg> <head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"Cette page n'existe pas ou a été déplacée.\"><meta name=\"robots\" content=\"index, follow\"><title>Page introuvable - AarMe</title><link rel=\"canonical\" href=\"https://aarme.cyberaar.io/404/\"><link rel=\"alternate\" hreflang=\"fr\" href=\"https://aarme.cyberaar.io/404/\"><link rel=\"alternate\" hreflang=\"en\" href=\"https://aarme.cyberaar.io/en/404/\"><link rel=\"preload\" href=\"/fonts/space-grotesk-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"preload\" href=\"/fonts/manrope-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"icon\" href=\"/favicon.ico?v=850fa558\" sizes=\"48x48\"><link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/aarme-favicon-32.png?v=e88f2f9c\"><link rel=\"icon\" type=\"image/png\" sizes=\"192x192\" href=\"/aarme-favicon-192.png?v=c9b6c0bc\"><link rel=\"apple-touch-icon\" href=\"/aarme-apple-touch-icon.png?v=72f21dba\"><script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Organization\",\"@id\":\"https://cyberaar.io/#organization\",\"name\":\"CyberAar\",\"url\":\"https://cyberaar.io\",\"address\":{\"@type\":\"PostalAddress\",\"addressLocality\":\"Dakar\",\"addressCountry\":\"SN\"},\"sameAs\":[\"https://linkedin.com/company/cyberaar\",\"https://github.com/cyberaar\",\"https://x.com/CyberAarHQ\"]},{\"@type\":\"WebSite\",\"@id\":\"https://aarme.cyberaar.io/#website\",\"url\":\"https://aarme.cyberaar.io\",\"name\":\"AarMe\",\"description\":\"Cette page n'existe pas ou a été déplacée.\",\"inLanguage\":\"fr\",\"publisher\":{\"@id\":\"https://cyberaar.io/#organization\"}},{\"@type\":\"Service\",\"@id\":\"https://aarme.cyberaar.io/#service\",\"name\":\"AarMe\",\"serviceType\":\"Plateforme de bug bounty\",\"description\":\"Cette page n'existe pas ou a été déplacée.\",\"provider\":{\"@id\":\"https://cyberaar.io/#organization\"},\"areaServed\":{\"@type\":\"Place\",\"name\":\"Monde entier\"},\"availableChannel\":{\"@type\":\"ServiceChannel\",\"serviceUrl\":\"https://aarme.cyberaar.io\"}}]}</script><link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DCZ3LDeO.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DmXe7M_M.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.JFDSkuKD.css\"></head> <body style=\"font-family: var(--font-body);\" data-astro-cid-nmcsnurg>  <header style=\"background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 40;\" data-astro-cid-nmcsnurg> <nav style=\"max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; height: 64px; display: flex; align-items: center; justify-content: space-between;\" data-astro-cid-nmcsnurg>  <a href=\"https://aarme.cyberaar.io/\" style=\"display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0;\" data-astro-cid-nmcsnurg> <img src=\"/aarme-mark.png?v=12bc45a6\" alt=\"\" width=\"34\" height=\"34\" style=\"height: 34px; width: 34px; border-radius: 8px;\" data-astro-cid-nmcsnurg> <span style=\"font-weig"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/_actions/signIn",
+  "m": "GET",
+  "s": 404,
+  "ct": "text/html",
+  "len": 14139,
+  "body": "<!DOCTYPE html><html lang=\"fr\" dir=\"ltr\" data-astro-cid-nmcsnurg> <head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"Cette page n'existe pas ou a été déplacée.\"><meta name=\"robots\" content=\"index, follow\"><title>Page introuvable - AarMe</title><link rel=\"canonical\" href=\"https://aarme.cyberaar.io/404/\"><link rel=\"alternate\" hreflang=\"fr\" href=\"https://aarme.cyberaar.io/404/\"><link rel=\"alternate\" hreflang=\"en\" href=\"https://aarme.cyberaar.io/en/404/\"><link rel=\"preload\" href=\"/fonts/space-grotesk-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"preload\" href=\"/fonts/manrope-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"icon\" href=\"/favicon.ico?v=850fa558\" sizes=\"48x48\"><link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/aarme-favicon-32.png?v=e88f2f9c\"><link rel=\"icon\" type=\"image/png\" sizes=\"192x192\" href=\"/aarme-favicon-192.png?v=c9b6c0bc\"><link rel=\"apple-touch-icon\" href=\"/aarme-apple-touch-icon.png?v=72f21dba\"><script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Organization\",\"@id\":\"https://cyberaar.io/#organization\",\"name\":\"CyberAar\",\"url\":\"https://cyberaar.io\",\"address\":{\"@type\":\"PostalAddress\",\"addressLocality\":\"Dakar\",\"addressCountry\":\"SN\"},\"sameAs\":[\"https://linkedin.com/company/cyberaar\",\"https://github.com/cyberaar\",\"https://x.com/CyberAarHQ\"]},{\"@type\":\"WebSite\",\"@id\":\"https://aarme.cyberaar.io/#website\",\"url\":\"https://aarme.cyberaar.io\",\"name\":\"AarMe\",\"description\":\"Cette page n'existe pas ou a été déplacée.\",\"inLanguage\":\"fr\",\"publisher\":{\"@id\":\"https://cyberaar.io/#organization\"}},{\"@type\":\"Service\",\"@id\":\"https://aarme.cyberaar.io/#service\",\"name\":\"AarMe\",\"serviceType\":\"Plateforme de bug bounty\",\"description\":\"Cette page n'existe pas ou a été déplacée.\",\"provider\":{\"@id\":\"https://cyberaar.io/#organization\"},\"areaServed\":{\"@type\":\"Place\",\"name\":\"Monde entier\"},\"availableChannel\":{\"@type\":\"ServiceChannel\",\"serviceUrl\":\"https://aarme.cyberaar.io\"}}]}</script><link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DCZ3LDeO.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DmXe7M_M.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.JFDSkuKD.css\"></head> <body style=\"font-family: var(--font-body);\" data-astro-cid-nmcsnurg>  <header style=\"background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 40;\" data-astro-cid-nmcsnurg> <nav style=\"max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; height: 64px; display: flex; align-items: center; justify-content: space-between;\" data-astro-cid-nmcsnurg>  <a href=\"https://aarme.cyberaar.io/\" style=\"display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0;\" data-astro-cid-nmcsnurg> <img src=\"/aarme-mark.png?v=12bc45a6\" alt=\"\" width=\"34\" height=\"34\" style=\"height: 34px; width: 34px; border-radius: 8px;\" data-astro-cid-nmcsnurg> <span style=\"font-weig"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/_actions/auth",
+  "m": "GET",
+  "s": 404,
+  "ct": "text/html",
+  "len": 14139,
+  "body": "<!DOCTYPE html><html lang=\"fr\" dir=\"ltr\" data-astro-cid-nmcsnurg> <head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"Cette page n'existe pas ou a été déplacée.\"><meta name=\"robots\" content=\"index, follow\"><title>Page introuvable - AarMe</title><link rel=\"canonical\" href=\"https://aarme.cyberaar.io/404/\"><link rel=\"alternate\" hreflang=\"fr\" href=\"https://aarme.cyberaar.io/404/\"><link rel=\"alternate\" hreflang=\"en\" href=\"https://aarme.cyberaar.io/en/404/\"><link rel=\"preload\" href=\"/fonts/space-grotesk-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"preload\" href=\"/fonts/manrope-latin-wght-normal.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"icon\" href=\"/favicon.ico?v=850fa558\" sizes=\"48x48\"><link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/aarme-favicon-32.png?v=e88f2f9c\"><link rel=\"icon\" type=\"image/png\" sizes=\"192x192\" href=\"/aarme-favicon-192.png?v=c9b6c0bc\"><link rel=\"apple-touch-icon\" href=\"/aarme-apple-touch-icon.png?v=72f21dba\"><script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Organization\",\"@id\":\"https://cyberaar.io/#organization\",\"name\":\"CyberAar\",\"url\":\"https://cyberaar.io\",\"address\":{\"@type\":\"PostalAddress\",\"addressLocality\":\"Dakar\",\"addressCountry\":\"SN\"},\"sameAs\":[\"https://linkedin.com/company/cyberaar\",\"https://github.com/cyberaar\",\"https://x.com/CyberAarHQ\"]},{\"@type\":\"WebSite\",\"@id\":\"https://aarme.cyberaar.io/#website\",\"url\":\"https://aarme.cyberaar.io\",\"name\":\"AarMe\",\"description\":\"Cette page n'existe pas ou a été déplacée.\",\"inLanguage\":\"fr\",\"publisher\":{\"@id\":\"https://cyberaar.io/#organization\"}},{\"@type\":\"Service\",\"@id\":\"https://aarme.cyberaar.io/#service\",\"name\":\"AarMe\",\"serviceType\":\"Plateforme de bug bounty\",\"description\":\"Cette page n'existe pas ou a été déplacée.\",\"provider\":{\"@id\":\"https://cyberaar.io/#organization\"},\"areaServed\":{\"@type\":\"Place\",\"name\":\"Monde entier\"},\"availableChannel\":{\"@type\":\"ServiceChannel\",\"serviceUrl\":\"https://aarme.cyberaar.io\"}}]}</script><link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DCZ3LDeO.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.DmXe7M_M.css\">\n<link rel=\"stylesheet\" href=\"/_astro/sitemap_xml.JFDSkuKD.css\"></head> <body style=\"font-family: var(--font-body);\" data-astro-cid-nmcsnurg>  <header style=\"background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 40;\" data-astro-cid-nmcsnurg> <nav style=\"max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; height: 64px; display: flex; align-items: center; justify-content: space-between;\" data-astro-cid-nmcsnurg>  <a href=\"https://aarme.cyberaar.io/\" style=\"display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0;\" data-astro-cid-nmcsnurg> <img src=\"/aarme-mark.png?v=12bc45a6\" alt=\"\" width=\"34\" height=\"34\" style=\"height: 34px; width: 34px; border-radius: 8px;\" data-astro-cid-nmcsnurg> <span style=\"font-weig"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/account/verify",
+  "m": "GET",
+  "s": 404,
+  "ct": "application/json",
+  "len": 22,
+  "body": "{\"error\":\"not_found\"}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/account/forgot",
+  "m": "GET",
+  "s": 404,
+  "ct": "application/json",
+  "len": 22,
+  "body": "{\"error\":\"not_found\"}\n"
+ },
+ {
+  "url": "https://aarme.cyberaar.io/api/aarme/account/reset",
+  "m": "GET",
+  "s": 404,
+  "ct": "application/json",
+  "len": 22,
+  "body": "{\"error\":\"not_found\"}\n"
+ }
+]

@@ -1,0 +1,362 @@
+[
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/",
+  "method": "GET",
+  "s": 200,
+  "ms": 2386,
+  "ct": "text/html",
+  "body": "<!DOCTYPE html><html lang=\"fr\" dir=\"ltr\" data-astro-cid-nmcsnurg> <head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"La"
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api",
+  "method": "GET",
+  "s": 404,
+  "ms": 464,
+  "ct": "text/html",
+  "body": "<!DOCTYPE html><html lang=\"fr\" dir=\"ltr\" data-astro-cid-nmcsnurg> <head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"Ce"
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/",
+  "method": "GET",
+  "s": 404,
+  "ms": 606,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme",
+  "method": "GET",
+  "s": 404,
+  "ms": 271,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/admin",
+  "method": "GET",
+  "s": 404,
+  "ms": 242,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/admin/users",
+  "method": "GET",
+  "s": 404,
+  "ms": 209,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/admin/reports",
+  "method": "GET",
+  "s": 404,
+  "ms": 220,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/admin/orgs",
+  "method": "GET",
+  "s": 404,
+  "ms": 221,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/admin",
+  "method": "GET",
+  "s": 404,
+  "ms": 237,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/admin/users",
+  "method": "GET",
+  "s": 404,
+  "ms": 247,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/admin/reports",
+  "method": "GET",
+  "s": 404,
+  "ms": 230,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/admin/programs",
+  "method": "GET",
+  "s": 404,
+  "ms": 212,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/admin/payouts",
+  "method": "GET",
+  "s": 404,
+  "ms": 208,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/admin/settings",
+  "method": "GET",
+  "s": 404,
+  "ms": 223,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/admin/stats",
+  "method": "GET",
+  "s": 404,
+  "ms": 245,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/admin/audit",
+  "method": "GET",
+  "s": 404,
+  "ms": 208,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/reports",
+  "method": "GET",
+  "s": 404,
+  "ms": 243,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/reports/list",
+  "method": "GET",
+  "s": 404,
+  "ms": 218,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/report",
+  "method": "GET",
+  "s": 405,
+  "ms": 224,
+  "ct": "application/json",
+  "body": "{\"error\":\"method_not_allowed\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/orgs",
+  "method": "GET",
+  "s": 404,
+  "ms": 264,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/org",
+  "method": "GET",
+  "s": 405,
+  "ms": 243,
+  "ct": "application/json",
+  "body": "{\"error\":\"method_not_allowed\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/members",
+  "method": "GET",
+  "s": 404,
+  "ms": 276,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/member",
+  "method": "GET",
+  "s": 404,
+  "ms": 550,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/payouts",
+  "method": "GET",
+  "s": 404,
+  "ms": 219,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/payout",
+  "method": "GET",
+  "s": 404,
+  "ms": 213,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/payments",
+  "method": "GET",
+  "s": 404,
+  "ms": 343,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/settlements",
+  "method": "GET",
+  "s": 404,
+  "ms": 220,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/certificates",
+  "method": "GET",
+  "s": 404,
+  "ms": 246,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/invitations",
+  "method": "GET",
+  "s": 404,
+  "ms": 219,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/notifications",
+  "method": "GET",
+  "s": 404,
+  "ms": 212,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/account/me",
+  "method": "GET",
+  "s": 401,
+  "ms": 248,
+  "ct": "application/json",
+  "body": "{\"error\":\"unauthenticated\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/account/profile",
+  "method": "GET",
+  "s": 405,
+  "ms": 3574,
+  "ct": "application/json",
+  "body": "{\"error\":\"method_not_allowed\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/account/identity",
+  "method": "GET",
+  "s": 404,
+  "ms": 251,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/account/security",
+  "method": "GET",
+  "s": 404,
+  "ms": 211,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/account/researcher-header",
+  "method": "GET",
+  "s": 404,
+  "ms": 213,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/programmes/cyberaar",
+  "method": "GET",
+  "s": 404,
+  "ms": 216,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/search",
+  "method": "GET",
+  "s": 404,
+  "ms": 959,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/taxonomy",
+  "method": "GET",
+  "s": 404,
+  "ms": 224,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/badges",
+  "method": "GET",
+  "s": 404,
+  "ms": 216,
+  "ct": "application/json",
+  "body": "{\"error\":\"not_found\"} "
+ },
+ {
+  "base": "https://aarme.cyberaar.io",
+  "path": "/api/aarme/leaderboard",
+  "method": "GET",
+  "s": 200,
+  "ms": 216,
+  "ct": "application/json",
+  "body": "{\"leaderboard\":[{\"accepted\":3,\"avatar\":false,\"badges\":3,\"handle\":\"trixx\",\"highest\":\"medium\",\"name\":\"trixx\",\"points\":110,\"position\":1,\"rank\":\"recrue\",\"rank_en\":\"Recruit\",\"rank_fr\":\"Recrue\"}],\"period\":\""
+ }
+]
