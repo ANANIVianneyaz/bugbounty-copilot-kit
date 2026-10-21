@@ -196,6 +196,42 @@ le plafond d'**entrée** de 60 à 300/min, pas celui des formulaires).
 décanter, puis tester une fois.
 
 
+### La soumission de rapport d'AarMe (actif Critique) : architecture en deux temps ★
+
+Le script client `/aarme-report.js` est lu en entier. La soumission se fait en **deux appels** :
+
+```
+1) POST /api/aarme/attachment      multipart/form-data  : file
+      -> { attachment_ref: "..." }        (un REF, pas une URL)
+2) POST /api/aarme/report           application/json
+      { name, email, target, asset, category, title, description, steps, impact,
+        severity, proof, attachment_ref, collaborators }
+```
+
+Points d'intérêt (règles du programme : « Upload de fichiers malveillants » = **dans le périmètre**) :
+
+| Observation | Conséquence | Statut |
+|---|---|---|
+| `POST /api/aarme/attachment` **sans session** → `401 {"error":"unauthenticated"}` (4 variantes de fichier testées) | pas d'upload anonyme | **contrôle conforme** |
+| le filtre de type est **côté client uniquement** : `ALLOWED_TYPES = ['application/pdf']` + `MAX_BYTES` | le serveur peut-il accepter autre chose que du PDF ? (à tester avec une session) | **à tester** |
+| le fichier est renvoyé sous forme de **`attachment_ref`**, et non stocké sous une URL publique | l'impact d'un upload malveillant dépend de la façon dont le triage le récupère (chiffré « dès l'arrivée », « détruit après décision » selon le texte affiché) | **à tester** |
+| le `website` visible dans le HTML du formulaire est en réalité le **pot de miel** (`<input name="website" hidden>`) → il n'y a **pas** de champ URL libre dans le formulaire de rapport | pas de SSRF via ce champ | **écarté** |
+| `target` + `asset` : le client devine l'actif à partir de l'URL saisie (`guessAsset()`) → le serveur **valide-t-il** que la cible est bien dans le périmètre ? | signalement de rapport hors périmètre (logique métier) | **à tester** |
+| `collaborators` : erreurs dédiées `invalid_collaborators` / `too_many_collaborators` | validation d'une liste | conforme a priori |
+| **la soumission exige un compte dont l'IDENTITÉ EST VALIDÉE** (« Reports are accepted only from researchers whose identity has been validated ») | leResearchers doit faire valider son identité (page « Faire valider mon identité ») | **contrainte du programme** |
+| le serveur répond **identiquement** pour « aucun compte pour cette adresse » et « compte existant non validé » (le code source le dit explicitement dans un commentaire) | **anti-énumération de comptes bien pensée** | **contrôle conforme** |
+| `POST /api/aarme/attachment` n'est **pas** soumis au plafond des formulaires (4 POSTs consécutifs, aucun 429) | le plafond est **par endpoint** | observation |
+
+### Le plafond des formulaires : mes sondes l'entretenaient
+
+`POST /api/contact` et `POST /api/aarme/account/register` renvoient `429` depuis ~45 min, alors que les
+`GET` passent. En sondant toutes les 45 s pour mesurer la fenêtre, **chaque probe réarmait la
+pénalité** → je ne mesurais rien, je l'entretenais. → **règle pour la suite** : sur un endpoint
+rate-limité, ne jamais sonder en boucle ; laisser décanter (ici : jusqu'à ~1 h) et ne faire qu'**un
+essai par hypothèse**, très espacé. Marteler un endpoint déjà plafonné, c'est du **self-DoS** — ce que
+les règles du programme interdisent explicitement.
+
+
 ---
 
 *Chaque ligne de ce document renvoie à une mesure reproductible (scripts + journaux dans le kit).*
