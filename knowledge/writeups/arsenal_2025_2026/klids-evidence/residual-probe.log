@@ -1,0 +1,46 @@
+=== JETON SOUS TEST (snapshot, jamais rafraichi) ===
+  jti      : 7508973a-611c-45f3-965a-75d3c277678c
+  grant_id : 2505907b-1667-4ed6-8fd0-27ed06897dc8
+  scope    : programs:read profile:read reports:read reports:write notifications:write profile:write
+  aud      : https://bugsecure-api.senintel.sn
+  iat/exp  : 1792586941 -> 1792587541 (duree de vie residuelle max apres le reset : 448 s)
+  epoch present ? false | claims : iss,sub,aud,client_id,scope,jti,grant_id,iat,exp
+
+=== BOUCLE DE REJEU (5 min, cycle 3000 ms) ===
+  -> le chercheur change le mot de passe quand il veut ; le journal date chaque cycle
+
+  [2026-10-21T12:51:33.069Z] cycle   1 VIVANT lecture: DATA {"me":{"id":"e3aa51e2-2c87-4b64-a3cb-6d5eb857f40c","email":"viann | write: This change needs the user's approval on
+  [2026-10-21T12:51:46.621Z] cycle   2 VIVANT lecture: DATA {"me":{"id":"e3aa51e2-2c87-4b64-a3cb-6d5eb857f40c","email":"viann | write: This change needs the user's approval on
+  [2026-10-21T12:51:59.761Z] cycle   3 VIVANT lecture: DATA {"me":{"id":"e3aa51e2-2c87-4b64-a3cb-6d5eb857f40c","email":"viann | write: This change needs the user's approval on
+  [2026-10-21T12:52:05.504Z] cycle   4 MORT  lecture: Access has been revoked
+  [2026-10-21T12:52:10.147Z] cycle   5 MORT  lecture: Access has been revoked
+  [2026-10-21T12:52:15.024Z] cycle   6 MORT  lecture: Access has been revoked
+  [2026-10-21T12:52:19.537Z] cycle   7 MORT  lecture: Access has been revoked
+  [2026-10-21T12:52:23.084Z] cycle   8 MORT  lecture: Access has been revoked
+  [2026-10-21T12:52:26.615Z] cycle   9 MORT  lecture: Access has been revoked
+  [2026-10-21T12:52:30.172Z] cycle  10 MORT  lecture: Access has been revoked
+  [2026-10-21T12:52:33.723Z] cycle  11 MORT  lecture: Access has been revoked
+  [2026-10-21T12:52:37.254Z] cycle  12 MORT  lecture: Access has been revoked
+  [2026-10-21T12:52:42.211Z] cycle  13 MORT  lecture: Access has been revoked
+  [2026-10-21T12:52:57.114Z] cycle  14 MORT  lecture: Access has been revoked
+  [2026-10-21T12:53:05.035Z] cycle  15 MORT  lecture: Access has been revoked
+  [2026-10-21T12:53:15.830Z] cycle  16 MORT  lecture: Access has been revoked
+  [2026-10-21T12:53:22.484Z] cycle  17 MORT  lecture: Access has been revoked
+  [2026-10-21T12:53:31.290Z] cycle  18 MORT  lecture: Access has been revoked
+  [2026-10-21T12:53:39.644Z] cycle  19 MORT  lecture: Access has been revoked
+  [2026-10-21T12:53:50.679Z] cycle  20 MORT  lecture: Access has been revoked
+  [2026-10-21T12:53:58.013Z] cycle  21 MORT  lecture: Access has been revoked
+  [2026-10-21T12:54:04.047Z] cycle  22 MORT  lecture: Access has been revoked
+  [2026-10-21T12:54:12.695Z] cycle  23 MORT  lecture: Access has been revoked
+  [2026-10-21T12:54:25.151Z] cycle  24 MORT  lecture: Access has been revoked
+  [2026-10-21T12:54:32.793Z] cycle  25 MORT  lecture: Access has been revoked
+  [2026-10-21T12:54:40.667Z] cycle  26 MORT  lecture: Access has been revoked
+  [2026-10-21T12:54:47.738Z] cycle  27 MORT  lecture: Access has been revoked
+  [2026-10-21T12:54:54.053Z] cycle  28 MORT  lecture: Access has been revoked
+  [2026-10-21T12:55:05.724Z] cycle  29 MORT  lecture: Access has been revoked
+  [2026-10-21T12:55:12.259Z] cycle  30 MORT  lecture: Access has been revoked
+  [2026-10-21T12:55:19.032Z] cycle  31 MORT  lecture: Access has been revoked
+  [2026-10-21T12:55:28.817Z] cycle  32 MORT  lecture: Access has been revoked
+  [2026-10-21T12:55:34.897Z] cycle  33 MORT  lecture: Access has been revoked
+  [2026-10-21T12:55:45.485Z] cycle  34 MORT  lecture: Access has been revoked
+  [2026-10-21T12:55:51.215Z] cycle  35 MORT  lecture: Access has been revoked

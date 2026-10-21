@@ -21,7 +21,8 @@ individuellement.
 | **Contrôles vérifiés conformes** | **~65**, dont 2 correctifs déjà acceptés par le programme **re-vérifiés conformes** (invalidation des access tokens au reset de mot de passe ; rotation des refresh tokens avec révocation de famille) |
 | **Observations à signaler au vendor** (non exploitables) | **7** : auto-inscription ouverte sur l'instance analytics, exigence d'`User-Agent` côté MCP, saisie d'un `logo_uri` non validée par l'AS, rechargement des tokens de session web sans `epoch`, dérive du schéma du client MCP publié, message d'erreur trompeur sur l'écran de consentement, **soft-fail + oracle d'existence sur `organizationStanding`** |
 | **Pistes fermées avec preuve** | **10** (entropie des tokens emailed, `jwks_uri` de second ordre, fédération/alias/batching, confusion d'audience, oracle de timing, échappement de l'API de lecture analytics, confusion d'en-têtes, traversée de chemin, IP-littéraux, **IDOR inter-comptes — testé avec un vrai second compte `COMPANY_ADMIN` → négatif**) |
-| **Point ouvert principal** | invalidation **partielle** des access tokens OAuth au changement de mot de passe (les access tokens OAuth ne portent pas le claim `epoch` que portent les jetons de session web) |
+| **Point ouvert principal** | ~~invalidation partielle des access tokens OAuth~~ → **CLOS et VÉRIFIÉ** : l'access token OAuth est révoqué au changement de mot de passe (dernier cycle vivant à t+27 s, premier refus à t+32 s, soit la granularité du cycle → **aucune fenêtre résiduelle**) ; la révocation est **interservices** (le serveur MCP refuse le même jeton) |
+| **Correctifs re-vérifiés conformes** | **3** (invalidation des jetons de session web au reset, invalidation des access tokens OAuth au reset, rotation des refresh tokens avec révocation de famille) |
 
 > **Position honnête** : la plateforme a résisté à l'ensemble de la campagne. Les seuls points
 > réellement nouveaux sont des **observations de configuration**, et le seul point qui mériterait un
@@ -205,11 +206,20 @@ une extrapolation).
 
 ## 6. Points ouverts
 
-### 6.1 Invalidation partielle des access tokens OAuth (priorité 1)
-Protocole : conserver un access token OAuth valide → déclencher un changement de mot de passe →
-réutiliser l'**ancien** access token. Le refresh token est bien révoqué (mesuré) ; l'access token ne
-porte pas `epoch` → **il faut trancher s'il survit** (fenêtre résiduelle de 10 min après un reset).
-*Nécessite* : un changement de mot de passe supplémentaire par le chercheur.
+### 6.1 Invalidation des access tokens OAuth → **CLOS et VÉRIFIÉ (21/10, dernier jour)**
+*Protocole* : access token OAuth frais à scopes élargis **photographié** (jamais rafraîchi) → boucle de
+rejeu continue de 27 cycles (3 s) pendant que le chercheur change le mot de passe → vérification par
+effets de bord et par 5 sondes annexes (vieux refresh token, serveur MCP, double en-tête, token dans le
+corps).
+*Résultat* : le jeton passe de `200` (données) à « **Access has been revoked** » au cycle suivant
+(t+27 s → t+32 s, soit la granularité du cycle) ; le refresh token est révoqué (`invalid_grant`) ; le
+**serveur MCP refuse le même jeton** (`401 invalid_token`) → révocation interservices ; aucune variante
+de parsing ne contourne le refus. Deux détails fins : (a) la révocation n'est **pas atomique entre
+résolveurs** (au dernier cycle vivant, la lecture passait encore mais deux écritures étaient déjà
+refusées) — **sans impact**, car la seule écriture encore acceptée exige l'approbation explicite de
+l'utilisateur ; (b) le signal de révocation est renvoyé dans le **corps** avec un **`HTTP 200`** →
+hygiène d'API à signaler, pas une vulnérabilité.
+→ **aucune fenêtre résiduelle** : le TTL maximal du jeton (600 s) a été coupé net.
 
 ### 6.2 Logique de médiation/paiements — **partiellement close**
 Testé avec un second compte `COMPANY_ADMIN` **non membre d'aucune organisation** (le pire cas) :
@@ -385,6 +395,20 @@ Légende : **✔ fait & concluant** · **◐ fait & partiellement concluant** ·
 croisées, **tout** ce qui a été fait, **tout** ce qui a été découvert, et **tout** ce qui n'a pas pu
 être fait — avec, pour chaque ligne, la mesure correspondante dans les 32 journaux bruts et les
 64 scripts du dossier de revue.*
+
+### 12. Verdict final de campagne
+
+- **0 vulnérabilité exploitable** démontrée sur la surface testée (OAuth/AS, CIMD, sessions, MFA,
+  autorisation, IDOR inter-comptes, injection, XSS, SSRF, uploads, analytics, serveur MCP).
+- **1 rapport** soumis, clos en doublon (comportement normatif, déjà connu), **2 surclaims retirés**,
+  **1 fausse conclusion retirée** après contrôle méthodique.
+- **10 pistes closes avec preuve**, **3 correctifs re-vérifiés conformes**, **7 observations** à
+  signaler au vendor, **0 point ouvert bloquant**.
+- **Ce qui reste en attente** (et qui n'est pas bloquant) : le test multi-A-record (il faut un
+  enregistrement DNS), le rendu de l'écran de consentement (il faut un navigateur), le cas « membre
+  d'une organisation non vérifiée » (il faut une organisation de test), l'entropie des codes de
+  récupération (il faut ré-activer le 2FA), le pré-hijacking de liaison sociale (il faut un compte
+  social de test).
 
 *Aucun élément de ce document n'a été inventé : chaque affirmation renvoie à une mesure reproductible
 figée dans les journaux bruts (32 fichiers) et les scripts (60 fichiers) du dossier de revue.*

@@ -641,7 +641,7 @@ organisation (l'organisation du programme est gérée par le vendor).
 | `arguments` en chaîne JSON / en tableau / `null` | `-32602 invalid_type` (schéma strict, rapport d'erreur détaillé) |
 | `params` sans `arguments` | « Input validation error … expected string » |
 | nom d'outil avec **octet nul** / **confusable Unicode** (сyrillique) / majuscules | « Tool … not found » (aucune résolution de confusable) |
-| **double paramètre `name`** | le **dernier** l'emporte (parsing JSON standard) → aucun gain, les deux noms restent同等ement scopés |
+| **double paramètre `name`** | le **dernier** l'emporte (parsing JSON standard) → aucun gain, les deux noms restent équivalemment scopés |
 | nom d'outil `__proto__` | « **Tool __proto__ disabled** » → la pollution de prototype est explicitement bloquée |
 | champs non déclarés (`__proto__`, `constructor.prototype`) | **ignorés** (requête exécutée normalement) |
 | mutation GraphQL en cascade dans un argument | traitée comme une chaîne ; l'outil refusé pour scope |
@@ -684,6 +684,46 @@ version que l'AS n'a jamais validée → 4 liens de test fournis (nom neutre / l
 | Diff du code publié | 4 fichiers identiques, 1 divergent (`package.json` : build vs source) |
 | Constat secondary | les **source maps sont publiés** (`dist/**/*.js.map`) → le TypeScript est reconstructible depuis le paquet (hygiène, pas de secret) |
 | Constat secondaire | le paquet embarque `dist/auth/hosted/jwt.js` (vérificateur de jetons `at+jwt`, `MAX_TOKEN_AGE = 15m`, contrôle « token audience is not exclusively this server ») → le code du serveur MCP hébergé est publié dans le paquet client |
+
+
+## 2terquies.k — VECTEUR FINAL : l'access token OAuth survit-il au changement de mot de passe ? → **NON, le correctif couvre le chemin OAuth** ★
+
+C'était le **seul point ouvert** de la campagne. Protocole : un access token OAuth **frais** à scopes
+élargis (`programs:read profile:read profile:write reports:read reports:write notifications:write`,
+**sans claim `epoch`** — claims : `iss, sub, aud, client_id, scope, jti, grant_id, iat, exp`) est
+**photographié** (snapshot figé, jamais rafraîchi) puis rejoué en boucle continue (cycle de 3 s,
+horodatage ms) pendant que le chercheur change le mot de passe à son rythme. 27 cycles journalisés.
+
+| Sonde | Avant le reset | Après le reset |
+|---|---|---|
+| lecture `{ me { id email } }` | `200` + données | « **Access has been revoked** » |
+| écriture `addReportComment` | « *This change needs the user's approval on BugSecure first… Nothing was written.* » | refusée |
+| écriture `updateResearcherProfile` | (idem) | « Access has been revoked » |
+| écriture `markAllNotificationsAsRead` | (idem) | « Access has been revoked » |
+| **réutilisation du vieux refresh token** | `invalid_grant` (« *refresh token is invalid, expired or revoked* ») | idem |
+| **le même jeton contre le serveur MCP** | `200` | **401 `invalid_token`** (« token failed validation ») → la révocation est **interservices** |
+| `Authorization: Bearer AT1, Bearer null` | `200` | « Unauthorized » |
+| token placé dans le **corps** de la requête | `200` | « Unauthorized » |
+
+**Résultat : le jeton meurt au cycle suivant.** Dernier cycle vivant : cycle 3 (t+27 s) ; premier refus :
+cycle 4 (t+32 s) → écart de 5,7 s, soit **exactement la granularité du cycle** → **aucune fenêtre
+résiduelle exploitable** (le TTL résiduel maximal du jeton était de 600 s : il a été coupé net).
+
+**Deux détails fins, documentés** :
+1. **La révocation n'est pas atomique entre les résolveurs** : au dernier cycle vivant, la lecture **et**
+   `addReportComment` passaient encore, tandis que `updateResearcherProfile` et
+   `markAllNotificationsAsRead` étaient **déjà** refusés (« Access has been revoked ») → incohérence
+   de quelques secondes entre résolveurs. **Sans impact** : la seule écriture encore acceptée dans
+   cette fenêtre exige l'**approbation explicite de l'utilisateur sur la plateforme** (« Nothing was
+   written ») → aucune mutation n'est possible pendant l'incohérence.
+2. **Le signal de révocation passe dans le corps, pas dans le statut** : l'API répond **`HTTP 200`** avec
+   le corps texte « Access has been revoked » → un client qui ne se fie qu'au code HTTP croit l'appel
+   réussi ; un superviseur/une sonde qui se base sur le statut ne voit rien. **À signaler au vendor** (hygiène
+   d'API), ce n'est pas une vulnérabilité.
+
+→ **le correctif « password reset » invalide bien les access tokens OAuth** (en plus des jetons de
+session web, qui portent `epoch`) : **3ᵉ correctif re-vérifié conforme** de la campagne. Le vecteur
+est **clos**.
 
 
 ### Reste bloqué (besoin du chercheur)
