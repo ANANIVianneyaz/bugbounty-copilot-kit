@@ -66,7 +66,7 @@ l'IP de sortie `52.214.90.218`, ou si le filtre d'adresses est contournable sur 
 |---|---|
 | `jku` / `x5u` / `jwk` embarqué | refusés — l'AS utilise un **JWKS figé** et ne suit pas le `jku` (vérifié via log OOB : aucun fetch) |
 | `alg:none`, HS256 (confusion RSA/HMAC) | refusés |
-| `epoch` | **resté à 0 dans les 7 jetons de la campagne** (16:31 → 20:15) : l'`epoch` est le mécanisme du correctif « password reset » (il doit incrémenter au **changement de mot de passe**) ; l'activation du 2FA invalide la session par un **autre** mécanisme (état « 2FA vérifiée » côté serveur). L'access token ne porte donc **aucun** marqueur 2FA → l'invalidation de l'access token au reset reste à vérifier (piste P1) |
+| `epoch` | **vérifié comme le mécanisme du correctif « password reset »** : il passe de `0` à `1` sur le jeton émis après un changement de mot de passe (mesuré), et les jetons émis avant (epoch `0`) sont rejetés par l'API (« Session ended »). Les 7 jetons observés avant le reset portaient tous `epoch: 0` (aucun changement de mot de passe avant) ; l'epoch n'est donc **pas** décoratif |
 | Claims contrôlés | `id`, `email`, `username`, `roles`, `epoch`, `iat`, `exp`, `aud`, `iss`, `sub` — `roles` non modifiables (`setUserRoles` refusé, et `ADMIN` n'existe pas dans l'enum `BountyUserRole`) |
 | Session fixation | `/api/auth/session/refresh` avec un identifiant arbitraire → 403/401 ; pas de session sans cookie |
 | CORS | aucun `Access-Control-Allow-Origin` sur `/graphql`, `/api/auth/session/refresh`, `/oauth/token`, `/oauth/authorize`, `/.well-known/jwks.json` |
@@ -184,3 +184,24 @@ navigateur) · `bugsecure-files` = URLs signées CloudFront.
   supprime l'oracle d'énumération — c'est la bonne pratique, et ça se vérifie en trois requêtes.
 - Le `streamNetworkBody: false` + `maskAllInputs: true` du recorder PostHog neutralise le risque
   « mot de passe / code 2FA dans l'analytics » : vérifier ces deux drapeaux avant de rapporter.
+
+
+### Invalidation au changement de mot de passe — VÉRIFIÉE (correctif déjà accepté par le programme)
+
+Protocole : jeton d'accès émis **avant** le reset → `resetPassword(newPassword, token reçu par email)`
+→ `true` → **le même jeton** est retesté.
+
+| Étape | Résultat |
+|---|---|
+| avant le reset : `me` | 200 (identifiant, email) |
+| avant le reset : `updateResearcherProfile` | 200 (bio modifiée) → le jeton **écrivait** |
+| le reset | `{"resetPassword":true}` (nouveau mot de passe appliqué) |
+| après le reset : `me` | « **Session ended** » |
+| après le reset : `reports` | « **Session ended** » |
+| après le reset : `updateResearcherProfile` (écriture) | « **Session ended** » |
+| après le reset : `myKycStatus`, `notifications` | « **Session ended** » |
+
+→ **le correctif fonctionne** : le changement de mot de passe invalide les jetons d'accès déjà émis
+(lecture *et* écriture). La fenêtre résiduelle d'écriture du rapport d'origine n'existe plus.
+**Mécanisme confirmé : le claim `epoch`** (0 → 1 au reset) ; l'API répond « Session ended ».
+

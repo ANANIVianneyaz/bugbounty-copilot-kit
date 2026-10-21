@@ -18,8 +18,8 @@ La mission visait à trouver, sur le programme KLDS de BugSecure Africa, des vul
 |---|---|
 | **Vulnérabilités soumises** | **1** — fetch serveur non authentifié via `client_id` (chemin Client ID Metadata Document), initialement CVSS **5.3 (Medium)**, **amendé après relecture croisée** → réclamation réduite (le fetch est normatif + mitigé) et **sévérité proposée abaissée à Faible** ; seul écart maintenu : **absence de quota d'enregistrement sur le chemin CIMD** (mesuré apparié : DCR 0/12 créés, CIMD 12/12) |
 | **Vulnérabilités en cours de triage** | 1 (celle-ci, soumise sur la plateforme, `status: NEW`) |
-| **Hypothèses fermées avec preuve** | **~45 contrôles** documentés comme non exploitables (OAuth/AS, JWT, MFA, autorisation, injection, fichiers, XSS, serveur MCP, web app, infrastructure, dépôt `bugsecure-mcp`) |
-| **Correctifs antérieurs re-vérifiés** | 4 (consent-injection, invalidation de session au reset, rotation du refresh token, codes OAuth dans l'analytics) |
+| **Hypothèses fermées avec preuve** | **~47 contrôles** documentés comme non exploitables (OAuth/AS, JWT, MFA, autorisation, injection, fichiers, XSS, serveur MCP, web app, infrastructure, dépôt `bugsecure-mcp`) |
+| **Correctifs antérieurs re-vérifiés** | 5 (consent-injection, invalidation des access tokens au reset de mot de passe, invalidation de session, rotation du refresh token, codes OAuth dans l'analytics) |
 | **Pistes ouvertes** | 3 (chacune à 1 clic du chercheur) : invalidation de l'access token au reset · entropie des tokens par email · IDOR inter-comptes |
 
 ### 1.3 Chiffres clés de la campagne
@@ -283,7 +283,7 @@ Claims du `challengeToken` (JWT signé, 5 min) : `id`, `requires2fa:true`, `jti`
 
 | # | Piste | Ce qu'il faut | Ce qui serait démontré |
 |---|---|---|---|
-| P1 | **Le correctif « password reset n'invalide pas les access tokens » tient-il ?** | un access token frais **émis avant le reset** + accord pour fixer le mot de passe du compte de test | si le token survit → **ATO post-récupération** (High) ; s'il meurt → correctif **vérifié** |
+| P1 | **Le correctif « password reset n'invalide pas les access tokens » tient-il ?** | — | **CLOS et VÉRIFIÉ** : après le reset, le jeton émis avant est rejeté (« Session ended ») en lecture **et** en écriture ; le claim `epoch` passe de `0` à `1` → le correctif est conforme |
 | P2 | Entropie des tokens **émailés** (reset, suppression du 2FA, invitation) | un lien de reset (le token de reset est déjà mesuré à 256 bits ; c'est lanalogie des autres canaux qui compte) | token court → **ATO par devinette** |
 | P3 | **IDOR inter-comptes** | un 2e compte de test | compte A dépose un rapport → compte B le lit → **IDOR** (High) |
 
