@@ -80,6 +80,34 @@ vaut que 75 000-125 000 → **priorité à l'actif Critique**.
 | P4 | `cyberaar.io/api/*` (actif Standard) | les endpoints de formulaires (`/api/contact`, `/api/apply` → 405 sans POST) : 2ᵉ cible, ~3× moins payée |
 | P5 | Le « niveau » auto-déclaré à l'inscription (`level`) | s'il influence un score de réputation ou un accès → auto-attribution de privilèges (à mesurer une fois connecté) |
 
+### Les formulaires `cyberaar.io` (actif Standard) — premiers constats
+
+| Endpoint | Champ obligatoire d'après l'API | Observation |
+|---|---|---|
+| `POST /api/contact` | `name` (erreur `missing_name` ; puis `invalid_email`) | champs de la page : `name, email, subject, message` |
+| `POST /api/apply` | `org` (erreur `missing_org`) | proposition d'organisation : `org, sector, email, message` |
+
+- Les deux endpoints **refusent les adresses jetables** (`invalid_email`) → il faut une adresse réelle.
+- **Le plafond d'entrée de la plateforme est de 60 req/min** sans l'en-tête chercheur (et l'en-tête le
+  porte à 300/min) : ~20 requêtes en 15 s suffisent à déclencher `429 {"error":"rate_limited"}`, qui
+  s'applique ensuite à **tous** les endpoints (y compris les formulaires) pendant une fenêtre de
+  refroidissement. → **l'en-tête `X-AarMe-Researcher` n'est pas un confort, c'est un préalable.**
+- Les erreurs sont **champ par champ** (`missing_name`, `missing_org`, `invalid_email`) → schéma strict,
+  ce qui rend le mass assignment peu probable (à confirmer sur l'inscription, qui refuse déjà
+  `invalid_input` sur champs inconnus).
+
+### Tests à exécuter une fois le plafond levé et un email réel disponible
+
+| Test | Cible | Ce qu'il doit démontrer |
+|---|---|---|
+| **Injection CRLF → Bcc** | `contact` (`name`, `subject`, `email`), `apply` (`org`, `message`), puis **`aarme.cyrme` `register`/`org`** (actif **Critique**) | si le mailer du vendor accepte un `
+Bcc:` injecté, l'attaquant reçoit une copie de l'e-mail de notification — et, sur l'inscription, d'un éventuel **lien de confirmation de compte** ⇒ ATO. **C'est le test à plus fort rendement de la campagne** : le même code de formulaire sert sur les deux actifs, et la version AarMe est en classe Critique (225 000-300 000 FCFA). |
+| Mass assignment sur `contact`/`apply`/`register` | tous | un champ de privilège ignoré = inscription avec privilège |
+| Type confusion / NoSQL | `name` en tableau / en objet | bypass de validation, injection |
+| XSS stocké | `name`/`subject`/`message` | si le contenu est affiché dans un back-office ⇒ XSS en privilege |
+| Longueurs / formats | tous | validation d'entrée stricte (déjà partially true) |
+
+
 ---
 
 *Chaque ligne de ce document renvoie à une mesure reproductible (scripts + journaux dans le kit).*
