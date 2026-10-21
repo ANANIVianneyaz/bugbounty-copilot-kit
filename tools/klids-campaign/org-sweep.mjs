@@ -60,7 +60,10 @@ async function gql(q, v) {
 }
 const out = [];
 console.log("=== sweep organisation | contexte: " + LABEL + " | org: " + (ORG || "(non fourni)") + " ===\n");
+const READ_ONLY = process.env.READ_ONLY !== "0"; // par defaut : lectures seules (les mutations ont des effets reels)
 for (const [name, q, v] of OPS) {
+  const isMutation = /^\s*mutation/.test(q);
+  if (isMutation && READ_ONLY) { console.log("  " + name.padEnd(30) + "SKIP (mutation, desactivee : READ_ONLY=0 pour l executer)"); out.push({ name, cls: "SKIP", shape: "mutation non executee (READ_ONLY)", ms: 0 }); continue; }
   const r = await gql(q, v);
   console.log("  " + name.padEnd(30) + r.cls.padEnd(16) + String(r.ms).padStart(5) + "ms  " + r.shape.slice(0, 120));
   out.push({ name, ...r });

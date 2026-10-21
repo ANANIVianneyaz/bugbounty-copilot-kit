@@ -13,10 +13,12 @@ async function token() { const t = await ensureToken("https://bugsecure-mcp.seni
 let id = 0;
 async function rpc(tok, method, params) {
   id++;
-  for (let attempt = 0; attempt < 8; attempt++) {
+  for (let attempt = 0; attempt < 60; attempt++) {
     const r = await F(MCP + "/mcp", { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json, text/event-stream", Authorization: "Bearer " + tok }, body: JSON.stringify({ jsonrpc: "2.0", id, method, params }) });
     const txt = r ? await r.text() : "";
-    if (r && r.status === 404) { await sleep(4000); continue; } // fenetre transitoire du serveur
+    if (!r) { console.log("   [retry " + attempt + "] requete echouee (reseau)"); await sleep(5000); continue; }
+    if (r.status === 404) { console.log("   [retry " + attempt + "] HTTP 404 (fenetre de deploiement du serveur MCP)"); await sleep(5000); continue; }
+    if (r.status === 401) { console.log("   [HTTP 401] jeton refuse : " + txt.slice(0, 120)); return { s: 401, j: { error: { message: txt } }, txt }; }
     const line = txt.split("\n").find((l) => l.startsWith("data:"));
     let j = null;
     if (line) { try { j = JSON.parse(line.slice(5).trim()); } catch {} }
@@ -29,7 +31,10 @@ const tok = await token();
 const c = JSON.parse(Buffer.from(tok.split(".")[1], "base64url").toString());
 console.log("jeton MCP : aud=" + c.aud + " | scope=" + c.scope + "\n");
 
+console.log("[debug] token len=" + tok.length + " | " + tok.slice(0, 20) + "...");
 const tl = await rpc(tok, "tools/list", {});
+console.log("[debug] tools/list -> HTTP " + tl.s + " | j=" + (tl.j ? JSON.stringify(tl.j).slice(0, 160) : "null") + " | txt len=" + (tl.txt || "").length);
+if (!tl.j || !tl.j.result) { console.log("[debug] BRUT:", (tl.txt || "(vide)").slice(0, 300)); }
 fs.writeFileSync("/tmp/opencode/mcp-tools-full.json", JSON.stringify(tl.j, null, 1));
 const tools = tl.j?.result?.tools || [];
 console.log("=== inventaire : " + tools.length + " outils ===");

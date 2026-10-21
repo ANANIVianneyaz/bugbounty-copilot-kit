@@ -542,6 +542,31 @@ nginx) est prêt et redémarre proprement : **il suffit d'ouvrir le port 443** d
 fournisseur.
 
 
+### 2terquies.f — Serveur MCP : le 404 est bien une fenêtre de déploiement (et non un artefact de test) ★
+
+Le `404 {"error":"not_found"}` sur **toutes** les méthodes JSON-RPC a été qualifier à tort de
+« transitoire » puis de « différence de client ». Contrôle méthodique (script minimal identique, même
+jeton, requêtes strictement identiques) :
+
+| Moment | Requête via le nom | IP `52.18.227.46` en direct | IP `52.18.30.12` en direct |
+|---|---|---|---|
+| fenêtre A | 404 × 30 (3 min d'affilée) | — | — |
+| fenêtre B | 404 × 6 | — | — |
+| hors fenêtre | 200 × 20 | 200 × 10 | 200 × 10 |
+| hors fenêtre (script minimal) | 200 × 15 | — | — |
+
+→ le même script, la même requête et le même jeton **alternent** entre 404 (raisons vides) et 200, et les
+**deux IP répondent 200 en direct** hors fenêtre. La métadonnée de ressource
+(`/.well-known/oauth-protected-resource/mcp`) reste 200 pendant les fenêtres → **ce n'est pas un
+problème de routage mais l'application MCP elle-même** qui n'expose pas ses routes pendant le
+redéploiement (rolling deploy **sans readiness probe**).
+
+→ **observation à signaler au vendor** (disponibilité + message trompeur : un client MCP ne peut pas
+distinguer « instance pas prête » d'« endpoint inexistante »). Ce n'est pas une vulnérabilité de
+sécurité ; en revanche c'est ce qui rend **non fiable toute campagne de tests MCP** → les payloads par
+outil doivent être réessayés (budget de retry : 60 × 5 s).
+
+
 ### Reste bloqué (besoin du chercheur)
 
 1. ~~Un échantillon du token de suppression du 2FA~~ → **OBTENU et analysé** (§2sexies.a) : hex 64,
