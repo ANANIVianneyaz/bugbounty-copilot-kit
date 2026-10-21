@@ -162,6 +162,40 @@ est volontairement **très étroite** : 11 endpoints, 3 publics, 8 sur session.
 | Leaderboard | 1 chercheur : `accepted, avatar, badges, handle, highest, name, points, position, rank` | pas de donnée sensible |
 
 
+### La surface des formulaires, cartographiée (53 sondes, différentiel de code)
+
+Sur `cyberaar.io/api/*` (actif Standard), **seuls 2 endpoints existent** :
+`POST /api/contact` (405 sur GET) et `POST /api/apply` (405 sur GET) → les 51 autres chemins testés
+(`/api/{newsletter,career,upload,webhook,kyc,avatar,login,register,lead,search,auth,billing,invoice,partner,form,forms,feedback,…}`) → **404**. La surface est très étroite.
+
+**Le code client est maintenant lu en entier** (`/contact-form.js` et `/aarme-form.js`) :
+- `POST /api/contact` → corps exact `{name, email, subject, message}` ;
+- `POST /api/aarme/account/register` → corps exact `{name, email, profile, level, password, accord, lang, hp}` ;
+- `POST /api/aarme/org` → corps exact `{org, sector, email, message, lang, hp}` ;
+- le pot de miel est un `<input name="website">` masqué (`hp-org` / `hp-res`) dont la valeur est renvoyée
+  sous la clé `hp` → **il est bien lu côté serveur** (un `hp` rempli absorbe la requête en `200 success`
+  **sans créer de compte** → comportement correct).
+
+**Deux détails qui ouvrent des tests** :
+1. **Le champ `level` (niveau auto-déclaré) n'a pas d'attribut `value`** → le navigateur envoie le
+   **texte** de l'option : « Débutant (je commence) », « Intermédiaire (CTF, labs, quelques reports) »,
+   « Expert (expérience confirmée en bug bounty) » → **côté serveur c'est une chaîne libre** (à tester :
+   acceptation d'une valeur hors liste ? le niveau fabrique-t-il un rang public ? un accès ?).
+2. **La politique de mot de passe n'est imposée que côté client** : `minlength="12"`,
+   placeholder « 12 caractères minimum » → **à vérifier côté serveur** (un mot de passe faible accepté
+   = ATO facilitée sur la plateforme de bug bounty elle-même).
+
+### Le plafond des formulaires : une limite dédiée, à fenêtre longue
+
+Les `GET` passent (200) pendant que les `POST /api/contact` et `POST /api/aarme/account/register`
+renvoient `429 {"error":"rate_limited"}` depuis ~25 min → le plafond est **spécifique aux formulaires**
+(leurs règles confirment que l'en-tête chercheur **ne modifie pas** les limites de formulaire : il porte
+le plafond d'**entrée** de 60 à 300/min, pas celui des formulaires).
+⚠️ **erreur de méthode à ne pas reproduire** : en sondant toutes les 45 s pour mesurer la fenêtre, je
+**réarmais moi-même** la pénalité (chaque probe la renouvelle). → il faut **arrêter de sonder** et laisser
+décanter, puis tester une fois.
+
+
 ---
 
 *Chaque ligne de ce document renvoie à une mesure reproductible (scripts + journaux dans le kit).*
