@@ -394,14 +394,93 @@ c'est un indice sur la gestion des ressources côté app (à re-tester si un sec
 apparaît pour d'autres ressources).
 
 
+## 2sexies. Clôtures du 21/10 : P2 (entropie des tokens) et balayage complet des 198 opérations
+
+### 2sexies.a — P2 : le token de suppression du 2FA est un hex de 64 caractères (256 bits) → **Piste close, non exploitable** ★
+
+Les deux emails du compte de test ont été transférés et analysés (ils sont parvenus dans la boîte
+`bbtest4926@maxxspace.com`) :
+
+| Email | Lien | Token |
+|---|---|---|
+| « An authenticator app is enrolled on your BugSecure Africa account » | `https://bugsecure.senintel.sn/remove-authenticator/<TOKEN>` | `4af4f943ae085fd78b61896e728793525e03e953c244bc7fabd321e87d13948a` |
+| « The authenticator app was removed from your BugSecure Africa account » | (aucun lien : notification seule) | — |
+
+→ **longueur 64, alphabet hexadécimal (16 symboles), 256 bits d'entropie** — identique au format du
+token de réinitialisation de mot de passe déjà mesuré. Le token d'enrôlement et de suppression est le
+**même type de token** (256 bits), et le lien est mono-usage (la page `/remove-authenticator/<token>`).
+
+**Conséquence directe sur la piste `removeTotpViaToken`** (non authentifié, oracle booléen, §2quinquies.a) :
+l'espace de recherche est de 10⁶⁴, donc **non exploitable** même au rythme mesuré (5 essais/60 s/IP,
+×N IP). → **la piste P2 est close.** L'oracle non authentifié reste un défaut de conception (un
+`removeTotpViaToken` authentifié serait plus sûr, et un refus explicite « 2FA non configuré » éviterait
+l'appel), mais **aucun impact demonstrated** → à ne pas rapporter comme vulnérabilité. Ce qui reste
+documenté pour le vendor : la mutation est appelable sans session et renvoie un booléen.
+
+### 2sexies.b — Balayage complet de la surface GraphQL : **197 / 198 opérations** (fuite 53/198 comblée) ★
+
+Relance avec un jeton **valide** (audience API, scopes `programs:read profile:read reports:read
+reports:write`), moteur d'auto-réparation, journal complet dans `klids-evidence/sweep-197.json` :
+
+| Classe | nb | Lecture |
+|---|---|---|
+| `OAUTH-BLOCKED` (« not available to OAuth clients ») | **125** | toute la surface d'administration et de triage est **fermée aux clients OAuth** |
+| `SKIP` (mutations à effet de bord : password, 2FA, organisation, invitation) | 23 | non exécutées volontairement |
+| `SCOPE` (scope manquant **nommé** par l'API) | **16** | `triage:read` (6), `triage:write` (2), `grade:write`, `notifications:write` (2), `disclosures:write` (2), `profile:write` → l'enforcement est discriminant |
+| `DATA` (réponse non vide) | **9** | **uniquement mes propres données** : `BountyMe` (profil), `CertificateSigningKeys` (clés publiques), `GetUnreadNotificationCount` (=4), et `GetLeaderboard`, `GetMyCertificates`, `GetPrograms`, `GetReports`, `MyAgentApprovals`, `Search` → tableaux **vides** |
+| `EMPTY` | 10 | tableaux vides (compte sans rapport) |
+| `NOT-FOUND` / `OTHER` | 11 | messages **uniformes** : « You do not have access to this resource », « Program not found », « You can only read your own activity » → **aucun oracle d'énumération** |
+| validation d'entrée | 2 | `RaiseAppeal` : « grounds must be longer than or equal to 20 characters » ; `SubmitReport` : « clientRequestId must be 16 to 128 characters » → validation stricte, exploitable par le moteur d'auto-réparation |
+| `NOT-FOUND` (autre) | 1 | `GetTermsDocument` : « No such terms version » |
+
+→ **aucune fuite, aucun contournement** : la surface accessible à un client OAuth portant des scopes de
+chercheur est exactement celle du chercheur sur ses propres données. Le trou documentaire du début de
+campagne (« 53 des 198 ») est **comblé et corrigé** dans la note de mission.
+
+### 2sexies.c — Serveur MCP : fenêtres 404 pendant les déploiements (observation de disponibilité)
+
+Le serveur MCP (`https://bugsecure-mcp.senintel.sn/mcp`, derrière nginx — `x-accel-buffering: no`)
+renvoie `404 {"error":"not_found"}` sur **toutes** les routes JSON-RPC pendant des fenêtres de ~1 à 2
+minutes, de façon récurrente (observées 3 fois : ~09:36, ~10:20, ~10:30). Le reste du temps : `200`.
+Contrôles faits pendant la fenêtre : sans jeton → `401 unauthorized` (donc la route **existe**), jeton
+bidon → `401 invalid_token` ; avec un jeton valide → `404` ; les deux IP du serveur
+(`52.18.227.46`, `52.18.30.12`) répondent `200` en accès direct avec le bon SNI ; depuis 2 IP
+différentes, 30/30 puis 20/20 en `200` hors fenêtre.
+
+→ interprétation : l'**appli** MCP (pas nginx) ne répond `404` que le temps du *rolling deploy*, sans
+readiness probe → **ce n'est pas une vulnérabilité**, mais un défaut de disponibilité à signaler au
+vendor (les clients MCP qui se connectent pendant la fenêtre reçoivent un 404 indistinguable d'une
+route inexistante). Le reste du temps, `initialize`, `tools/list` (77 Ko d'outils) et les appels
+d'outils répondent `200`.
+
+### 2sexies.d — Infrastructure de test (hébergement stable du document CIMD)
+
+Le filtre d'IP du chemin CIMD et le test multi-A-record exigent un nom public **avec un certificat
+valide** : le tunnel ngrok ne convenait pas (page d'interception, quotas). Infrastructure retenue, sur le
+serveur personnel du chercheur (aucune modification de l'infrastructure de production) :
+
+- `~/bb-listener/listener.cjs` — serveur de preuve (document CIMD paramétrable par chemin : `jwks_uri`,
+  `token_endpoint_auth_method`, `client_name` HTML, `logo_uri` ; journal de chaque requête reçue).
+- `~/bb-caddy/` — **Caddy en conteneur Docker**, challenge ACME en **TLS-ALPN** (le port 80 est déjà
+  tenu par nginx sur ce serveur, le 443 est libre) → certificat obtenu automatiquement, sans toucher à
+  l'existant.
+- Le sous-domaine de test pointe le proxy vers `127.0.0.1:8443` (le `X-Forwarded-Proto` est pris en
+  compte pour reconstruire le `client_id` en `https`).
+
+
 ### Reste bloqué (besoin du chercheur)
 
-1. **Un échantillon du token de suppression du 2FA** (l'email que le chercheur vient de déclencher) →
-   donne la longueur/alphabet et tranche l'impact de §2quinquies.a.
-2. **Un jeton OAuth vivant** (nouvelle autorisation : le RT a été révoqué par le changement de mot de
-   passe) → pour l'enforcement des scopes par outil MCP (§d) et la fin du sweep des 198 opérations.
-3. **Un domaine contrôlable** → pour le test multi-A-record / DNS rebinding du filtre d'IP du CIMD
-   (le tunnel ngrok ne permet qu'un nom public à A unique).
+1. ~~Un échantillon du token de suppression du 2FA~~ → **OBTENU et analysé** (§2sexies.a) : hex 64,
+   256 bits → **piste P2 close**.
+2. ~~La fin du sweep des 198 opérations~~ → **FAITE** (§2sexies.b) : 197/198.
+3. **Une autorisation OAuth neuve** (les refresh tokens ont été révoqués : par le changement de mot de
+   passe du compte de test, puis par mes propres tests de rotation) → il faut un **jeton `aud=MCP`
+   vivant** pour l'enforcement des scopes par outil (le serveur MCP annonce 77 Ko d'outils, dont des
+   outils de triage qui doivent exiger `triage:*`).
+4. **Le sous-domaine en « DNS only »** (nuage gris) dans Cloudflare → nécessaire pour (a) le challenge
+   ACME en TLS-ALPN (le proxy Cloudflare ne relaie pas ce challenge) et (b) le test multi-A-record : le
+   DNS public doit exposer mes enregistrements A, pas les IP de Cloudflare. Un **2ᵉ enregistrement A**
+   pointant sur `127.0.0.1` sera ensuite demandé pour le test multi-A.
 
 
 ## 3. Restes à tester (il faut une action du chercheur)

@@ -1,0 +1,28 @@
+[
+ {
+  "subject": "Fwd: An authenticator app is enrolled on your BugSecure Africa account",
+  "from": "vianney24lechancelier@gmail.com",
+  "text": " ---------- Forwarded message --------- De : BugSecure Africa &lt; noreply@bugsecure.senintel.sn &gt; Date: mer. 21 oct. 2026 \u00e0 09:53 Subject: An authenticator app is enrolled on your BugSecure Africa account To: &lt; vianney24lechancelier@gmail.com &gt; You just reset your password. An authenticator app (two-factor authentication) is enrolled on this account. If you set this up yourself, there is nothing to do \u2014 ignore this message. If you did not, someone else added it before you reset your password, and it will ask for a code only they have the next time you sign in. Use this link within 1 hour to remove it: Remove the authenticator app This also removes any backup codes and security keys on the account, and ends every session again. ---------- Forwarded message --------- De : BugSecure Africa Date: mer. 21 oct. 2026 \u00e0 09:53 Subject: An authenticator app is enrolled on your BugSecure Africa account To: You just reset your password. An authenticator app (two-factor authentication) is enrolled on this account. *If you set this up yourself, there is nothing to do \u2014 ignore this message.* If you did not, someone else added it before you reset your password, and it will ask for a code only they have the next time you sign in. Use this link within 1 hour to remove it: Remove the authenticator app This also removes any backup codes and security keys on the account, and ends every session again.",
+  "urls": [
+   "https://bugsecure.senintel.sn/remove-authenticator/4af4f943ae085fd78b61896e728793525e03e953c244bc7fabd321e87d13948a",
+   "https://bugsecure.senintel.sn/remove-authenticator/4af4f943ae085fd78b61896e728793525e03e953c244bc7fabd321e87d13948a"
+  ],
+  "cands": [
+   "4af4f943ae085fd78b61896e728793525e03e953c244bc7fabd321e87d13948a",
+   "authenticator",
+   "bugsecure.senintel.sn",
+   "remove-authenticator",
+   "vianney24lechancelier"
+  ]
+ },
+ {
+  "subject": "Fwd: The authenticator app was removed from your BugSecure Africa account",
+  "from": "vianney24lechancelier@gmail.com",
+  "text": " ---------- Forwarded message --------- De : BugSecure Africa &lt; noreply@bugsecure.senintel.sn &gt; Date: mer. 21 oct. 2026 \u00e0 10:00 Subject: The authenticator app was removed from your BugSecure Africa account To: &lt; vianney24lechancelier@gmail.com &gt; The authenticator app was removed from two-factor authentication on your BugSecure Africa account, and it no longer works to sign in. If this was you, there is nothing to do. If it was not, someone else is using your account: reset your password now, check two-factor authentication in Settings, and contact BugSecure support. ---------- Forwarded message --------- De : BugSecure Africa Date: mer. 21 oct. 2026 \u00e0 10:00 Subject: The authenticator app was removed from your BugSecure Africa account To: The authenticator app was removed from two-factor authentication on your BugSecure Africa account, and it no longer works to sign in. If this was you, there is nothing to do. If it was not, someone else is using your account: reset your password now, check two-factor authentication in Settings, and contact BugSecure support.",
+  "urls": [],
+  "cands": [
+   "authenticator",
+   "vianney24lechancelier"
+  ]
+ }
+]

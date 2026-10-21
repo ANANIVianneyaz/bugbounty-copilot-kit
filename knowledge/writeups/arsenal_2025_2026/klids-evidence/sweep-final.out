@@ -1,0 +1,214 @@
+operations: 198 | auth: true
+
+  SKIP  AcceptOrganizationInvitation
+  AcceptPlatformTerms               mutation OAUTH-BLOCKED  i2 
+  AcceptProgrammeTerms              mutation OAUTH-BLOCKED  i2 
+  AddReportComment                  mutation OTHER          i2 You do not have access to this resource
+  AdjudicateReport                  mutation SCOPE          i6  grade:write
+  AdminUser                         query    OAUTH-BLOCKED  i0 
+  AdminUserAccount                  query    OAUTH-BLOCKED  i0 
+  AdminUserActivity                 query    OAUTH-BLOCKED  i0 
+  AdminUserCount                    query    OAUTH-BLOCKED  i0 
+  AdminUserLinkedAccounts           query    OAUTH-BLOCKED  i0 
+  AdminUserMoney                    query    OAUTH-BLOCKED  i0 
+  AdminUserOrganisations            query    OAUTH-BLOCKED  i0 
+  AdminUserSecurity                 query    OAUTH-BLOCKED  i0 
+  AdminUserSummary                  query    OAUTH-BLOCKED  i0 
+  AdminUsers                        query    OAUTH-BLOCKED  i0 
+  AgentApproval                     query    NOT-FOUND      i0 Agent approval not found
+  ApproveUser                       mutation OAUTH-BLOCKED  i1 
+  AssignTriageAnalyst               mutation SCOPE          i0  triage:write
+  SKIP  AttestSettlement
+  AuditLogEntries                   query    OAUTH-BLOCKED  i0 
+  AuditLogNewerCount                query    OAUTH-BLOCKED  i0 
+  AuditLogs                         query    OAUTH-BLOCKED  i0 
+  AwardStaffBadge                   mutation OAUTH-BLOCKED  i4 
+  BountyLogin                       mutation OAUTH-BLOCKED  i2 
+  SKIP  BountyLogout
+  BountyMe                          query    DATA           i0 {"me":{"id":"e3aa51e2-2c87-4b64-a3cb-6d5eb857f40c","email":"vianney24lechancelier@gmail.com","username":"william_root","
+  BountyRefreshToken                mutation OAUTH-BLOCKED  i0 
+  BountySignUp                      mutation OAUTH-BLOCKED  i3 
+  BulkDelete                        mutation OAUTH-BLOCKED  i0 
+  CertificateShare                  query    OAUTH-BLOCKED  i0 
+  CertificateSigningKeys            query    DATA           i0 {"certificateSigningKeys":{"keys":[{"kty":"RSA","n":"tRSkPzqK3eki_oGmZQBBGDMMe5dhsOZkxl1vvhunN6cerlyuPY0j7kXq1ifM8hosrQz
+  SKIP  ChangePassword
+  CheckDuplicates                   query    SCOPE          i0  triage:read
+  CloseSupportConversation          mutation OAUTH-BLOCKED  i0 
+  CompleteGithubLink                mutation OAUTH-BLOCKED  i0 
+  ConfirmEmailChange                mutation OAUTH-BLOCKED  i0 
+  SKIP  ConfirmSettlement
+  SKIP  ConfirmSettlementOnBehalf
+  CreateCliSignInCode               mutation OAUTH-BLOCKED  i0 
+  SKIP  CreateOrganization
+  CreateProgram                     mutation OAUTH-BLOCKED  i6 
+  DecideAgentApproval               mutation OAUTH-BLOCKED  i2 
+  DecideAppeal                      mutation OAUTH-BLOCKED  i3 
+  DecideOAuthAuthorization          mutation OAUTH-BLOCKED  i3 
+  DecideReportDisclosure            mutation OAUTH-BLOCKED  i0 
+  DeleteKycDocument                 mutation OAUTH-BLOCKED  i0 
+  DeleteMyAccount                   mutation OAUTH-BLOCKED  i1 
+  DisableTotp                       mutation OAUTH-BLOCKED  i0 
+  DiscordLinkedRolesUrl             mutation OAUTH-BLOCKED  i0 
+  DismissOnboarding                 mutation OAUTH-BLOCKED  i0 
+  SKIP  DisputeSettlement
+  DuplicateCandidates               query    OAUTH-BLOCKED  i0 
+  EnableTotp                        mutation OAUTH-BLOCKED  i2 
+  ExchangeCliSignInCode             mutation OAUTH-BLOCKED  i0 
+  ExportAuditLog                    mutation OAUTH-BLOCKED  i0 
+  SKIP  ForgotPassword
+  SKIP  GenerateBackupCodes
+  GenerateTotpSecret                mutation OAUTH-BLOCKED  i0 
+  GetAdminPrograms                  query    OAUTH-BLOCKED  i0 
+  GetAppealQueue                    query    OAUTH-BLOCKED  i0 
+  GetBadgeCatalog                   query    EMPTY          i0 {"badgeCatalog":[{"id":"8d5c22dd-0890-4be1-ab5d-6abb49e6a0a4","name":"First Blood","slug":"premier-sang","description":"
+  GetBillableInterventions          query    OAUTH-BLOCKED  i0 
+  GetCertificate                    query    OAUTH-BLOCKED  i0 
+  GetCertificateDocument            query    OAUTH-BLOCKED  i0 
+  GetCertificateDocumentPdfUrl      query    OAUTH-BLOCKED  i0 
+  GetCriticalReviewQueue            query    OAUTH-BLOCKED  i0 
+  SKIP  GetDisputedSettlements
+  GetDownloadUrl                    query    OAUTH-BLOCKED  i0 
+  GetEscalatedReports               query    OAUTH-BLOCKED  i0 
+  GetInboundEmails                  query    OAUTH-BLOCKED  i0 
+  GetKycDocuments                   query    OAUTH-BLOCKED  i0 
+  GetLapsedCriticalReviews          query    OAUTH-BLOCKED  i0 
+  GetLeaderboard                    query    DATA           i0 {"leaderboard":[]}
+  GetMyCertificates                 query    DATA           i0 {"myCertificates":[]}
+  SKIP  GetMyInvitedPrograms
+  GetMyKycDocuments                 query    OAUTH-BLOCKED  i0 
+  GetMyKycStatus                    query    OAUTH-BLOCKED  i0 
+  GetMyOrganizationInvitations      query    OAUTH-BLOCKED  i0 
+  GetMyOrganizations                query    SCOPE          i0  triage:read
+  GetMyProfile                      query    EMPTY          i0 {"myProfile":{"id":"da7442e3-2ca3-4644-a832-420d26551deb","userId":"e3aa51e2-2c87-4b64-a3cb-6d5eb857f40c","reputation":0
+  GetMyPrograms                     query    SCOPE          i0  triage:read
+  GetMySupportConversation          query    OAUTH-BLOCKED  i0 
+  GetMyWebAuthnCredentials          query    OAUTH-BLOCKED  i0 
+  GetNotificationPreferences        query    OAUTH-BLOCKED  i0 
+  GetNotifications                  query    EMPTY          i0 {"notifications":[{"id":"fac4113a-1c31-4adb-85e5-6e45323fe351","type":"REPORT_STATUS_CHANGED","title":"Statut du rapport
+  GetOrganization                   query    OAUTH-BLOCKED  i0 
+  GetOrganizationCertificates       query    SCOPE          i0  triage:read
+  GetOrganizationInterventionUsage  query    OAUTH-BLOCKED  i0 
+  GetOrganizationInvitations        query    OAUTH-BLOCKED  i0 
+  GetOrganizationMembers            query    OAUTH-BLOCKED  i0 
+  GetOrganizationStanding           query    SCOPE          i0  triage:read
+  GetOrganizations                  query    OAUTH-BLOCKED  i0 
+  GetOverdueCertificates            query    OAUTH-BLOCKED  i0 
+  SKIP  GetPayoutSummary
+  GetPendingKycDocuments            query    OAUTH-BLOCKED  i0 
+  GetProgram                        query    EMPTY          i0 {"program":null}
+  GetProgramBySlug                  query    NOT-FOUND      i0 Program not found
+  GetProgramStats                   query    SCOPE          i0  triage:read
+  GetPrograms                       query    DATA           i0 {"programs":[]}
+  GetReport                         query    OTHER          i0 You do not have access to this resource
+  GetReportAdjudication             query    OTHER          i0 You do not have access to this resource
+  GetReportAppeals                  query    OTHER          i0 You do not have access to this resource
+  GetReportComments                 query    OTHER          i0 You do not have access to this resource
+  GetReportTransitions              query    OTHER          i0 You do not have access to this resource
+  GetReportTrends                   query    SCOPE          i0  triage:read
+  GetReports                        query    DATA           i0 {"reports":[]}
+  GetResearcherActivity             query    OTHER          i0 You can only read your own activity
+  GetResearcherProfile              query    EMPTY          i0 {"researcherProfile":null}
+  GetResearcherPublicProfile        query    EMPTY          i0 {"researcherPublicProfile":null}
+  GetResearcherStats                query    EMPTY          i0 {"researcherStats":null}
+  GetResearchers                    query    OAUTH-BLOCKED  i0 
+  SKIP  GetSettlementInstruction
+  GetSeverityDistribution           query    SCOPE          i0  triage:read
+  GetStuckFiles                     query    OAUTH-BLOCKED  i0 
+  GetSupportAttachmentUrl           query    OAUTH-BLOCKED  i0 
+  GetSupportConversationForUser     query    OAUTH-BLOCKED  i0 
+  GetSupportConversations           query    OAUTH-BLOCKED  i0 
+  GetSupportMessages                query    OAUTH-BLOCKED  i0 
+  GetTermsDocument                  query    OTHER          i0 No such terms version
+  GetTermsVersions                  query    EMPTY          i0 {"termsVersions":[{"id":"9dc17e98-dab2-48be-9f8b-45879bfb7190","kind":"PLATFORM_ORGANIZATION","programId":null,"version"
+  GetUnreadNotificationCount        query    DATA           i0 {"unreadNotificationCount":4}
+  GithubLinkUrl                     mutation OAUTH-BLOCKED  i0 
+  HasAcceptedPlatformTerms          query    OAUTH-BLOCKED  i0 
+  HasAcceptedProgrammeTerms         query    OAUTH-BLOCKED  i0 
+  HasOrganizationAcceptedTerms      query    OAUTH-BLOCKED  i0 
+  SKIP  InviteOrganizationMember
+  KycDocumentUrl                    query    OAUTH-BLOCKED  i0 
+  MarkAllNotificationsAsRead        mutation SCOPE          i0  notifications:write
+  MarkEmailVerified                 mutation OAUTH-BLOCKED  i2 
+  MarkNotificationAsRead            mutation SCOPE          i0  notifications:write
+  MarkSupportConversationRead       mutation OAUTH-BLOCKED  i0 
+  MyAgentApprovals                  query    DATA           i0 {"myAgentApprovals":[]}
+  MyDiscordLink                     query    OAUTH-BLOCKED  i0 
+  MyGithubLink                      query    OAUTH-BLOCKED  i0 
+  MyOAuthGrants                     query    OAUTH-BLOCKED  i0 
+  MyOnboarding                      query    OAUTH-BLOCKED  i0 
+  SKIP  MyPayoutMethod
+  OAuthAuthorizationRequest         query    OAUTH-BLOCKED  i0 
+  PlanBulkDeletion                  query    OAUTH-BLOCKED  i0 
+  PresentPlatformTerms              mutation OAUTH-BLOCKED  i0 
+  PresentProgrammeTerms             mutation OAUTH-BLOCKED  i0 
+  PreviewGrade                      query    OAUTH-BLOCKED  i4 
+  PublicProgramActivity             query    NOT-FOUND      i0 Public program not found
+  PublishRewardGrid                 mutation OAUTH-BLOCKED  i2 
+  PublishTerms                      mutation OAUTH-BLOCKED  i2 
+  RaiseAppeal                       mutation OTHER          i2 grounds must be longer than or equal to 20 characters
+  RedactSupportMessage              mutation OAUTH-BLOCKED  i0 
+  SKIP  RejectSettlementClaim
+  RejectUser                        mutation OAUTH-BLOCKED  i2 
+  RemoveOrganizationMember          mutation OAUTH-BLOCKED  i0 
+  RemoveTotpViaToken                mutation OAUTH-BLOCKED  i0 
+  RemoveWebAuthnCredential          mutation OAUTH-BLOCKED  i0 
+  ReopenSupportConversation         mutation OAUTH-BLOCKED  i0 
+  SKIP  ReplaceSettlementProof
+  ReportDisclosureDraft             query    SCOPE          i0  disclosures:write
+  RequestEmailChange                mutation OAUTH-BLOCKED  i2 
+  RequestUploadUrl                  mutation OAUTH-BLOCKED  i3 
+  RequeueFileVerification           mutation NOT-FOUND      i0 Variable "$purpose" got invalid value "PENDING"; Value "PENDING" does not exist in "UploadPurpose" enum.
+  ResendVerificationEmail           mutation OAUTH-BLOCKED  i0 
+  SKIP  ResetPassword
+  ResetUserTwoFactor                mutation OAUTH-BLOCKED  i2 
+  ReviewCriticalGrade               mutation OAUTH-BLOCKED  i2 
+  ReviewKycDocument                 mutation OAUTH-BLOCKED  i2 
+  RevokeCertificateShare            mutation OAUTH-BLOCKED  i0 
+  SKIP  RevokeOAuthGrant
+  RevokeOrganizationInvitation      mutation OAUTH-BLOCKED  i0 
+  RevokeStaffBadge                  mutation OAUTH-BLOCKED  i3 
+  SaveReportDisclosure              mutation SCOPE          i6  disclosures:write
+  Search                            query    DATA           i0 {"search":[]}
+  SendProgramBackToDraft            mutation OAUTH-BLOCKED  i0 
+  SendSupportMessage                mutation OAUTH-BLOCKED  i0 
+  SetAmbassador                     mutation OAUTH-BLOCKED  i2 
+  SetDiscordCelebration             mutation OAUTH-BLOCKED  i0 
+  SetOrganizationAiGrading          mutation OAUTH-BLOCKED  i0 
+  SetOrganizationAiTriageAccess     mutation OAUTH-BLOCKED  i0 
+  SetOrganizationSubmissionsSuspendedmutation OAUTH-BLOCKED  i3 
+  SKIP  SetResearcherPayoutMethod
+  SetUserRoles                      mutation OAUTH-BLOCKED  i2 
+  SetUserStatus                     mutation OAUTH-BLOCKED  i2 
+  SKIP  SettlementProofUrl
+  ShareCertificate                  mutation OAUTH-BLOCKED  i0 
+  SharedFinding                     query    OAUTH-BLOCKED  i0 
+  StartSupportConversation          mutation OAUTH-BLOCKED  i0 
+  SubmitKycDocument                 mutation OAUTH-BLOCKED  i2 
+  SubmitReport                      mutation OTHER          i6 clientRequestId must be 16 to 128 characters of A-Z, a-z, 0-9, _ or -
+  TaxonomyProfile                   query    EMPTY          i0 {"taxonomyProfile":{"taxonomyId":"bugcrowd-vrt","taxonomyVersion":"v1.19.1","releaseAt":"2026-07-08T00:00:00.000Z","node
+  TransitionProgramStatus           mutation OAUTH-BLOCKED  i0 
+  UnlinkDiscord                     mutation OAUTH-BLOCKED  i0 
+  UnlinkGithub                      mutation OAUTH-BLOCKED  i0 
+  UpdateNotificationPreferences     mutation OAUTH-BLOCKED  i0 
+  UpdateOrganization                mutation OAUTH-BLOCKED  i0 
+  UpdateProgram                     mutation OAUTH-BLOCKED  i0 
+  UpdateReportStatus                mutation SCOPE          i2  triage:write
+  UpdateResearcherProfile           mutation SCOPE          i0  profile:write
+  SKIP  Verify2fa
+  VerifyCertificate                 query    EMPTY          i0 {"verifyCertificate":null}
+  VerifyEmail                       mutation OAUTH-BLOCKED  i0 
+  SKIP  WithdrawSettlementProof
+
+=== RECAP ===
+M:NOT-FOUND = 1   M:OAUTH-BLOCKED = 67   M:OTHER = 3   M:SCOPE = 7   M:SKIP = 18   Q:DATA = 9   Q:EMPTY = 10   Q:NOT-FOUND = 3   Q:OAUTH-BLOCKED = 58   Q:OTHER = 7   Q:SCOPE = 9   Q:SKIP = 6
+
+=== TOUTES LES OPERATIONS QUI RETOURNENT DES DONNEES (priorite) ===
+  *** query BountyMe -> {"me":{"id":"e3aa51e2-2c87-4b64-a3cb-6d5eb857f40c","email":"vianney24lechancelier@gmail.com","username":"william_root","roles":["RESEARCHER"],"status":"ACTIVE","approvedAt":"2026-09-27T19:49:51.853Z",
+  *** query CertificateSigningKeys -> {"certificateSigningKeys":{"keys":[{"kty":"RSA","n":"tRSkPzqK3eki_oGmZQBBGDMMe5dhsOZkxl1vvhunN6cerlyuPY0j7kXq1ifM8hosrQzsEjhOCOEbKoAiNdz4rukxU3FqAHBUh37TMDE7FFelv_LaDdLQD83_6OQej5dUzSN1xYcr0S2IF6ipH9_
+  *** query GetLeaderboard -> {"leaderboard":[]}
+  *** query GetMyCertificates -> {"myCertificates":[]}
+  *** query GetPrograms -> {"programs":[]}
+  *** query GetReports -> {"reports":[]}
+  *** query GetUnreadNotificationCount -> {"unreadNotificationCount":4}
+  *** query MyAgentApprovals -> {"myAgentApprovals":[]}
+  *** query Search -> {"search":[]}
