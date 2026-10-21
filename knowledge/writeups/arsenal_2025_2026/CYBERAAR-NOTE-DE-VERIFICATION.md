@@ -232,6 +232,42 @@ essai par hypothèse**, très espacé. Marteler un endpoint déjà plafonné, c'
 les règles du programme interdisent explicitement.
 
 
+### La surface du compte, testée AVEC session (compte de test) ★
+
+Connexion obtenue (`amr_id: AMR-5TNMMRMWUH`, `email_verified: true`, 10 codes de secours restants) →
+30 endpoints de compte cartographiés (verbes réelles : `PATCH` pour le profil, `DELETE` pour l'en-tête
+chercheur et l'avatar, `POST` pour le reste).
+
+| Endpoint | Comportement avec session | Verdict |
+|---|---|---|
+| `GET /account/me` | profil complet (badges, `game`, `backup_codes_remaining: 10`, `amr_id`) | attendu |
+| `GET /account/sessions` | **liste des sessions avec IP et User-Agent** (la mienne + celle du navigateur) | attendu (le texte du site : « Close the ones you do not recognise ») |
+| `GET /account/collaborations` | `[]` | — |
+| `GET /account/sanctions` | `[]` | — |
+| `GET /account/research-header` | `{"eligible":false,"header":"X-AarMe-Researcher","issued_at":null,"last_used_at":null}` | l'éligibilité dépend de l'**identité validée** → le compte de test ne peut pas l'obtenir (le compte du chercheur, lui, l'a) |
+| `POST /account/report/payout` | **403 `{"error":"kyc_required"}`** | ✅ les **données de prime** exigent une identité validée → cloisonnement correct |
+| `POST /account/attachment` (pièce jointe de rapport) | **403 `{"error":"identity_required"}`** | ✅ |
+| `POST /account/avatar` (upload d'avatar) | accessible (mais soumis au plafond) | à tester |
+| `PATCH /account/profile` | n'accepte **que** `country`, `display_name`, `handle` → tout autre champ → `{"error":"nothing_to_update"}` | ✅ **aucun champ URL → pas de SSRF par le profil** ; **pas de mass assignment** (champs inconnus ignorés) |
+| `POST /account/totp/backup-codes` | **mot de passe courant exigé** (`wrong_password`) ; avec le **vrai** mot de passe + un **faux** TOTP → `{"error":"invalid_code"}` et **aucun code divulgué** | ✅ **les codes de secours exigent le mot de passe ET un TOTP vivant** (contrôle remarquable) |
+| `POST /account/totp/enrol` | 409 `already_enrolled` | (le TOTP est déjà actif) |
+
+### Le 2FA est lié à la session (et l'anti-énumération tient)
+
+- `POST /login {email,password}` → `200 {"mfa_required":true,"success":false}` + cookie `session`
+  (`Secure; HttpOnly; Path=/; SameSite=Lax` → **bons flags**) ;
+- `POST /login {totp}` **sans** le cookie → le champ `totp` est **ignoré** (la réponse est à nouveau
+  `mfa_required`) → **le challenge 2FA est lié à la session** (comme le `challengeToken` du programme
+  précédent) ;
+- messages : `invalid_credentials` pour un mot de passe faux **que le compte existe ou non** ;
+  `invalid_code` quand le mot de passe est juste mais le TOTP faux → **l'ordre de vérification est
+  mot-de-passe d'abord**, donc **aucun oracle d'énumération de compte** ;
+- `password-reset` → `{"success":true}` **uniforme** sur 5 adresses (existante, inexistante, jetable,
+  malformée) et **pas d'oracle de timing** (257-304 ms vs 283-284 ms) ;
+- `verify-email` → `{"error":"invalid_token"}` **uniforme**, y compris avec le **vrai** mot de passe
+  (le mot de passe ne suffit pas : il faut prouver être le propriétaire de l'adresse).
+
+
 ---
 
 *Chaque ligne de ce document renvoie à une mesure reproductible (scripts + journaux dans le kit).*
