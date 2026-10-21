@@ -23,3 +23,13 @@ journaux.
 
 Note : les jetons et cookies **ne sont pas** archivés ici (ils sont expirés/révoqués) ; seuls les
 résultats et les mesures le sont.
+
+## Ajout 21/10/2026 — surface non authentifiée + analytics (P6 clos)
+
+| Fichier | Contenu |
+|---|---|
+| `unauth-probe.json` | 67 requêtes : 39 routes `/api/*` de l'app, introspection GraphQL (désactivée), 8 variantes de traversée sur `/ingest`, métadonnées MCP/AS, `POST /mcp` sans jeton |
+| `posthog-read.mjs` (dans `tools/klids-campaign/`) | 39 endpoints de l'API de lecture PostHog sous `/ingest` — tous 401/403 |
+| `ph2.mjs` (idem) | corps bruts de `/ingest/flags?v=2` et `/ingest/decide?v=3` (publics, `flags:{}`), + 24 routes admin PostHog |
+| `hdr.mjs` (idem) | en-têtes HTTP complets : `WWW-Authenticate` du serveur MCP, CSP, `/api/health`, métadonnées de ressource |
+| `catcher4.cjs` (idem) | gestionnaire de grant OAuth multi-ressources (le RT est stocké par ressource) |

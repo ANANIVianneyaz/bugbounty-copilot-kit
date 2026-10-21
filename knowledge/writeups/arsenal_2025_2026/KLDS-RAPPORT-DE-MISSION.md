@@ -286,6 +286,11 @@ Claims du `challengeToken` (JWT signé, 5 min) : `id`, `requires2fa:true`, `jti`
 | P1 | **Le correctif « password reset n'invalide pas les access tokens » tient-il ?** | — | **CLOS et VÉRIFIÉ** : après le reset, le jeton émis avant est rejeté (« Session ended ») en lecture **et** en écriture ; le claim `epoch` passe de `0` à `1` → le correctif est conforme |
 | P2 | Entropie des tokens **émailés** (reset, suppression du 2FA, invitation) | un lien de reset (le token de reset est déjà mesuré à 256 bits ; c'est lanalogie des autres canaux qui compte) | token court → **ATO par devinette** |
 | P3 | **IDOR inter-comptes** | un 2e compte de test | compte A dépose un rapport → compte B le lit → **IDOR** (High) |
+| P4 | **Quota d'inscription sur le chemin CIMD** (DCR vs CIMD) | — | **CLOS / communiqué au triage** : DCR 0/12 clients créés (12 × `429`), CIMD 12/12 clients créés (0 × quota) → relais non borné, en cours d'évaluation côté vendor |
+| P5 | **Binding approbation ↔ arguments réellement exécutés** | — | **CLOS et CONFORME** : rejeu avec contenu modifié → refus « *This clientRequestId was already used for a different request* » ; payload identique rejoué → idempotent |
+| P6 | **API de lecture de l'analytics (PostHog auto-hébergé derrière `/ingest`, même domaine que l'app)** | — | **CLOS : la lecture est protégée** (39 endpoints → 401/403 `not_authenticated` ; `/decide` et `/flags` publics mais vides ; aucune clé personnelle `phx_` dans le bundle ; ingestion publique par design) → pas de fuite de sessions/PII |
+| P7 | **Logique médiation/paiements** (`organizationStanding`, `payoutSummary`, `settlement`, `certificate(reference:)`) | un **compte d'organisation** | logique de prime faussée / paiement indûment déclenché (impact financier) |
+| P8 | **Audience du serveur MCP** : un jeton `aud=bugsecure-api.senintel.sn` (audience de l'app) est-il accepté par `https://bugsecure-mcp.senintel.sn/mcp` ? | un **jeton OAuth vivant** (le refresh token du catcher a été révoqué par le reset → nouvelle autorisation nécessaire) | confusion d'audience → un jeton d'application atteint la surface MCP (outils d'agents) |
 
 ---
 

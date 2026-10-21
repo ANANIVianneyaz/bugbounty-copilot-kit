@@ -1,0 +1,538 @@
+[
+ {
+  "url": "https://bugsecure.senintel.sn/api/auth/session/refresh",
+  "s": 404,
+  "ms": 855,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/auth/session",
+  "s": 404,
+  "ms": 220,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/auth/session/logout",
+  "s": 404,
+  "ms": 211,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/auth/csrf",
+  "s": 404,
+  "ms": 205,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/upload",
+  "s": 404,
+  "ms": 209,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/uploads",
+  "s": 404,
+  "ms": 393,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/upload-url",
+  "s": 404,
+  "ms": 375,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/webhook",
+  "s": 404,
+  "ms": 396,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/webhooks",
+  "s": 404,
+  "ms": 824,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/s3",
+  "s": 404,
+  "ms": 1349,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/avatar",
+  "s": 404,
+  "ms": 706,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/avatar/upload",
+  "s": 404,
+  "ms": 415,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/report",
+  "s": 404,
+  "ms": 189,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/reports",
+  "s": 404,
+  "ms": 306,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/profile",
+  "s": 404,
+  "ms": 188,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/me",
+  "s": 404,
+  "ms": 182,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/user",
+  "s": 404,
+  "ms": 188,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/users",
+  "s": 404,
+  "ms": 174,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/admin",
+  "s": 404,
+  "ms": 162,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/org",
+  "s": 404,
+  "ms": 200,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/organizations",
+  "s": 404,
+  "ms": 239,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/kudos",
+  "s": 404,
+  "ms": 229,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/graphql",
+  "s": 404,
+  "ms": 166,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/health",
+  "s": 200,
+  "ms": 170,
+  "ct": "application/json",
+  "loc": "",
+  "body": "{\"status\":\"ok\",\"service\":\"bug-bounty-frontend\",\"timestamp\":\"2026-10-21T08:59:43.530Z\",\"uptime\":155780.806884765,\"memory\":{\"used\":86,\"total\":95},\"environment\":\"production\"}"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/status",
+  "s": 404,
+  "ms": 201,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/version",
+  "s": 404,
+  "ms": 202,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/config",
+  "s": 404,
+  "ms": 178,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/env",
+  "s": 404,
+  "ms": 300,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/session",
+  "s": 404,
+  "ms": 180,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/auth/totp",
+  "s": 404,
+  "ms": 196,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/auth/2fa",
+  "s": 404,
+  "ms": 179,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/auth/mfa",
+  "s": 404,
+  "ms": 189,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/auth/logout",
+  "s": 404,
+  "ms": 193,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/invitations",
+  "s": 404,
+  "ms": 196,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/approve",
+  "s": 404,
+  "ms": 162,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/agent",
+  "s": 404,
+  "ms": 176,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/agents",
+  "s": 404,
+  "ms": 203,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/export",
+  "s": 404,
+  "ms": 176,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/import",
+  "s": 404,
+  "ms": 168,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/search",
+  "s": 404,
+  "ms": 200,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><html id=\"__next_error__\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" as=\"script\" fetchPriority=\"low\" href=\"/_next/static/chunks/we"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/notification",
+  "s": 404,
+  "ms": 175,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/notifications",
+  "s": 404,
+  "ms": 187,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/certificate",
+  "s": 404,
+  "ms": 170,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/payout",
+  "s": 404,
+  "ms": 197,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/api/auth/session/refresh",
+  "s": 404,
+  "ms": 168,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure-api.senintel.sn/graphql",
+  "s": 400,
+  "ms": 537,
+  "ct": "application/json",
+  "loc": "",
+  "body": "{\"errors\":[{\"message\":\"GraphQL introspection is not allowed by Apollo Server, but the query contained __schema or __type. To enable introspection, pass introspection: true to ApolloServer in production\",\"locations\":[{\"li"
+ },
+ {
+  "url": "https://bugsecure-api.senintel.sn/graphql",
+  "s": 400,
+  "ms": 576,
+  "ct": "application/json",
+  "loc": "",
+  "body": "{\"errors\":[{\"message\":\"GraphQL introspection is not allowed by Apollo Server, but the query contained __schema or __type. To enable introspection, pass introspection: true to ApolloServer in production\",\"locations\":[{\"li"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/ingest/../api/auth/session/refresh",
+  "s": 404,
+  "ms": 192,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/ingest/%2e%2e/api/auth/session/refresh",
+  "s": 404,
+  "ms": 187,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/ingest/..%2f..%2fapi/",
+  "s": 400,
+  "ms": 168,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<html>\r\n<head><title>400 Bad Request</title></head>\r\n<body>\r\n<center><h1>400 Bad Request</h1></center>\r\n</body>\r\n</html>\r\n"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/ingest//api/projects",
+  "s": 308,
+  "ms": 584,
+  "ct": "",
+  "loc": "/ingest/api/projects",
+  "body": "/ingest/api/projects"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/ingest/api/projects/../../../../api/",
+  "s": 404,
+  "ms": 423,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><html id=\"__next_error__\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" as=\"script\" fetchPriority=\"low\" href=\"/_next/static/chunks/we"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/ingest;/api/projects",
+  "s": 404,
+  "ms": 170,
+  "ct": "text/html",
+  "loc": "",
+  "body": "<!DOCTYPE html><!--H4F14j5I419_oUARluAoL--><html lang=\"fr\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/8e98"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/ingest/api/projects/../users",
+  "s": 401,
+  "ms": 246,
+  "ct": "application/json",
+  "loc": "",
+  "body": "{\"type\":\"authentication_error\",\"code\":\"not_authenticated\",\"detail\":\"Authentication credentials were not provided.\",\"attr\":null}"
+ },
+ {
+  "url": "https://bugsecure.senintel.sn/ingest/api/../api/users",
+  "s": 401,
+  "ms": 278,
+  "ct": "application/json",
+  "loc": "",
+  "body": "{\"type\":\"authentication_error\",\"code\":\"not_authenticated\",\"detail\":\"Authentication credentials were not provided.\",\"attr\":null}"
+ },
+ {
+  "url": "https://bugsecure-mcp.senintel.sn/mcp",
+  "s": 405,
+  "ms": 742,
+  "ct": "application/json",
+  "loc": "",
+  "body": "{\"error\":\"method_not_allowed\"}"
+ },
+ {
+  "url": "https://bugsecure-mcp.senintel.sn/",
+  "s": 404,
+  "ms": 163,
+  "ct": "application/json",
+  "loc": "",
+  "body": "{\"error\":\"not_found\"}"
+ },
+ {
+  "url": "https://bugsecure-mcp.senintel.sn/.well-known/oauth-protected-resource",
+  "s": 404,
+  "ms": 166,
+  "ct": "application/json",
+  "loc": "",
+  "body": "{\"error\":\"not_found\"}"
+ },
+ {
+  "url": "https://bugsecure-mcp.senintel.sn/.well-known/oauth-protected-resource/mcp",
+  "s": 200,
+  "ms": 218,
+  "ct": "application/json",
+  "loc": "",
+  "body": "{\"resource\":\"https://bugsecure-mcp.senintel.sn/mcp\",\"authorization_servers\":[\"https://bugsecure-api.senintel.sn\"],\"scopes_supported\":[\"programs:read\",\"profile:read\",\"reports:read\",\"reports:write\",\"triage:read\",\"triage:wr"
+ },
+ {
+  "url": "https://bugsecure-mcp.senintel.sn/.well-known/openid-configuration",
+  "s": 404,
+  "ms": 223,
+  "ct": "application/json",
+  "loc": "",
+  "body": "{\"error\":\"not_found\"}"
+ },
+ {
+  "url": "https://bugsecure-mcp.senintel.sn/health",
+  "s": 404,
+  "ms": 166,
+  "ct": "application/json",
+  "loc": "",
+  "body": "{\"error\":\"not_found\"}"
+ },
+ {
+  "url": "https://bugsecure-mcp.senintel.sn/sse",
+  "s": 404,
+  "ms": 209,
+  "ct": "application/json",
+  "loc": "",
+  "body": "{\"error\":\"not_found\"}"
+ },
+ {
+  "url": "https://bugsecure-mcp.senintel.sn/mcp",
+  "s": 401,
+  "ms": 273,
+  "ct": "application/json",
+  "loc": "",
+  "body": "{\"error\":\"unauthorized\"}"
+ },
+ {
+  "url": "https://bugsecure-api.senintel.sn/.well-known/oauth-authorization-server",
+  "s": 200,
+  "ms": 692,
+  "ct": "application/json",
+  "loc": "",
+  "body": "{\"issuer\":\"https://bugsecure-api.senintel.sn\",\"authorization_endpoint\":\"https://bugsecure-api.senintel.sn/oauth/authorize\",\"token_endpoint\":\"https://bugsecure-api.senintel.sn/oauth/token\",\"registration_endpoint\":\"https:/"
+ },
+ {
+  "url": "https://bugsecure-api.senintel.sn/.well-known/oauth-protected-resource",
+  "s": 200,
+  "ms": 160,
+  "ct": "application/json",
+  "loc": "",
+  "body": "{\"resource\":\"https://bugsecure-api.senintel.sn\",\"authorization_servers\":[\"https://bugsecure-api.senintel.sn\"],\"scopes_supported\":[\"programs:read\",\"profile:read\",\"reports:read\",\"reports:write\",\"triage:read\",\"triage:write\""
+ },
+ {
+  "url": "https://bugsecure-api.senintel.sn/oauth/register",
+  "s": 404,
+  "ms": 447,
+  "ct": "application/json",
+  "loc": "",
+  "body": "{\"statusCode\":404,\"message\":\"Cannot GET /oauth/register\",\"error\":\"Not Found\"}"
+ },
+ {
+  "url": "https://bugsecure-api.senintel.sn/oauth/authorize",
+  "s": 302,
+  "ms": 181,
+  "ct": "text/plain",
+  "loc": "https://bugsecure.senintel.sn/oauth/error?code=invalid_request",
+  "body": "Found. Redirecting to https://bugsecure.senintel.sn/oauth/error?code=invalid_request"
+ }
+]

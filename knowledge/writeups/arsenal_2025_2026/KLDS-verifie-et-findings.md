@@ -165,6 +165,74 @@ plafonné à 43 caractères (SHA-256 base64url, condensat non secret) · `userId
 public (déjà public via le leaderboard) · captcha login/reset = Turnstile + Private Access Token (lié au
 navigateur) · `bugsecure-files` = URLs signées CloudFront.
 
+## 2ter. Surface NON authentifiée + analytics (PostHog) — contrôles du 21/10
+
+Aucun jeton n'était disponible (le refresh token du catcher a été **révoqué par le reset de mot de
+passe** → comportement *correct* du correctif `epoch`) : ces contrôles ont donc été faits **entièrement
+sans authentification**, ce qui est le périmètre le plus sensible.
+
+### 2ter.a — API de lecture de l'analytics (PostHog auto-hébergé) → **PROTÉGÉE, non exploitable**
+
+Le proxy `/ingest` relaie **toute** l'API PostHog sur le **domaine de l'app** (`bugsecure.senintel.sn`).
+39 endpoints sondés (read API, admin, organizations, users, personal_api_keys, session_recordings,
+insights, query, activity, dashboards, batch_exports, event_definitions, tags, share routes) :
+
+| Endpoint sondé | Réponse | Lecture |
+|---|---|---|
+| `/ingest/api/projects/<phc…>/events` | **401** `authentication_error / not_authenticated` | protégé |
+| `/ingest/api/projects/<phc…>/insights` | **403** idem | protégé |
+| `/ingest/api/projects/<phc…>/query` (HogQL) | **403** idem | protégé |
+| `/ingest/api/projects/<phc…>/session_recordings` | **401** | protégé |
+| `/ingest/api/projects/<phc…>/activity`, `/persons`, `/surveys`, `/cohorts`, `/dashboards`, `/experiments`, `/feature_flags`, `/tags`, `/batch_exports`, `/event_definitions` | **401** | protégés |
+| `/ingest/api/users`, `/ingest/api/organizations`, `/ingest/api/personal_api_keys` | **401** | protégés |
+| `/ingest/api/login` | 405 (POST) | inchangé |
+| `/ingest/decide?v=3`, `/ingest/flags?v=2` | **200**, `flags:{}`, `sessionRecording:false`, `config.enable_collect_everything:true` | endpoint public **par design** (client-side), ne retourne **aucun** flag ni donnée |
+| `/ingest/batch`, `/ingest/capture`, `/ingest/i/v0/e/` | 400 « request missing data payload » | ingestion publique par design |
+
+**Clôture** : la piste « fuite des sessions / PII via l'API de lecture » est **fermée**. Le proxy ne
+laisse passer aucun endpoint de lecture sans authentification, et un faux `Authorization: Bearer phx_…`
+ne change rien (401/403 identiques). Le bundle web ne contient **aucune clé personnelle** (`grep phx_`
+sur le bundle → 0 occurrence) ; `api_host:"/ingest"` (same-origin) et `ui_host` par défaut
+(`https://eu.posthog.com`) → l'instance est **auto-hébergée**, les données ne quittent pas la plateforme.
+→ **Ce n'est donc pas une fuite « vers un tiers »** : la piste était mal cadrée, elle est close.
+
+### 2ter.b — Traversée de chemin sur le proxy `/ingest` → **négative**
+
+`/ingest/../api/…`, `/ingest/%2e%2e/api/…`, `/ingest/..%2f..%2fapi/` (400 Bad Request), `/ingest;/api/projects`,
+`/ingest//api/projects` (308 → `/ingest/api/projects`), `/ingest/api/projects/../users` (401 PostHog) :
+**aucune** échappement vers l'app ni vers l'admin PostHog. Le proxy normalise.
+
+### 2ter.c — Serveur MCP hébergé → **conforme à la spec MCP**
+
+| Contrôle | Résultat |
+|---|---|
+| `POST /mcp` sans jeton | **401** + `WWW-Authenticate: Bearer scope="programs:read profile:read reports:read reports:write triage:read triage:write grade:write profile:write disclosures:write", resource_metadata="https://bugsecure-mcp.senintel.sn/.well-known/oauth-protected-resource/mcp"` → **conforme** (MCP 2025-06-18 exige le `WWW-Authenticate` avec `resource_metadata`) |
+| `POST /mcp` avec jeton bidon | **401** `error="invalid_token", error_description="token failed validation"` + même `WWW-Authenticate` |
+| `/.well-known/oauth-protected-resource/mcp` | **200** `resource`, `authorization_servers:[https://bugsecure-api.senintel.sn]`, `scopes_supported`, `bearer_methods_supported` |
+| `/.well-known/oauth-protected-resource` (racine) | 404 (le chemin canonique avec le suffixe `/mcp` est correct) |
+| `GET /mcp` | 405 `method_not_allowed` |
+
+### 2ter.d — API GraphQL : introspection **désactivée**
+
+`{ __schema { … } }` sans jeton → 400 « *GraphQL introspection is not allowed by Apollo Server, but the
+query contained __schema or __type* ». Pas d'énumération du schéma à distance.
+
+### 2ter.e — Routes `/api/*` de l'app web (39 sondées) → **une seule existe**
+
+`/api/health` → **200** `{"status":"ok","service":"bug-bounty-frontend","timestamp":"…","uptime":155767.9,
+"memory":{"used":82,"total":92},"environment":"production"}` → **divulgation mineure** (uptime, taille du
+tas, environnement). Les 38 autres (`/api/auth/session/refresh` inclus, `/api/upload`, `/api/webhook`,
+`/api/graphql`, `/api/admin`, `/api/session`, …) → 404. `/metrics` → 404 sur l'app et sur l'API.
+
+### 2ter.f — Contrefaçon de jeton sur le serveur MCP : message discriminant
+
+Un jeton au format valide mais signature invalide → 401 `invalid_token` (« *token failed validation* »)
+alors qu'une absence de jeton → 401 `unauthorized` : les deux cas sont distinguables, mais **aucun** ne
+révèle d'information (ni l'existence d'une clé, ni l'audience attendue, ni un jeton valide).
+→ Le contrôle « audience du serveur MCP » (un jeton `aud=bugsecure-api.senintel.sn` accepté par
+`/mcp` ?) reste **à tester** : il exige un jeton OAuth vivant (P2/§3).
+
+
 ## 3. Restes à tester (il faut une action du chercheur)
 
 1. ~~Bypass MFA~~ → **CLOS**, voir §2bis (les 7 patterns).
