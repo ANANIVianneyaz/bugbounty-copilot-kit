@@ -468,19 +468,98 @@ serveur personnel du chercheur (aucune modification de l'infrastructure de produ
   compte pour reconstruire le `client_id` en `https`).
 
 
+## 2terquies. Techniques « inventives » (3ᵉ revue) et état de l'infrastructure de test
+
+### 2terquies.a — Directives GraphQL, alias, batching : **CLOS**
+
+| Test | Résultat | Lecture |
+|---|---|---|
+| `@include(if:true/false)`, `@skip(if:true/false)` sur une mutation privilégiée | erreur de validation **identique** dans tous les cas | la directive est évaluée **après** la validation de l'entrée → aucun contournement |
+| `@include(if:"true")` / `@include(if:1)` | « Boolean cannot represent a non boolean value » | type-checking correct |
+| `@defer` / `@stream` | « **Unknown directive** » | non supportés → pas de « deferred privilege escalation » |
+| 20 alias de la même mutation | « **Aliases limit of 15 exceeded** » | plafond d'alias imposé par le serveur |
+| mutation + query dans la même requête | « This anonymous operation must be the only defined operation » | mélange refusé |
+| requêtes mixtes public/privé dans un document | refus de parsing | pas de contournement par groupement |
+
+### 2terquies.b — Oracle doux par message / latence : **CLOS (aucun oracle)**
+
+12 échantillons par cas, même jeton, mêmes requêtes :
+
+| Cas | min | médiane | max |
+|---|---|---|---|
+| scope manquant (`getProgramStats`) | 167 ms | 174 ms | 182 ms |
+| objet absent (`getReport`) | 167 ms | 171 ms | 184 ms |
+| accès réel (`me`) | 170 ms | 180 ms | 5637 ms (outlier ponctuel) |
+| scope manquant (`updateReportStatus`) | 166 ms | 169 ms | 6252 ms (outlier ponctuel) |
+
+→ **aucune différence de latence** entre « scope manquant », « objet absent » et « accès réel » → pas
+d'oracle d'autorisation exploitable par timing. Les messages sont **discriminants** (le scope manquant
+est nommé) mais cela ne révèle que les droits du **porteur du jeton**, pas ceux d'un tiers.
+
+### 2terquies.c — Confusion de binding au `/oauth/authorize` : **CLOS, contrôles stricts**
+
+| Cas | Réponse | Lecture |
+|---|---|---|
+| témoin | 302 → `/oauth/consent?request=…` | nominal |
+| `state` de 300 caractères | 302 → consent | accepté |
+| `state` de 2000 caractères | **403** (HTML nginx) | filtre de longueur en amont |
+| `state` avec `<script>` et `&` | **403** (HTML nginx) | filtre de caractères en amont (WAF) |
+| `code_challenge` S256 incorrect | 302 → consent | le challenge n'est vérifié qu'au `/oauth/token` ✓ (conforme) |
+| `code_challenge_method=plain` / absent / `code_challenge` absent | 302 → `error=invalid_request` vers le `redirect_uri` | **S256 obligatoire** ✓ |
+| `redirect_uri` + fragment / slash final / majuscules | 302 → `error=invalid_redirect_uri` | correspondance exacte ✓ |
+| `scope` dupliqué | 302 → consent | sans effet |
+| `scope` inconnu (`admin:all`) | 302 → `error=invalid_scope` | scope inconnu refusé ✓ |
+| `resource` dupliqué | 302 → `error=invalid_target` | ✓ |
+| `resource` = serveur MCP | 302 → consent | côté AS tout est correct (l'échec est **après**, côté app) |
+| `client_id` avec espace final / en majuscules | 302 → `error=invalid_client` | correspondance exacte ✓ |
+| `response_type=token` / absent | 302 → `error=unsupported_response_type` | ✓ |
+| `redirect_uri` sur un **autre port** (53683) | 302 → consent | le `redirect_uri` n'est **pas** vérifié contre l'enregistrement à l'étape authorize (il l'est au `/oauth/token`, où la campagne a mesuré le refus) → **sans impact démontré** |
+
+### 2terquies.d — Dérive du schéma : le client MCP publié est en retard sur l'API
+
+Le schéma `bugsecure-mcp/schema/bugsecure.graphql` (généré par `scripts/prune-schema.ts` depuis le
+schéma complet de l'API) déclare `enum ReportStatus { CLOSED, DUPLICATE, FIXED, INFORMATIVE, IN_FIX,
+IN_TRIAGE, NEEDS_MORE_INFO, NEW }`. Or **l'API refuse les 8 valeurs**, y compris `NEW` et
+`IN_TRIAGE` : « *Enum "ReportStatus" cannot represent non-enum value: "NEW"* ». 18 autres noms
+plausibles (`OPEN`, `TRIAGE`, `CLOSED`, `IN_REVIEW`, `IN_PROGRESS`, `RESOLVED`, `PENDING`,
+`NEEDS_MORE_INFO`, …) sont refusés eux aussi, et l'API ne donne **aucune liste** des valeurs
+possibles (ni dans le message d'erreur, ni via l'introspection qui est désactivée).
+
+→ le **schéma embarqué dans le paquet npm `@kulinda-sec/bugsecure-mcp` est périmé** : toute opération
+dédiée au statut d'un rapport (et le JSON Schema des outils MCP généré à partir de ce schéma) expose
+des valeurs que l'API refuse. Ce n'est pas une vulnérabilité de la plateforme cible, mais un **défaut
+de notre propre paquet publié** → à corriger (régénérer le schéma depuis l'API et le republier).
+
+### 2terquies.e — Infrastructure de test : le pare-feu du VPS bloque tout le trafic entrant
+
+Le sous-domaine de test `bb-test.enseignementsecondaire.bj` pointe bien vers le serveur
+(`45.88.189.67`, DNS « only »), mais **tous les ports entrants sont filtrés par le pare-feu du
+fournisseur** (80, 443, 8099, 8443 : joignables en local, **injoignables de l'extérieur**) → le
+challenge ACME de Let's Encrypt échoue avec « *Timeout during connect (likely firewall problem)* », et
+aucun nom public ne peut servir le document CIMD depuis ce serveur. Caddy (conteneur, `network_mode:
+host`, challenge **TLS-ALPN** sur 443, `auto_https disable_redirects` pour ne pas voler le port 80 à
+nginx) est prêt et redémarre proprement : **il suffit d'ouvrir le port 443** dans le panneau du
+fournisseur.
+
+
 ### Reste bloqué (besoin du chercheur)
 
 1. ~~Un échantillon du token de suppression du 2FA~~ → **OBTENU et analysé** (§2sexies.a) : hex 64,
    256 bits → **piste P2 close**.
 2. ~~La fin du sweep des 198 opérations~~ → **FAITE** (§2sexies.b) : 197/198.
-3. **Une autorisation OAuth neuve** (les refresh tokens ont été révoqués : par le changement de mot de
-   passe du compte de test, puis par mes propres tests de rotation) → il faut un **jeton `aud=MCP`
-   vivant** pour l'enforcement des scopes par outil (le serveur MCP annonce 77 Ko d'outils, dont des
-   outils de triage qui doivent exiger `triage:*`).
-4. **Le sous-domaine en « DNS only »** (nuage gris) dans Cloudflare → nécessaire pour (a) le challenge
-   ACME en TLS-ALPN (le proxy Cloudflare ne relaie pas ce challenge) et (b) le test multi-A-record : le
-   DNS public doit exposer mes enregistrements A, pas les IP de Cloudflare. Un **2ᵉ enregistrement A**
-   pointant sur `127.0.0.1` sera ensuite demandé pour le test multi-A.
+3. **Une autorisation OAuth « ressource MCP »** (le refresh token MCP a expiré) → pour l'enforcement des
+   scopes **par outil** (le serveur annonce 77 Ko d'outils) et les payloads de confusion de type.
+4. **Un jeton de session du compte organisation non vérifié** → pour comparer le soft-fail
+   (`organizationStanding` → objet par défaut) entre contexte personnel et contexte organisation
+   (script prêt : `org-sweep.mjs`, 22 resolvers `orgId`/`organizationId`).
+5. ~~Le sous-domaine en « DNS only »~~ → **FAIT** (`bb-test.enseignementsecondaire.bj` → `45.88.189.67`),
+   mais le **pare-feu du VPS bloque tous les ports entrants** → il faut **ouvrir le port 443** dans le
+   panneau du fournisseur. Ensuite : test multi-A-record (2ᵉ enregistrement A vers `127.0.0.1`), race de
+   swap du document CIMD, et test de rendu de l'écran de consentement.
+6. **Un changement de mot de passe supplémentaire** → pour tester l'**invalidation partielle** : un
+   access token OAuth émis *avant* le changement survit-il ? (le jeton OAuth ne porte **pas** le claim
+   `epoch` : claims `aud, client_id, exp, grant_id, iat, iss, jti, scope, sub` → la question est donc
+   ouverte, alors que le refresh token, lui, a bien été révoqué par le changement de mot de passe).
 
 
 ## 3. Restes à tester (il faut une action du chercheur)
