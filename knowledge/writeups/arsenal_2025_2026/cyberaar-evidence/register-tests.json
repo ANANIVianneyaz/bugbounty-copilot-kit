@@ -1,0 +1,58 @@
+[
+ {
+  "path": "/api/aarme/account/register",
+  "body": "{\"error\":\"forbidden\"}\n",
+  "s": 403,
+  "ms": 1038,
+  "setCookie": []
+ },
+ {
+  "path": "/api/aarme/account/register",
+  "body": "{\"error\":\"forbidden\"}\n",
+  "s": 403,
+  "ms": 892,
+  "setCookie": []
+ },
+ {
+  "path": "/api/aarme/account/register",
+  "body": "{\"error\":\"forbidden\"}\n",
+  "s": 403,
+  "ms": 478,
+  "setCookie": []
+ },
+ {
+  "path": "/api/aarme/account/register",
+  "body": "{\"error\":\"forbidden\"}\n",
+  "s": 403,
+  "ms": 360,
+  "setCookie": []
+ },
+ {
+  "path": "/api/aarme/account/register",
+  "body": "{\"error\":\"forbidden\"}\n",
+  "s": 403,
+  "ms": 317,
+  "setCookie": []
+ },
+ {
+  "path": "/api/aarme/account/register",
+  "body": "{\"error\":\"forbidden\"}\n",
+  "s": 403,
+  "ms": 347,
+  "setCookie": []
+ },
+ {
+  "path": "/api/aarme/account/register",
+  "body": "{\"error\":\"forbidden\"}\n",
+  "s": 403,
+  "ms": 306,
+  "setCookie": []
+ },
+ {
+  "path": "/api/aarme/account/register",
+  "body": "{\"error\":\"forbidden\"}\n",
+  "s": 403,
+  "ms": 317,
+  "setCookie": []
+ }
+]

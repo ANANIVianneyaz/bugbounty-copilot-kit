@@ -1,0 +1,98 @@
+{
+ "pageInfo": [
+  {
+   "p": "https://aarme.cyberaar.io/compte/",
+   "s": 0,
+   "len": 0,
+   "chunks": 0,
+   "scripts": 0
+  },
+  {
+   "p": "https://aarme.cyberaar.io/soumettre/",
+   "s": 0,
+   "len": 0,
+   "chunks": 0,
+   "scripts": 0
+  },
+  {
+   "p": "https://aarme.cyberaar.io/suivi-rapport/",
+   "s": 0,
+   "len": 0,
+   "chunks": 0,
+   "scripts": 0
+  },
+  {
+   "p": "https://aarme.cyberaar.io/programmes/cyberaar/",
+   "s": 0,
+   "len": 0,
+   "chunks": 0,
+   "scripts": 0
+  },
+  {
+   "p": "https://aarme.cyberaar.io/organisations/",
+   "s": 0,
+   "len": 0,
+   "chunks": 0,
+   "scripts": 0
+  },
+  {
+   "p": "https://aarme.cyberaar.io/palmares/",
+   "s": 200,
+   "len": 17088,
+   "chunks": 0,
+   "scripts": 6,
+   "title": "Palmarès AarMe - CyberAar"
+  },
+  {
+   "p": "https://aarme.cyberaar.io/en/account/",
+   "s": 200,
+   "len": 12851,
+   "chunks": 0,
+   "scripts": 7,
+   "title": "My account - AarMe CyberAar"
+  },
+  {
+   "p": "https://aarme.cyberaar.io/en/h/",
+   "s": 200,
+   "len": 12367,
+   "chunks": 0,
+   "scripts": 7,
+   "title": "Hacker profile - AarMe CyberAar"
+  },
+  {
+   "p": "https://aarme.cyberaar.io/en/hall-of-fame/",
+   "s": 200,
+   "len": 17067,
+   "chunks": 0,
+   "scripts": 6,
+   "title": "Leaderboard and Hall of Fame - AarMe by CyberAar"
+  },
+  {
+   "p": "https://aarme.cyberaar.io/en/organisations/",
+   "s": 200,
+   "len": 18372,
+   "chunks": 0,
+   "scripts": 5,
+   "title": "Propose a programme - AarMe"
+  },
+  {
+   "p": "https://aarme.cyberaar.io/en/programmes/",
+   "s": 200,
+   "len": 18627,
+   "chunks": 0,
+   "scripts": 5,
+   "title": "Bug bounty programs - AarMe by CyberAar"
+  },
+  {
+   "p": "https://cyberaar.io/",
+   "s": 200,
+   "len": 42889,
+   "chunks": 0,
+   "scripts": 3,
+   "title": "CyberAar : Conseil et services en cybersécurité"
+  }
+ ],
+ "apiPaths": [],
+ "auth": [],
+ "hosts": []
+}
