@@ -632,6 +632,60 @@ d'une organisation non vérifiée » reste non testable : le compte de test n'es
 organisation (l'organisation du programme est gérée par le vendor).
 
 
+## 2terquies.j — Derniers angles des revues croisés (Kimi §3-§4, Grok) : **tous clos**
+
+### 2terquies.j.a — Confusion de type / smuggling sur `tools/call` (20 payloads) → **CLOS**
+
+| Payload | Réponse du serveur MCP |
+|---|---|
+| `arguments` en chaîne JSON / en tableau / `null` | `-32602 invalid_type` (schéma strict, rapport d'erreur détaillé) |
+| `params` sans `arguments` | « Input validation error … expected string » |
+| nom d'outil avec **octet nul** / **confusable Unicode** (сyrillique) / majuscules | « Tool … not found » (aucune résolution de confusable) |
+| **double paramètre `name`** | le **dernier** l'emporte (parsing JSON standard) → aucun gain, les deux noms restent同等ement scopés |
+| nom d'outil `__proto__` | « **Tool __proto__ disabled** » → la pollution de prototype est explicitement bloquée |
+| champs non déclarés (`__proto__`, `constructor.prototype`) | **ignorés** (requête exécutée normalement) |
+| mutation GraphQL en cascade dans un argument | traitée comme une chaîne ; l'outil refusé pour scope |
+| `tools/call` imbriqué (JSON-RPC dans un argument) | idem |
+| `resources/read`, `completion/complete`, `prompts/get`, `logging/setLevel` | « Method not found » (seuls `initialize` et `tools/*` sont implémentés) |
+| `add_report_comment` avec `clientRequestId: null` | « Nothing was sent yet. This change needs the user's approval on BugSecure » → circuit d'approbation intact |
+
+### 2terquies.j.b — Confusion client DCR ↔ client dynamique (CIMD) → **CLOS**
+
+`POST /oauth/register` → 201 (`client_id: dcr_Ty2A6_…`) ; `authorize` avec ce `client_id` → page de
+consentement ; **le même `client_id` avec le `redirect_uri` d'un autre client** → `invalid_redirect_uri`.
+→ les deux registres ne se mélangent pas, et la correspondance du `redirect_uri` reste exacte.
+
+### 2terquies.j.c — Course de swap du document CIMD → **l'AS MET EN CACHE** (le TOCTOU côté AS est impossible)
+
+Le serveur de preuve sert un document qui **alterne à chaque requête** entre deux versions : version A
+(nom neutre) et version B (nom contenant la marque + un `logo_uri`). Journal des requêtes reçues :
+
+```
+12:24:30  GET /doc/swap.json   ip=52.214.90.218  ua=BugSecure-OAuth/1 (+client-id-metadata-document)   <- 1 seul fetch de l'AS
+12:25:18  GET /doc/swap.json   ip=41.138.89.158  ua=curl/8.5.0     (mes 6 appels suivants)
+… puis 6 × /oauth/authorize -> 302 /oauth/consent      (AUCUN nouveau fetch de l'AS)
+```
+
+→ **le serveur d'autorisation récupère le document CIMD une seule fois par `client_id` et le met en
+cache** : six requêtes d'autorisation consécutives n'ont déclenché **qu'un seul** fetch. La fenêtre
+TOCTOU côté AS est donc **fermée** (il valide toujours la version qu'il a récupérée). Reste à vérifier
+que l'**application**, qui peut récupérer le document séparément pour l'affichage, ne montre pas une
+version que l'AS n'a jamais validée → 4 liens de test fournis (nom neutre / logo / `javascript:` /
+`data:text/html` + HTML dans le nom).
+
+### 2terquies.j.d — Paquet npm `@kulinda-sec/bugsecure-mcp` vs dépôt → **pas de secret, pas de dérive** (sauf le schéma)
+
+| Contrôle | Résultat |
+|---|---|
+| Version publiée | `0.3.1` (19/10/2026) — versions `0.0.0-bootstrap.0` → `0.3.1` |
+| Secrets figés dans `dist/` | **aucun** (les 278 lignes « suspectes » sont des identifiants de code : `ACCESS_TOKEN_TYP`, `InvalidTokenError`…) |
+| Endpoints de staging / config permissive | **aucun** (URLs : prod + `example.com` en exemple + documentation) |
+| Dépendances | **identiques** au dépôt et **épinglées** : `@modelcontextprotocol/server@2.3.1`, `@napi-rs/keyring@2.1.1`, `jose@6.2.12`, `zod@4.6.6` |
+| Diff du code publié | 4 fichiers identiques, 1 divergent (`package.json` : build vs source) |
+| Constat secondary | les **source maps sont publiés** (`dist/**/*.js.map`) → le TypeScript est reconstructible depuis le paquet (hygiène, pas de secret) |
+| Constat secondaire | le paquet embarque `dist/auth/hosted/jwt.js` (vérificateur de jetons `at+jwt`, `MAX_TOKEN_AGE = 15m`, contrôle « token audience is not exclusively this server ») → le code du serveur MCP hébergé est publié dans le paquet client |
+
+
 ### Reste bloqué (besoin du chercheur)
 
 1. ~~Un échantillon du token de suppression du 2FA~~ → **OBTENU et analysé** (§2sexies.a) : hex 64,

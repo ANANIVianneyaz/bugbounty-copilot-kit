@@ -1,0 +1,2088 @@
+{
+ "findings": [
+  {
+   "f": "CHANGELOG.md",
+   "i": 62,
+   "l": "scopes and `reports:write` by default, other write scopes opt-in), `logout` (RFC 7009 revocation), `whoami`; tokens in the OS keychain"
+  },
+  {
+   "f": "CHANGELOG.md",
+   "i": 63,
+   "l": "with a 0600-file fallback, refused when stored for a different API; refresh-token"
+  },
+  {
+   "f": "CHANGELOG.md",
+   "i": 68,
+   "l": "validation (RFC 9068, maximum token age) against the authorization server's JWKS,"
+  },
+  {
+   "f": "CHANGELOG.md",
+   "i": 69,
+   "l": "RFC 8693 token exchange (no token passthrough), Host/Origin allowlists checked"
+  },
+  {
+   "f": "CHANGELOG.md",
+   "i": 115,
+   "l": "token reaches both sides, researcher tools act only on the user's own reports"
+  },
+  {
+   "f": "CHANGELOG.md",
+   "i": 141,
+   "l": "a 1 MiB body limit matching the largest approvable write; token exchange"
+  },
+  {
+   "f": "CHANGELOG.md",
+   "i": 143,
+   "l": "`invalid_scope` as a dead token. Local mode treats `invalid_scope` on refresh"
+  },
+  {
+   "f": "README.md",
+   "i": 17,
+   "l": "- OAuth 2.1 end to end: PKCE, audience-bound tokens, least-privilege scopes, no"
+  },
+  {
+   "f": "README.md",
+   "i": 18,
+   "l": "token passthrough."
+  },
+  {
+   "f": "README.md",
+   "i": 40,
+   "l": "| Tokens stored | OS keychain on your machine                          | By your MCP client                                                                     "
+  },
+  {
+   "f": "README.md",
+   "i": 234,
+   "l": "BugSecure staff accounts (staff use BugSecure's own admin tools). Where a token holds both"
+  },
+  {
+   "f": "README.md",
+   "i": 278,
+   "l": "(password or two-factor code). Nothing you read comes from the assistant"
+  },
+  {
+   "f": "README.md",
+   "i": 290,
+   "l": "to a first-party session: no OAuth token, and so no assistant, can approve. The"
+  },
+  {
+   "f": "README.md",
+   "i": 384,
+   "l": "bound to `127.0.0.1` only, with the `Host` header checked. Tokens are"
+  },
+  {
+   "f": "README.md",
+   "i": 387,
+   "l": "exists, a `0600` file with a warning). Refresh tokens rotate on every use;"
+  },
+  {
+   "f": "README.md",
+   "i": 389,
+   "l": "file (owner token, heartbeat), so a reused refresh token — which revokes"
+  },
+  {
+   "f": "README.md",
+   "i": 390,
+   "l": "the whole grant — cannot happen by accident. An access token the API"
+  },
+  {
+   "f": "README.md",
+   "i": 406,
+   "l": "metadata, answers `401` with `WWW-Authenticate: Bearer resource_metadata=\"…\"`,"
+  },
+  {
+   "f": "README.md",
+   "i": 409,
+   "l": "maximum age). It never forwards your token: it exchanges it (RFC 8693) for a"
+  },
+  {
+   "f": "README.md",
+   "i": 410,
+   "l": "short-lived API token with the same or fewer scopes; one the API rejects is"
+  },
+  {
+   "f": "README.md",
+   "i": 411,
+   "l": "re-exchanged once, and a token the authorization server refuses to"
+  },
+  {
+   "f": "README.md",
+   "i": 412,
+   "l": "exchange is answered with `401 invalid_token` so your client refreshes it."
+  },
+  {
+   "f": "README.md",
+   "i": 440,
+   "l": "- **Quiet by design.** Logs go to stderr as JSON and never contain tokens,"
+  },
+  {
+   "f": "README.md",
+   "i": 441,
+   "l": "authorization codes, secrets, report contents or error messages (only error"
+  },
+  {
+   "f": "README.md",
+   "i": 488,
+   "l": "-e BUGSECURE_CLIENT_SECRET_FILE=/run/secrets/client_secret \\"
+  },
+  {
+   "f": "README.md",
+   "i": 489,
+   "l": "-e BUGSECURE_MCP_APPROVAL_KEY_FILE=/run/secrets/approval_key \\"
+  },
+  {
+   "f": "README.md",
+   "i": 490,
+   "l": "-v \"$PWD/client_secret:/run/secrets/client_secret:ro\" \\"
+  },
+  {
+   "f": "README.md",
+   "i": 491,
+   "l": "-v \"$PWD/approval_key:/run/secrets/approval_key:ro\" \\"
+  },
+  {
+   "f": "README.md",
+   "i": 514,
+   "l": "request with a bearer token has its JWT signature verified, and the JWKS"
+  },
+  {
+   "f": "README.md",
+   "i": 516,
+   "l": "fetched, not how many tokens are checked. Tool calls are rate limited per user"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.d.ts",
+   "i": 20,
+   "l": "export declare const ACCESS_TOKEN_TYP = \"at+jwt\";"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.d.ts",
+   "i": 22,
+   "l": "export declare const MAX_TOKEN_AGE = \"15m\";"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.d.ts",
+   "i": 23,
+   "l": "export interface VerifiedAccessToken {"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.d.ts",
+   "i": 24,
+   "l": "readonly token: string;"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.d.ts",
+   "i": 33,
+   "l": "export declare class InvalidTokenError extends Error {"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.d.ts",
+   "i": 34,
+   "l": "readonly name = \"InvalidTokenError\";"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.d.ts",
+   "i": 36,
+   "l": "export interface AccessTokenVerifierOptions {"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.d.ts",
+   "i": 43,
+   "l": "export type AccessTokenVerifier = (token: string) => Promise<VerifiedAccessToken>;"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.d.ts",
+   "i": 46,
+   "l": "export declare const createAccessTokenVerifier: (options: AccessTokenVerifierOptions) => AccessTokenVerifier;"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.js",
+   "i": 22,
+   "l": "export const ACCESS_TOKEN_TYP = 'at+jwt';"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.js",
+   "i": 25,
+   "l": "export const MAX_TOKEN_AGE = '15m';"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.js",
+   "i": 37,
+   "l": "export class InvalidTokenError extends Error {"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.js",
+   "i": 38,
+   "l": "name = 'InvalidTokenError';"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.js",
+   "i": 49,
+   "l": "export const createAccessTokenVerifier = (options) => {"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.js",
+   "i": 50,
+   "l": "return async (token) => {"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.js",
+   "i": 53,
+   "l": "({ payload } = await jwtVerify(token, options.keys, {"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.js",
+   "i": 56,
+   "l": "typ: ACCESS_TOKEN_TYP,"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.js",
+   "i": 59,
+   "l": "maxTokenAge: MAX_TOKEN_AGE,"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.js",
+   "i": 66,
+   "l": "throw new InvalidTokenError(error.code === 'ERR_JWT_EXPIRED' ? 'token expired' : 'token failed validation', {"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.js",
+   "i": 74,
+   "l": "throw new InvalidTokenError('token claims are malformed');"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.js",
+   "i": 79,
+   "l": "throw new InvalidTokenError('token audience is not exclusively this server');"
+  },
+  {
+   "f": "dist/auth/hosted/jwt.js",
+   "i": 82,
+   "l": "token,"
+  },
+  {
+   "f": "dist/auth/hosted/resource-metadata.d.ts",
+   "i": 12,
+   "l": "readonly bearer_methods_supported: readonly string[];"
+  },
+  {
+   "f": "dist/auth/hosted/resource-metadata.d.ts",
+   "i": 31,
+   "l": "readonly error?: 'invalid_request' | 'invalid_token' | 'insufficient_scope';"
+  },
+  {
+   "f": "dist/auth/hosted/resource-metadata.js",
+   "i": 16,
+   "l": "bearer_methods_supported: ['header'],"
+  },
+  {
+   "f": "dist/auth/hosted/resource-metadata.js",
+   "i": 44,
+   "l": "return `Bearer ${params.join(', ')}`;"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.d.ts",
+   "i": 1,
+   "l": "import type { AccessTokenProvider } from '../../graphql/client.js';"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.d.ts",
+   "i": 5,
+   "l": "import type { VerifiedAccessToken } from './jwt.js';"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.d.ts",
+   "i": 6,
+   "l": "export declare const TOKEN_EXCHANGE_GRANT = \"urn:ietf:params:oauth:grant-type:token-exchange\";"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.d.ts",
+   "i": 7,
+   "l": "export declare const ACCESS_TOKEN_TYPE = \"urn:ietf:params:oauth:token-type:access_token\";"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.d.ts",
+   "i": 10,
+   "l": "export interface TokenExchangerOptions {"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.d.ts",
+   "i": 11,
+   "l": "readonly tokenEndpoint: string;"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.d.ts",
+   "i": 13,
+   "l": "readonly clientSecret: string;"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.d.ts",
+   "i": 22,
+   "l": "export interface ExchangedToken {"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.d.ts",
+   "i": 23,
+   "l": "readonly accessToken: string;"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.d.ts",
+   "i": 27,
+   "l": "export declare class TokenExchanger {"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.d.ts",
+   "i": 29,
+   "l": "constructor(options: TokenExchangerOptions);"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.d.ts",
+   "i": 31,
+   "l": "exchange(subject: VerifiedAccessToken, signal?: AbortSignal): Promise<string>;"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.d.ts",
+   "i": 36,
+   "l": "grantedScopes(subject: VerifiedAccessToken, signal?: AbortSignal): Promise<ReadonlySet<Scope>>;"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.d.ts",
+   "i": 38,
+   "l": "exchanged(subject: VerifiedAccessToken, signal?: AbortSignal): Promise<ExchangedToken>;"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.d.ts",
+   "i": 40,
+   "l": "invalidate(subject: VerifiedAccessToken): void;"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.d.ts",
+   "i": 42,
+   "l": "isRefused(subject: VerifiedAccessToken): boolean;"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.d.ts",
+   "i": 45,
+   "l": "export declare const exchangedTokenProvider: (exchanger: TokenExchanger, subject: VerifiedAccessToken) => AccessTokenProvider;"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 35,
+   "l": "import { OAuthRequestError, requestToken } from '../oauth.js';"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 37,
+   "l": "export const TOKEN_EXCHANGE_GRANT = 'urn:ietf:params:oauth:grant-type:token-exchange';"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 38,
+   "l": "export const ACCESS_TOKEN_TYPE = 'urn:ietf:params:oauth:token-type:access_token';"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 67,
+   "l": "export class TokenExchanger {"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 81,
+   "l": "return (await this.exchanged(subject, signal)).accessToken;"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 122,
+   "l": "logger.info('token exchange skipped: no known scope on the inbound token');"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 127,
+   "l": "response = await requestToken(this.#options.tokenEndpoint, {"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 128,
+   "l": "grant_type: TOKEN_EXCHANGE_GRANT,"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 129,
+   "l": "subject_token: subject.token,"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 130,
+   "l": "subject_token_type: ACCESS_TOKEN_TYPE,"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 131,
+   "l": "requested_token_type: ACCESS_TOKEN_TYPE,"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 135,
+   "l": "clientSecretBasic: { clientId: this.#options.clientId, clientSecret: this.#options.clientSecret },"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 142,
+   "l": "error.error === 'invalid_token' ||"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 144,
+   "l": "logger.info('token exchange refused', { error: error.error });"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 149,
+   "l": "logger.error('token exchange failed', {"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 156,
+   "l": "if (response.issued_token_type !== undefined && response.issued_token_type !== ACCESS_TOKEN_TYPE) {"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 157,
+   "l": "throw new BugSecureError('UPSTREAM_ERROR', 'The authorization server issued an unexpected token type.');"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 166,
+   "l": "logger.error('token exchange returned scopes that were not requested');"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 172,
+   "l": "logger.warn('token exchange narrowed the scopes: the hosted client is not allowed them', {"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 177,
+   "l": "const exchanged = { accessToken: response.access_token, scopes };"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 185,
+   "l": "export const exchangedTokenProvider = (exchanger, subject) => {"
+  },
+  {
+   "f": "dist/auth/hosted/token-exchange.js",
+   "i": 187,
+   "l": "getAccessToken: (signal) => exchanger.exchange(subject, signal),"
+  },
+  {
+   "f": "dist/auth/oauth.d.ts",
+   "i": 18,
+   "l": "token_endpoint: z.ZodURL;"
+  },
+  {
+   "f": "dist/auth/oauth.d.ts",
+   "i": 47,
+   "l": "export declare const TokenResponseSchema: z.ZodObject<{"
+  },
+  {
+   "f": "dist/auth/oauth.d.ts",
+   "i": 48,
+   "l": "access_token: z.ZodString;"
+  },
+  {
+   "f": "dist/auth/oauth.d.ts",
+   "i": 49,
+   "l": "token_type: z.ZodString;"
+  },
+  {
+   "f": "dist/auth/oauth.d.ts",
+   "i": 51,
+   "l": "refresh_token: z.ZodOptional<z.ZodString>;"
+  },
+  {
+   "f": "dist/auth/oauth.d.ts",
+   "i": 53,
+   "l": "issued_token_type: z.ZodOptional<z.ZodString>;"
+  },
+  {
+   "f": "dist/auth/oauth.d.ts",
+   "i": 55,
+   "l": "export type TokenResponse = z.infer<typeof TokenResponseSchema>;"
+  },
+  {
+   "f": "dist/auth/oauth.d.ts",
+   "i": 57,
+   "l": "export declare const basicAuthorization: (clientId: string, clientSecret: string) => string;"
+  },
+  {
+   "f": "dist/auth/oauth.d.ts",
+   "i": 63,
+   "l": "readonly clientSecretBasic?: {"
+  },
+  {
+   "f": "dist/auth/oauth.d.ts",
+   "i": 65,
+   "l": "readonly clientSecret: string;"
+  },
+  {
+   "f": "dist/auth/oauth.d.ts",
+   "i": 69,
+   "l": "export declare const requestToken: (tokenEndpoint: string, params: Record<string, string>, options?: FormPostOptions) => Promise<TokenResponse>;"
+  },
+  {
+   "f": "dist/auth/oauth.d.ts",
+   "i": 71,
+   "l": "export declare const revokeToken: (revocationEndpoint: string, params: {"
+  },
+  {
+   "f": "dist/auth/oauth.d.ts",
+   "i": 72,
+   "l": "token: string;"
+  },
+  {
+   "f": "dist/auth/oauth.d.ts",
+   "i": 73,
+   "l": "token_type_hint: \"refresh_token\" | \"access_token\";"
+  },
+  {
+   "f": "dist/auth/oauth.js",
+   "i": 29,
+   "l": "token_endpoint: endpointUrl('token_endpoint'),"
+  },
+  {
+   "f": "dist/auth/oauth.js",
+   "i": 115,
+   "l": "export const TokenResponseSchema = z.looseObject({"
+  },
+  {
+   "f": "dist/auth/oauth.js",
+   "i": 116,
+   "l": "access_token: z.string().min(1),"
+  },
+  {
+   "f": "dist/auth/oauth.js",
+   "i": 117,
+   "l": "token_type: z.string(),"
+  },
+  {
+   "f": "dist/auth/oauth.js",
+   "i": 119,
+   "l": "refresh_token: z.string().min(1).optional(),"
+  },
+  {
+   "f": "dist/auth/oauth.js",
+   "i": 121,
+   "l": "issued_token_type: z.string().optional(),"
+  },
+  {
+   "f": "dist/auth/oauth.js",
+   "i": 128,
+   "l": "export const basicAuthorization = (clientId, clientSecret) => {"
+  },
+  {
+   "f": "dist/auth/oauth.js",
+   "i": 130,
+   "l": "return `Basic ${Buffer.from(`${enc(clientId)}:${enc(clientSecret)}`, 'utf8').toString('base64')}`;"
+  },
+  {
+   "f": "dist/auth/oauth.js",
+   "i": 139,
+   "l": "if (options.clientSecretBasic) {"
+  },
+  {
+   "f": "dist/auth/oauth.js",
+   "i": 140,
+   "l": "headers.authorization = basicAuthorization(options.clientSecretBasic.clientId, options.clientSecretBasic.clientSecret);"
+  },
+  {
+   "f": "dist/auth/oauth.js",
+   "i": 177,
+   "l": "export const requestToken = async (tokenEndpoint, params, options = {}) => {"
+  },
+  {
+   "f": "dist/auth/oauth.js",
+   "i": 178,
+   "l": "const response = await postForm(tokenEndpoint, params, options);"
+  },
+  {
+   "f": "dist/auth/oauth.js",
+   "i": 187,
+   "l": "throw new OAuthRequestError('invalid_response', 'Token endpoint returned a non-JSON response.', response.status);"
+  },
+  {
+   "f": "dist/auth/oauth.js",
+   "i": 189,
+   "l": "const parsed = TokenResponseSchema.safeParse(json);"
+  },
+  {
+   "f": "dist/auth/oauth.js",
+   "i": 191,
+   "l": "throw new OAuthRequestError('invalid_response', 'Token endpoint returned an invalid token response.', response.status);"
+  },
+  {
+   "f": "dist/auth/oauth.js",
+   "i": 193,
+   "l": "if (parsed.data.token_type.toLowerCase() !== 'bearer') {"
+  },
+  {
+   "f": "dist/auth/oauth.js",
+   "i": 194,
+   "l": "throw new OAuthRequestError('invalid_response', `Unsupported token_type ${JSON.stringify(parsed.data.token_type)}.`);"
+  },
+  {
+   "f": "dist/auth/oauth.js",
+   "i": 199,
+   "l": "export const revokeToken = async (revocationEndpoint, params, options = {}) => {"
+  },
+  {
+   "f": "dist/auth/stdio/credential-store.d.ts",
+   "i": 8,
+   "l": "tokenEndpoint: z.ZodString;"
+  },
+  {
+   "f": "dist/auth/stdio/credential-store.d.ts",
+   "i": 10,
+   "l": "accessToken: z.ZodString;"
+  },
+  {
+   "f": "dist/auth/stdio/credential-store.d.ts",
+   "i": 11,
+   "l": "accessTokenExpiresAt: z.ZodNumber;"
+  },
+  {
+   "f": "dist/auth/stdio/credential-store.d.ts",
+   "i": 12,
+   "l": "refreshToken: z.ZodOptional<z.ZodString>;"
+  },
+  {
+   "f": "dist/auth/stdio/credential-store.d.ts",
+   "i": 30,
+   "l": "getPassword(): Promise<string | undefined | null>;"
+  },
+  {
+   "f": "dist/auth/stdio/credential-store.d.ts",
+   "i": 31,
+   "l": "setPassword(password: string): Promise<void>;"
+  },
+  {
+   "f": "dist/auth/stdio/credential-store.d.ts",
+   "i": 32,
+   "l": "deletePassword(): Promise<boolean>;"
+  },
+  {
+   "f": "dist/auth/stdio/credential-store.js",
+   "i": 18,
+   "l": "import { randomToken } from '../../crypto.js';"
+  },
+  {
+   "f": "dist/auth/stdio/credential-store.js",
+   "i": 25,
+   "l": "tokenEndpoint: z.string(),"
+  },
+  {
+   "f": "dist/auth/stdio/credential-store.js",
+   "i": 27,
+   "l": "accessToken: z.string(),"
+  },
+  {
+   "f": "dist/auth/stdio/credential-store.js",
+   "i": 29,
+   "l": "accessTokenExpiresAt: z.number(),"
+  },
+  {
+   "f": "dist/auth/stdio/credential-store.js",
+   "i": 30,
+   "l": "refreshToken: z.string().optional(),"
+  },
+  {
+   "f": "dist/auth/stdio/credential-store.js",
+   "i": 57,
+   "l": "const raw = await factory(KEYCHAIN_SERVICE, issuer).getPassword();"
+  },
+  {
+   "f": "dist/auth/stdio/credential-store.js",
+   "i": 61,
+   "l": "await factory(KEYCHAIN_SERVICE, credentials.issuer).setPassword(JSON.stringify(credentials));"
+  },
+  {
+   "f": "dist/auth/stdio/credential-store.js",
+   "i": 64,
+   "l": "return factory(KEYCHAIN_SERVICE, issuer).deletePassword();"
+  },
+  {
+   "f": "dist/auth/stdio/credential-store.js",
+   "i": 111,
+   "l": "const tmp = join(dir, `.credentials.${randomToken(8)}.tmp`);"
+  },
+  {
+   "f": "dist/auth/stdio/credential-store.js",
+   "i": 172,
+   "l": "await factory(KEYCHAIN_SERVICE, '__probe__').getPassword();"
+  },
+  {
+   "f": "dist/auth/stdio/file-lock.js",
+   "i": 4,
+   "l": "import { randomToken } from '../../crypto.js';"
+  },
+  {
+   "f": "dist/auth/stdio/file-lock.js",
+   "i": 100,
+   "l": "acquired = await tryAcquire(guard, `${String(process.pid)}:${randomToken(16)}`);"
+  },
+  {
+   "f": "dist/auth/stdio/file-lock.js",
+   "i": 140,
+   "l": "const aside = `${path}${STALE_SUFFIX}${String(process.pid)}-${randomToken(9)}`;"
+  },
+  {
+   "f": "dist/auth/stdio/file-lock.js",
+   "i": 233,
+   "l": "const owner = `${String(process.pid)}:${randomToken(16)}`;"
+  },
+  {
+   "f": "dist/auth/stdio/login.js",
+   "i": 1,
+   "l": "import { createPkcePair, randomToken } from '../../crypto.js';"
+  },
+  {
+   "f": "dist/auth/stdio/login.js",
+   "i": 4,
+   "l": "import { discoverAuthorizationServer, OAuthRequestError, requestToken } from '../oauth.js';"
+  },
+  {
+   "f": "dist/auth/stdio/login.js",
+   "i": 30,
+   "l": "const state = randomToken(32);"
+  },
+  {
+   "f": "dist/auth/stdio/login.js",
+   "i": 55,
+   "l": "const tokens = await requestToken(metadata.token_endpoint, {"
+  },
+  {
+   "f": "dist/auth/stdio/login.js",
+   "i": 68,
+   "l": "tokenEndpoint: metadata.token_endpoint,"
+  },
+  {
+   "f": "dist/auth/stdio/login.js",
+   "i": 72,
+   "l": "accessToken: tokens.access_token,"
+  },
+  {
+   "f": "dist/auth/stdio/login.js",
+   "i": 73,
+   "l": "accessTokenExpiresAt: issuedAt + (tokens.expires_in ?? 300),"
+  },
+  {
+   "f": "dist/auth/stdio/login.js",
+   "i": 74,
+   "l": "...(tokens.refresh_token === undefined ? {} : { refreshToken: tokens.refresh_token }),"
+  },
+  {
+   "f": "dist/auth/stdio/login.js",
+   "i": 76,
+   "l": "scope: tokens.scope ?? scope,"
+  },
+  {
+   "f": "dist/auth/stdio/session.d.ts",
+   "i": 1,
+   "l": "import type { AccessTokenProvider } from '../../graphql/client.js';"
+  },
+  {
+   "f": "dist/auth/stdio/session.d.ts",
+   "i": 33,
+   "l": "export declare class LocalSession implements AccessTokenProvider {"
+  },
+  {
+   "f": "dist/auth/stdio/session.d.ts",
+   "i": 45,
+   "l": "getAccessToken(): Promise<string>;"
+  },
+  {
+   "f": "dist/auth/stdio/session.d.ts",
+   "i": 46,
+   "l": "invalidate(token: string): void;"
+  },
+  {
+   "f": "dist/auth/stdio/session.d.ts",
+   "i": 66,
+   "l": "export declare const decodeJwtPayload: (token: string) => Record<string, unknown> | undefined;"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 13,
+   "l": "import { OAuthRequestError, requestToken, revokeToken } from '../oauth.js';"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 61,
+   "l": "return c.accessTokenExpiresAt - this.#nowSeconds() > REFRESH_SKEW_SECONDS;"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 81,
+   "l": "const sub = c === undefined ? undefined : decodeJwtPayload(c.accessToken)?.sub;"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 84,
+   "l": "async getAccessToken() {"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 95,
+   "l": "return c.accessToken;"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 97,
+   "l": "invalidate(token) {"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 98,
+   "l": "if (this.#cached?.accessToken === token)"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 99,
+   "l": "this.#cached = { ...this.#cached, accessTokenExpiresAt: 0 };"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 109,
+   "l": "if (this.#fresh(stored) && stored.accessToken !== this.#cached?.accessToken) {"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 113,
+   "l": "if (stored.refreshToken === undefined) {"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 117,
+   "l": "let tokens;"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 119,
+   "l": "tokens = await requestToken(stored.tokenEndpoint, {"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 120,
+   "l": "grant_type: 'refresh_token',"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 121,
+   "l": "refresh_token: stored.refreshToken,"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 135,
+   "l": "logger.warn('refresh token rejected; stored login removed', { error: error.error });"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 155,
+   "l": "accessToken: tokens.access_token,"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 156,
+   "l": "accessTokenExpiresAt: issuedAt + (tokens.expires_in ?? 300),"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 158,
+   "l": "...(tokens.refresh_token === undefined ? {} : { refreshToken: tokens.refresh_token }),"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 159,
+   "l": "scope: tokens.scope ?? stored.scope,"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 164,
+   "l": "logger.debug('access token refreshed');"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 185,
+   "l": "if (stored.refreshToken !== undefined) {"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 186,
+   "l": "await revokeToken(stored.revocationEndpoint, { token: stored.refreshToken, token_type_hint: 'refresh_token', client_id: stored.clientId }, fetchOpt);"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 188,
+   "l": "await revokeToken(stored.revocationEndpoint, { token: stored.accessToken, token_type_hint: 'access_token', client_id: stored.clientId }, fetchOpt);"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 192,
+   "l": "options.logger.warn('token revocation failed; removing local credentials anyway', { error });"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 199,
+   "l": "export const decodeJwtPayload = (token) => {"
+  },
+  {
+   "f": "dist/auth/stdio/session.js",
+   "i": 200,
+   "l": "const part = token.split('.')[1];"
+  },
+  {
+   "f": "dist/cli/args.js",
+   "i": 11,
+   "l": "bugsecure-mcp login [--scopes <list>]   Sign in with your browser and store the tokens in the OS keychain"
+  },
+  {
+   "f": "dist/cli/commands.js",
+   "i": 113,
+   "l": "const claims = decodeJwtPayload(stored.accessToken) ?? {};"
+  },
+  {
+   "f": "dist/cli/commands.js",
+   "i": 120,
+   "l": "accessTokenExpiresAt: new Date(stored.accessTokenExpiresAt * 1000).toISOString(),"
+  },
+  {
+   "f": "dist/cli/commands.js",
+   "i": 121,
+   "l": "refreshable: stored.refreshToken !== undefined,"
+  },
+  {
+   "f": "dist/cli/commands.js",
+   "i": 134,
+   "l": "`Access token:  expires ${info.accessTokenExpiresAt}${info.refreshable ? ' (refreshed automatically)' : ''}`,"
+  },
+  {
+   "f": "dist/cli/commands.js",
+   "i": 136,
+   "l": "'(Token contents are decoded locally for display, not verified.)',"
+  },
+  {
+   "f": "dist/config.d.ts",
+   "i": 72,
+   "l": "readonly clientSecret: string;"
+  },
+  {
+   "f": "dist/config.d.ts",
+   "i": 91,
+   "l": "readonly tokenCacheSize: number;"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 42,
+   "l": "if (url.username !== '' || url.password !== '')"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 67,
+   "l": "BUGSECURE_CLIENT_SECRET: z.string().min(1).optional(),"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 68,
+   "l": "BUGSECURE_CLIENT_SECRET_FILE: z.string().min(1).optional(),"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 80,
+   "l": "BUGSECURE_TOKEN_CACHE_SIZE: z.coerce.number().int().min(1).max(100_000).optional(),"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 150,
+   "l": "const readOptionalSecret = (name, value, file) => {"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 155,
+   "l": "let secret;"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 157,
+   "l": "secret = readFileSync(file, 'utf8').trim();"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 162,
+   "l": "if (secret === '')"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 164,
+   "l": "return secret;"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 189,
+   "l": "const readSecret = (e) => {"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 190,
+   "l": "const secret = readOptionalSecret('BUGSECURE_CLIENT_SECRET', e.BUGSECURE_CLIENT_SECRET, e.BUGSECURE_CLIENT_SECRET_FILE);"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 191,
+   "l": "if (secret !== undefined)"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 192,
+   "l": "return secret;"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 193,
+   "l": "throw new ConfigError('Hosted mode needs the confidential client secret: set BUGSECURE_CLIENT_SECRET_FILE (preferred) or BUGSECURE_CLIENT_SECRET');"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 202,
+   "l": "const readApprovalKey = (e, clientSecret, development) => {"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 203,
+   "l": "const key = readOptionalSecret('BUGSECURE_MCP_APPROVAL_KEY', e.BUGSECURE_MCP_APPROVAL_KEY, e.BUGSECURE_MCP_APPROVAL_KEY_FILE);"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 211,
+   "l": "return `dev-approval-key:${clientSecret}`;"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 225,
+   "l": "throw new ConfigError('BUGSECURE_MCP_RESOURCE must differ from the API URL (tokens are audience-bound)');"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 232,
+   "l": "const clientSecret = readSecret(e);"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 238,
+   "l": "clientSecret,"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 239,
+   "l": "approvalKey: readApprovalKey(e, clientSecret, development),"
+  },
+  {
+   "f": "dist/config.js",
+   "i": 257,
+   "l": "tokenCacheSize: e.BUGSECURE_TOKEN_CACHE_SIZE ?? 1_000,"
+  },
+  {
+   "f": "dist/crypto.d.ts",
+   "i": 2,
+   "l": "export declare const randomToken: (bytes?: number) => string;"
+  },
+  {
+   "f": "dist/crypto.d.ts",
+   "i": 35,
+   "l": "export declare const deriveKey: (secret: string, purpose: string) => Uint8Array;"
+  },
+  {
+   "f": "dist/crypto.js",
+   "i": 3,
+   "l": "export const randomToken = (bytes = 32) => {"
+  },
+  {
+   "f": "dist/crypto.js",
+   "i": 23,
+   "l": "const verifier = randomToken(32);"
+  },
+  {
+   "f": "dist/crypto.js",
+   "i": 54,
+   "l": "export const deriveKey = (secret, purpose) => {"
+  },
+  {
+   "f": "dist/crypto.js",
+   "i": 55,
+   "l": "return new Uint8Array(hkdfSync('sha256', secret, 'bugsecure-mcp', purpose, 32));"
+  },
+  {
+   "f": "dist/errors.js",
+   "i": 55,
+   "l": "'authorization server left it out of the token it issued to this hosted server, which happens only ' +"
+  },
+  {
+   "f": "dist/graphql/client.d.ts",
+   "i": 11,
+   "l": "export interface AccessTokenProvider {"
+  },
+  {
+   "f": "dist/graphql/client.d.ts",
+   "i": 12,
+   "l": "getAccessToken(signal?: AbortSignal): Promise<string>;"
+  },
+  {
+   "f": "dist/graphql/client.d.ts",
+   "i": 18,
+   "l": "invalidate(token: string): void;"
+  },
+  {
+   "f": "dist/graphql/client.d.ts",
+   "i": 36,
+   "l": "readonly tokens: AccessTokenProvider;"
+  },
+  {
+   "f": "dist/graphql/client.js",
+   "i": 39,
+   "l": "const send = async (query, variables, token, requestOptions) => {"
+  },
+  {
+   "f": "dist/graphql/client.js",
+   "i": 46,
+   "l": "authorization: `Bearer ${token}`,"
+  },
+  {
+   "f": "dist/graphql/client.js",
+   "i": 50,
+   "l": "redirect: 'error', // never replay a bearer token to another location"
+  },
+  {
+   "f": "dist/graphql/client.js",
+   "i": 63,
+   "l": "const attempt = async (query, variables, token, op, requestOptions) => {"
+  },
+  {
+   "f": "dist/graphql/client.js",
+   "i": 65,
+   "l": "const response = await send(query, variables, token, requestOptions);"
+  },
+  {
+   "f": "dist/graphql/client.js",
+   "i": 115,
+   "l": "let token = await options.tokens.getAccessToken(signal);"
+  },
+  {
+   "f": "dist/graphql/client.js",
+   "i": 116,
+   "l": "let data = await attempt(query, variables, token, op, requestOptions);"
+  },
+  {
+   "f": "dist/graphql/client.js",
+   "i": 118,
+   "l": "options.tokens.invalidate(token);"
+  },
+  {
+   "f": "dist/graphql/client.js",
+   "i": 119,
+   "l": "logger.info('access token rejected; retrying once with a fresh one', { op });"
+  },
+  {
+   "f": "dist/graphql/client.js",
+   "i": 120,
+   "l": "token = await options.tokens.getAccessToken(signal);"
+  },
+  {
+   "f": "dist/graphql/client.js",
+   "i": 121,
+   "l": "data = await attempt(query, variables, token, op, requestOptions);"
+  },
+  {
+   "f": "dist/graphql/client.js",
+   "i": 124,
+   "l": "options.tokens.invalidate(token);"
+  },
+  {
+   "f": "dist/graphql/generated.d.ts",
+   "i": 1307,
+   "l": "publicToken: string;"
+  },
+  {
+   "f": "dist/graphql/generated.js",
+   "i": 1246,
+   "l": "query VerifyCertificate($publicToken: String!) {"
+  },
+  {
+   "f": "dist/graphql/generated.js",
+   "i": 1247,
+   "l": "verifyCertificate(publicToken: $publicToken) {"
+  },
+  {
+   "f": "dist/index.d.ts",
+   "i": 8,
+   "l": "export { createGraphQLClient, type AccessTokenProvider, type GraphQLClient } from './graphql/client.js';"
+  },
+  {
+   "f": "dist/logger.js",
+   "i": 21,
+   "l": "'token',"
+  },
+  {
+   "f": "dist/logger.js",
+   "i": 22,
+   "l": "'secret',"
+  },
+  {
+   "f": "dist/logger.js",
+   "i": 23,
+   "l": "'password',"
+  },
+  {
+   "f": "dist/logger.js",
+   "i": 29,
+   "l": "'apikey',"
+  },
+  {
+   "f": "dist/logger.js",
+   "i": 30,
+   "l": "'privatekey',"
+  },
+  {
+   "f": "dist/rate-limit.js",
+   "i": 37,
+   "l": "const bucket = this.#buckets.get(key) ?? { tokens: this.#burst, updatedAt: now };"
+  },
+  {
+   "f": "dist/rate-limit.js",
+   "i": 38,
+   "l": "bucket.tokens = Math.min(this.#burst, bucket.tokens + (now - bucket.updatedAt) * this.#ratePerMs);"
+  },
+  {
+   "f": "dist/rate-limit.js",
+   "i": 40,
+   "l": "const allowed = bucket.tokens >= 1;"
+  },
+  {
+   "f": "dist/rate-limit.js",
+   "i": 42,
+   "l": "bucket.tokens -= 1;"
+  },
+  {
+   "f": "dist/rate-limit.js",
+   "i": 48,
+   "l": "retryAfterSeconds: Math.max(1, Math.ceil((1 - bucket.tokens) / this.#ratePerMs / 1000)),"
+  },
+  {
+   "f": "dist/tools/approval-url.js",
+   "i": 41,
+   "l": "if (url.username !== '' || url.password !== '' || url.search !== '' || url.hash !== '')"
+  },
+  {
+   "f": "dist/tools/approval-url.js",
+   "i": 70,
+   "l": "if (url.username !== '' || url.password !== '' || url.search !== '' || url.hash !== '')"
+  },
+  {
+   "f": "dist/tools/approval.js",
+   "i": 57,
+   "l": "import { canonicalJson, randomToken, sha256Base64Url } from '../crypto.js';"
+  },
+  {
+   "f": "dist/tools/approval.js",
+   "i": 396,
+   "l": "clientRequestId: randomToken(16),"
+  },
+  {
+   "f": "dist/tools/assign-report.js",
+   "i": 21,
+   "l": "throw new BugSecureError('UPSTREAM_ERROR', 'Cannot tell who you are: the access token does not name its user. Sign in again.');"
+  },
+  {
+   "f": "dist/tools/list-badges.js",
+   "i": 25,
+   "l": "hidden: z.boolean().describe('Secret: name and progress revealed once earned.'),"
+  },
+  {
+   "f": "dist/tools/shared/report.js",
+   "i": 281,
+   "l": "throw new BugSecureError('UPSTREAM_ERROR', 'Cannot tell which reports are your own: the access token does not name its user. Sign in again.');"
+  },
+  {
+   "f": "dist/tools/shared/request-id.js",
+   "i": 24,
+   "l": "import { randomToken } from '../../crypto.js';"
+  },
+  {
+   "f": "dist/tools/shared/request-id.js",
+   "i": 38,
+   "l": "export const newClientRequestId = () => randomToken(16);"
+  },
+  {
+   "f": "dist/tools/verify-certificate.d.ts",
+   "i": 3,
+   "l": "publicToken: z.ZodString;"
+  },
+  {
+   "f": "dist/tools/verify-certificate.js",
+   "i": 9,
+   "l": "const PUBLIC_TOKEN = /^[A-Za-z0-9_-]{16,128}$/;"
+  },
+  {
+   "f": "dist/tools/verify-certificate.js",
+   "i": 38,
+   "l": "description: 'Look up a BugSecure payout certificate by the public token from its verification link. Returns the ' +"
+  },
+  {
+   "f": "dist/tools/verify-certificate.js",
+   "i": 46,
+   "l": "publicToken: z"
+  },
+  {
+   "f": "dist/tools/verify-certificate.js",
+   "i": 49,
+   "l": ".regex(PUBLIC_TOKEN, 'not a certificate verification token')"
+  },
+  {
+   "f": "dist/tools/verify-certificate.js",
+   "i": 50,
+   "l": ".describe('The opaque token at the end of the certificate’s verification link (not the printed BSC-… reference).'),"
+  },
+  {
+   "f": "dist/tools/verify-certificate.js",
+   "i": 76,
+   "l": "const { verifyCertificate: c, certificateSigningKeys } = await graphql.request(VerifyCertificateDocument, { publicToken: input.publicToken }, { signal });"
+  },
+  {
+   "f": "dist/tools/verify-certificate.js",
+   "i": 78,
+   "l": "throw new BugSecureError('NOT_FOUND', 'No certificate matches that verification token.');"
+  },
+  {
+   "f": "dist/transports/hosted.js",
+   "i": 6,
+   "l": "import { createAccessTokenVerifier, remoteJwks } from '../auth/hosted/jwt.js';"
+  },
+  {
+   "f": "dist/transports/hosted.js",
+   "i": 7,
+   "l": "import { TokenExchanger } from '../auth/hosted/token-exchange.js';"
+  },
+  {
+   "f": "dist/transports/hosted.js",
+   "i": 14,
+   "l": "!metadata.grant_types_supported.includes('urn:ietf:params:oauth:grant-type:token-exchange')) {"
+  },
+  {
+   "f": "dist/transports/hosted.js",
+   "i": 15,
+   "l": "logger.warn('authorization server does not advertise the token-exchange grant; API calls will fail');"
+  },
+  {
+   "f": "dist/transports/hosted.js",
+   "i": 20,
+   "l": "verifyAccessToken: createAccessTokenVerifier({"
+  },
+  {
+   "f": "dist/transports/hosted.js",
+   "i": 25,
+   "l": "exchanger: new TokenExchanger({"
+  },
+  {
+   "f": "dist/transports/hosted.js",
+   "i": 26,
+   "l": "tokenEndpoint: metadata.token_endpoint,"
+  },
+  {
+   "f": "dist/transports/hosted.js",
+   "i": 28,
+   "l": "clientSecret: config.clientSecret,"
+  },
+  {
+   "f": "dist/transports/hosted.js",
+   "i": 30,
+   "l": "cacheSize: config.tokenCacheSize,"
+  },
+  {
+   "f": "dist/transports/http-app.d.ts",
+   "i": 5,
+   "l": "import { type AccessTokenVerifier } from '../auth/hosted/jwt.js';"
+  },
+  {
+   "f": "dist/transports/http-app.d.ts",
+   "i": 6,
+   "l": "import { type TokenExchanger } from '../auth/hosted/token-exchange.js';"
+  },
+  {
+   "f": "dist/transports/http-app.d.ts",
+   "i": 9,
+   "l": "readonly verifyAccessToken: AccessTokenVerifier;"
+  },
+  {
+   "f": "dist/transports/http-app.d.ts",
+   "i": 10,
+   "l": "readonly exchanger: TokenExchanger;"
+  },
+  {
+   "f": "dist/transports/http-app.d.ts",
+   "i": 22,
+   "l": "export type BearerCredentials = {"
+  },
+  {
+   "f": "dist/transports/http-app.d.ts",
+   "i": 27,
+   "l": "readonly kind: 'token';"
+  },
+  {
+   "f": "dist/transports/http-app.d.ts",
+   "i": 28,
+   "l": "readonly token: string;"
+  },
+  {
+   "f": "dist/transports/http-app.d.ts",
+   "i": 31,
+   "l": "export declare const bearerToken: (header: string | null) => BearerCredentials;"
+  },
+  {
+   "f": "dist/transports/http-app.js",
+   "i": 30,
+   "l": "import { InvalidTokenError } from '../auth/hosted/jwt.js';"
+  },
+  {
+   "f": "dist/transports/http-app.js",
+   "i": 32,
+   "l": "import { exchangedTokenProvider } from '../auth/hosted/token-exchange.js';"
+  },
+  {
+   "f": "dist/transports/http-app.js",
+   "i": 35,
+   "l": "const TOKEN_REFUSED = 'token is no longer accepted by the authorization server';"
+  },
+  {
+   "f": "dist/transports/http-app.js",
+   "i": 46,
+   "l": "export const bearerToken = (header) => {"
+  },
+  {
+   "f": "dist/transports/http-app.js",
+   "i": 49,
+   "l": "const token = /^Bearer[ ]+([A-Za-z0-9\\-._~+/]+=*)[ ]*$/i.exec(header)?.[1];"
+  },
+  {
+   "f": "dist/transports/http-app.js",
+   "i": 50,
+   "l": "return token === undefined ? { kind: 'malformed' } : { kind: 'token', token };"
+  },
+  {
+   "f": "dist/transports/http-app.js",
+   "i": 144,
+   "l": "tokens: exchangedTokenProvider(options.exchanger, subject),"
+  },
+  {
+   "f": "dist/transports/http-app.js",
+   "i": 301,
+   "l": "const credentials = bearerToken(request.headers.get('authorization'));"
+  },
+  {
+   "f": "dist/transports/http-app.js",
+   "i": 308,
+   "l": "subject = await options.verifyAccessToken(credentials.token);"
+  },
+  {
+   "f": "dist/transports/http-app.js",
+   "i": 311,
+   "l": "if (error instanceof InvalidTokenError) {"
+  },
+  {
+   "f": "dist/transports/http-app.js",
+   "i": 312,
+   "l": "logger.info('rejected access token', { why: error.message });"
+  },
+  {
+   "f": "dist/transports/http-app.js",
+   "i": 313,
+   "l": "return unauthorized(request, 'invalid_token', error.message);"
+  },
+  {
+   "f": "dist/transports/http-app.js",
+   "i": 315,
+   "l": "logger.error('token verification failed', { error });"
+  },
+  {
+   "f": "dist/transports/http-app.js",
+   "i": 322,
+   "l": "logger.info('rejected access token', { why: TOKEN_REFUSED });"
+  },
+  {
+   "f": "dist/transports/http-app.js",
+   "i": 323,
+   "l": "return unauthorized(request, 'invalid_token', TOKEN_REFUSED);"
+  },
+  {
+   "f": "dist/transports/http-app.js",
+   "i": 343,
+   "l": "token: subject.token,"
+  },
+  {
+   "f": "dist/transports/http-app.js",
+   "i": 360,
+   "l": "logger.info('rejected access token', { why: TOKEN_REFUSED });"
+  },
+  {
+   "f": "dist/transports/http-app.js",
+   "i": 361,
+   "l": "return unauthorized(request, 'invalid_token', TOKEN_REFUSED);"
+  },
+  {
+   "f": "dist/transports/stdio.js",
+   "i": 34,
+   "l": "tokens: session,"
+  }
+ ],
+ "urls": [
+  "https://keepachangelog.com/en/1.1.0/",
+  "https://semver.org/spec/v2.0.0.html",
+  "https://docs.cocogitto.io",
+  "https://github.com/kulinda-sec/bugsecure-mcp/compare/fecf316047b26ffe016cb74d02b13ef6b8e45bab..v0.3.1",
+  "https://github.com/kulinda-sec/bugsecure-mcp/commit/6bfb244c2bc6698b7ab461f38b6629dea82d47d2",
+  "https://github.com/kulinda-sec/bugsecure-mcp/commit/48df98f97a2ab20839a61546d0ed09c6fe9f9189",
+  "https://github.com/kulinda-sec/bugsecure-mcp/commit/9741dc555af32877435c358a27b225d542861fc3",
+  "https://github.com/kulinda-sec/bugsecure-mcp/commit/7c48c7a54a8db7646c9151529078ce7ccd1aeada",
+  "https://github.com/kulinda-sec/bugsecure-mcp/commit/ead8b17e076552999ce1273ac2a992dbd7ae84f7",
+  "https://github.com/kulinda-sec/bugsecure-mcp/compare/01a31f0b5700cd96858e06998448920d6e168ef2..v0.3.0",
+  "https://github.com/kulinda-sec/bugsecure-mcp/commit/01a31f0b5700cd96858e06998448920d6e168ef2",
+  "https://github.com/kulinda-sec/bugsecure-mcp/commit/5062df8f84b0a20adc30c7c62e4d76b9fbf12d68",
+  "https://github.com/kulinda-sec/bugsecure-mcp/commit/29fc0915ee5a36ad79d97dfd8cc72db15f05b00c",
+  "https://github.com/kulinda-sec/bugsecure-mcp/commit/b66fab2db0dc9048b9483681f5ab4fcf66b477fc",
+  "https://github.com/kulinda-sec/bugsecure-mcp/compare/fe6b22f0dde1955fbf6a4011c43bc006a49f9493..v0.2.2",
+  "https://github.com/kulinda-sec/bugsecure-mcp/commit/fe6b22f0dde1955fbf6a4011c43bc006a49f9493",
+  "https://github.com/kulinda-sec/bugsecure-mcp/compare/ec90cabbf26290a80bd3296ee3c38f2bd25809f8..v0.2.1",
+  "https://github.com/kulinda-sec/bugsecure-mcp/commit/ec90cabbf26290a80bd3296ee3c38f2bd25809f8",
+  "https://github.com/kulinda-sec/bugsecure-mcp/compare/6facb944907e3a2f653d228d6ff6b89f6d0d6b54..v0.2.0",
+  "https://github.com/kulinda-sec/bugsecure-mcp/commit/6facb944907e3a2f653d228d6ff6b89f6d0d6b54",
+  "http://www.apache.org/licenses/",
+  "http://www.apache.org/licenses/LICENSE-2.0",
+  "https://github.com/kulinda-sec/bugsecure-mcp/actions/workflows/ci.yml/badge.svg",
+  "https://github.com/kulinda-sec/bugsecure-mcp/actions/workflows/ci.yml",
+  "https://github.com/kulinda-sec/bugsecure-mcp/actions/workflows/codeql.yml/badge.svg",
+  "https://github.com/kulinda-sec/bugsecure-mcp/actions/workflows/codeql.yml",
+  "https://api.scorecard.dev/projects/github.com/kulinda-sec/bugsecure-mcp/badge",
+  "https://scorecard.dev/viewer/",
+  "https://img.shields.io/npm/v/",
+  "https://www.npmjs.com/package/",
+  "https://img.shields.io/badge/license-Apache--2.0-blue",
+  "https://modelcontextprotocol.io",
+  "https://bugsecure.senintel.sn",
+  "https://bugsecure-mcp.senintel.sn/mcp",
+  "https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization/client-registration",
+  "https://modelcontextprotocol.io/specification/2026-07-28/client/elicitation",
+  "https://code.claude.com/docs/en/mcp",
+  "https://code.visualstudio.com/updates/v1_107",
+  "https://cursor.com/docs/context/mcp",
+  "https://github.com/anthropics/claude-ai-mcp/issues/153",
+  "https://modelcontextprotocol.io/specification/2026-07-28/basic/patterns/mrtr",
+  "https://bugsecure-api.senintel.sn",
+  "https://app.example:8443",
+  "https://mcp.example.com/mcp",
+  "https://api.example.com",
+  "https://app.example.com",
+  "https://discord.gg/2gg6QnDtu",
+  "https://github.com/kulinda-sec/bugsecure-mcp/issues",
+  "https://h/mcp",
+  "https://h/.well-known/oauth-protected-resource/mcp",
+  "https://github.com/kulinda-sec/bugsecure-mcp",
+  "http://127.0.0.1:53124/callback",
+  "https://host",
+  "https://mcp.example/mcp.",
+  "https://app.example",
+  "http://localhost",
+  "http://app.example",
+  "https://github.com/kulinda-sec/bugsecure-mcp.git"
+ ],
+ "onlyPkg": [
+  "dist/auth/hosted/jwt.d.ts",
+  "dist/auth/hosted/jwt.js",
+  "dist/auth/hosted/jwt.js.map",
+  "dist/auth/hosted/resource-metadata.d.ts",
+  "dist/auth/hosted/resource-metadata.js",
+  "dist/auth/hosted/resource-metadata.js.map",
+  "dist/auth/hosted/token-exchange.d.ts",
+  "dist/auth/hosted/token-exchange.js",
+  "dist/auth/hosted/token-exchange.js.map",
+  "dist/auth/oauth.d.ts",
+  "dist/auth/oauth.js",
+  "dist/auth/oauth.js.map",
+  "dist/auth/stdio/browser.d.ts",
+  "dist/auth/stdio/browser.js",
+  "dist/auth/stdio/browser.js.map",
+  "dist/auth/stdio/credential-store.d.ts",
+  "dist/auth/stdio/credential-store.js",
+  "dist/auth/stdio/credential-store.js.map",
+  "dist/auth/stdio/file-lock.d.ts",
+  "dist/auth/stdio/file-lock.js",
+  "dist/auth/stdio/file-lock.js.map",
+  "dist/auth/stdio/login.d.ts",
+  "dist/auth/stdio/login.js",
+  "dist/auth/stdio/login.js.map",
+  "dist/auth/stdio/loopback.d.ts",
+  "dist/auth/stdio/loopback.js",
+  "dist/auth/stdio/loopback.js.map",
+  "dist/auth/stdio/session.d.ts",
+  "dist/auth/stdio/session.js",
+  "dist/auth/stdio/session.js.map",
+  "dist/cli/args.d.ts",
+  "dist/cli/args.js",
+  "dist/cli/args.js.map",
+  "dist/cli/commands.d.ts",
+  "dist/cli/commands.js",
+  "dist/cli/commands.js.map",
+  "dist/cli.d.ts",
+  "dist/cli.js",
+  "dist/cli.js.map",
+  "dist/config.d.ts",
+  "dist/config.js",
+  "dist/config.js.map",
+  "dist/crypto.d.ts",
+  "dist/crypto.js",
+  "dist/crypto.js.map",
+  "dist/errors.d.ts",
+  "dist/errors.js",
+  "dist/errors.js.map",
+  "dist/graphql/client.d.ts",
+  "dist/graphql/client.js",
+  "dist/graphql/client.js.map",
+  "dist/graphql/errors.d.ts",
+  "dist/graphql/errors.js",
+  "dist/graphql/errors.js.map",
+  "dist/graphql/generated.d.ts",
+  "dist/graphql/generated.js",
+  "dist/graphql/generated.js.map",
+  "dist/http.d.ts",
+  "dist/http.js",
+  "dist/http.js.map",
+  "dist/index.d.ts",
+  "dist/index.js",
+  "dist/index.js.map",
+  "dist/instructions.d.ts",
+  "dist/instructions.js",
+  "dist/instructions.js.map",
+  "dist/logger.d.ts",
+  "dist/logger.js",
+  "dist/logger.js.map",
+  "dist/lru.d.ts",
+  "dist/lru.js",
+  "dist/lru.js.map",
+  "dist/rate-limit.d.ts",
+  "dist/rate-limit.js",
+  "dist/rate-limit.js.map",
+  "dist/scopes.d.ts",
+  "dist/scopes.js",
+  "dist/scopes.js.map",
+  "dist/server.d.ts",
+  "dist/server.js",
+  "dist/server.js.map",
+  "dist/tools/add-report-comment.d.ts",
+  "dist/tools/add-report-comment.js",
+  "dist/tools/add-report-comment.js.map",
+  "dist/tools/add-triage-comment.d.ts",
+  "dist/tools/add-triage-comment.js",
+  "dist/tools/add-triage-comment.js.map",
+  "dist/tools/approval-url.d.ts",
+  "dist/tools/approval-url.js",
+  "dist/tools/approval-url.js.map",
+  "dist/tools/approval.d.ts",
+  "dist/tools/approval.js",
+  "dist/tools/approval.js.map",
+  "dist/tools/assign-report.d.ts",
+  "dist/tools/assign-report.js",
+  "dist/tools/assign-report.js.map",
+  "dist/tools/check-duplicates.d.ts",
+  "dist/tools/check-duplicates.js",
+  "dist/tools/check-duplicates.js.map",
+  "dist/tools/define-tool.d.ts",
+  "dist/tools/define-tool.js",
+  "dist/tools/define-tool.js.map",
+  "dist/tools/get-leaderboard.d.ts",
+  "dist/tools/get-leaderboard.js",
+  "dist/tools/get-leaderboard.js.map",
+  "dist/tools/get-my-kyc-status.d.ts",
+  "dist/tools/get-my-kyc-status.js",
+  "dist/tools/get-my-kyc-status.js.map",
+  "dist/tools/get-my-profile.d.ts",
+  "dist/tools/get-my-profile.js",
+  "dist/tools/get-my-profile.js.map",
+  "dist/tools/get-org-report-stats.d.ts",
+  "dist/tools/get-org-report-stats.js",
+  "dist/tools/get-org-report-stats.js.map",
+  "dist/tools/get-org-report.d.ts",
+  "dist/tools/get-org-report.js",
+  "dist/tools/get-org-report.js.map",
+  "dist/tools/get-program-stats.d.ts",
+  "dist/tools/get-program-stats.js",
+  "dist/tools/get-program-stats.js.map",
+  "dist/tools/get-program-terms.d.ts",
+  "dist/tools/get-program-terms.js",
+  "dist/tools/get-program-terms.js.map",
+  "dist/tools/get-program.d.ts",
+  "dist/tools/get-program.js",
+  "dist/tools/get-program.js.map",
+  "dist/tools/get-report.d.ts",
+  "dist/tools/get-report.js",
+  "dist/tools/get-report.js.map",
+  "dist/tools/get-researcher-profile.d.ts",
+  "dist/tools/get-researcher-profile.js",
+  "dist/tools/get-researcher-profile.js.map",
+  "dist/tools/get-taxonomy.d.ts",
+  "dist/tools/get-taxonomy.js",
+  "dist/tools/get-taxonomy.js.map",
+  "dist/tools/grade-report.d.ts",
+  "dist/tools/grade-report.js",
+  "dist/tools/grade-report.js.map",
+  "dist/tools/index.d.ts",
+  "dist/tools/index.js",
+  "dist/tools/index.js.map",
+  "dist/tools/json-schema.d.ts",
+  "dist/tools/json-schema.js",
+  "dist/tools/json-schema.js.map",
+  "dist/tools/list-badges.d.ts",
+  "dist/tools/list-badges.js",
+  "dist/tools/list-badges.js.map",
+  "dist/tools/list-my-certificates.d.ts",
+  "dist/tools/list-my-certificates.js",
+  "dist/tools/list-my-certificates.js.map",
+  "dist/tools/list-my-organizations.d.ts",
+  "dist/tools/list-my-organizations.js",
+  "dist/tools/list-my-organizations.js.map",
+  "dist/tools/list-my-reports.d.ts",
+  "dist/tools/list-my-reports.js",
+  "dist/tools/list-my-reports.js.map",
+  "dist/tools/list-notifications.d.ts",
+  "dist/tools/list-notifications.js",
+  "dist/tools/list-notifications.js.map",
+  "dist/tools/list-org-certificates.d.ts",
+  "dist/tools/list-org-certificates.js",
+  "dist/tools/list-org-certificates.js.map",
+  "dist/tools/list-org-programs.d.ts",
+  "dist/tools/list-org-programs.js",
+  "dist/tools/list-org-programs.js.map",
+  "dist/tools/list-org-reports.d.ts",
+  "dist/tools/list-org-reports.js",
+  "dist/tools/list-org-reports.js.map",
+  "dist/tools/mark-notifications-read.d.ts",
+  "dist/tools/mark-notifications-read.js",
+  "dist/tools/mark-notifications-read.js.map",
+  "dist/tools/raise-appeal.d.ts",
+  "dist/tools/raise-appeal.js",
+  "dist/tools/raise-appeal.js.map",
+  "dist/tools/save-disclosure-draft.d.ts",
+  "dist/tools/save-disclosure-draft.js",
+  "dist/tools/save-disclosure-draft.js.map",
+  "dist/tools/search-programs.d.ts",
+  "dist/tools/search-programs.js",
+  "dist/tools/search-programs.js.map",
+  "dist/tools/search.d.ts",
+  "dist/tools/search.js",
+  "dist/tools/search.js.map",
+  "dist/tools/shared/account.d.ts",
+  "dist/tools/shared/account.js",
+  "dist/tools/shared/account.js.map",
+  "dist/tools/shared/adjudication.d.ts",
+  "dist/tools/shared/adjudication.js",
+  "dist/tools/shared/adjudication.js.map",
+  "dist/tools/shared/certificate.d.ts",
+  "dist/tools/shared/certificate.js",
+  "dist/tools/shared/certificate.js.map",
+  "dist/tools/shared/comment.d.ts",
+  "dist/tools/shared/comment.js",
+  "dist/tools/shared/comment.js.map",
+  "dist/tools/shared/common.d.ts",
+  "dist/tools/shared/common.js",
+  "dist/tools/shared/common.js.map",
+  "dist/tools/shared/disclosure.d.ts",
+  "dist/tools/shared/disclosure.js",
+  "dist/tools/shared/disclosure.js.map",
+  "dist/tools/shared/program.d.ts",
+  "dist/tools/shared/program.js",
+  "dist/tools/shared/program.js.map",
+  "dist/tools/shared/report-ref.d.ts",
+  "dist/tools/shared/report-ref.js",
+  "dist/tools/shared/report-ref.js.map",
+  "dist/tools/shared/report.d.ts",
+  "dist/tools/shared/report.js",
+  "dist/tools/shared/report.js.map",
+  "dist/tools/shared/request-id.d.ts",
+  "dist/tools/shared/request-id.js",
+  "dist/tools/shared/request-id.js.map",
+  "dist/tools/shared/taxonomy.d.ts",
+  "dist/tools/shared/taxonomy.js",
+  "dist/tools/shared/taxonomy.js.map",
+  "dist/tools/shared/viewer.d.ts",
+  "dist/tools/shared/viewer.js",
+  "dist/tools/shared/viewer.js.map",
+  "dist/tools/shared/write-retry.d.ts",
+  "dist/tools/shared/write-retry.js",
+  "dist/tools/shared/write-retry.js.map",
+  "dist/tools/submit-report.d.ts",
+  "dist/tools/submit-report.js",
+  "dist/tools/submit-report.js.map",
+  "dist/tools/update-my-profile.d.ts",
+  "dist/tools/update-my-profile.js",
+  "dist/tools/update-my-profile.js.map",
+  "dist/tools/update-report-status.d.ts",
+  "dist/tools/update-report-status.js",
+  "dist/tools/update-report-status.js.map",
+  "dist/tools/verify-certificate.d.ts",
+  "dist/tools/verify-certificate.js",
+  "dist/tools/verify-certificate.js.map",
+  "dist/transports/hosted.d.ts",
+  "dist/transports/hosted.js",
+  "dist/transports/hosted.js.map",
+  "dist/transports/http-app.d.ts",
+  "dist/transports/http-app.js",
+  "dist/transports/http-app.js.map",
+  "dist/transports/http-server.d.ts",
+  "dist/transports/http-server.js",
+  "dist/transports/http-server.js.map",
+  "dist/transports/stdio.d.ts",
+  "dist/transports/stdio.js",
+  "dist/transports/stdio.js.map",
+  "dist/untrusted.d.ts",
+  "dist/untrusted.js",
+  "dist/untrusted.js.map",
+  "dist/version.d.ts",
+  "dist/version.js",
+  "dist/version.js.map"
+ ],
+ "onlyRepo": [
+  ".dockerignore",
+  ".editorconfig",
+  ".husky/commit-msg",
+  ".husky/pre-commit",
+  ".husky/pre-push",
+  ".mcp.json",
+  ".nvmrc",
+  ".prettierignore",
+  ".prettierrc.json",
+  "AGENTS.md",
+  "CLAUDE.md",
+  "CODE_OF_CONDUCT.md",
+  "CONTRIBUTING.md",
+  "Dockerfile",
+  "Makefile",
+  "SECURITY.md",
+  "cog.toml",
+  "eslint.config.js",
+  "pnpm-lock.yaml",
+  "pnpm-workspace.yaml",
+  "schema/bugsecure.graphql",
+  "scripts/check-commit-msg.ts",
+  "scripts/check-hygiene.ts",
+  "scripts/codegen.ts",
+  "scripts/lib/operations.ts",
+  "scripts/prune-schema.ts",
+  "scripts/release.sh",
+  "scripts/setup-github.sh",
+  "src/auth/hosted/jwt.test.ts",
+  "src/auth/hosted/jwt.ts",
+  "src/auth/hosted/resource-metadata.test.ts",
+  "src/auth/hosted/resource-metadata.ts",
+  "src/auth/hosted/token-exchange.test.ts",
+  "src/auth/hosted/token-exchange.ts",
+  "src/auth/oauth.test.ts",
+  "src/auth/oauth.ts",
+  "src/auth/stdio/browser.test.ts",
+  "src/auth/stdio/browser.ts",
+  "src/auth/stdio/credential-store.test.ts",
+  "src/auth/stdio/credential-store.ts",
+  "src/auth/stdio/file-lock.race.test.ts",
+  "src/auth/stdio/file-lock.test.ts",
+  "src/auth/stdio/file-lock.ts",
+  "src/auth/stdio/login.test.ts",
+  "src/auth/stdio/login.ts",
+  "src/auth/stdio/loopback.test.ts",
+  "src/auth/stdio/loopback.ts",
+  "src/auth/stdio/session.test.ts",
+  "src/auth/stdio/session.ts",
+  "src/cli/args.test.ts",
+  "src/cli/args.ts",
+  "src/cli/commands.test.ts",
+  "src/cli/commands.ts",
+  "src/cli.ts",
+  "src/config.test.ts",
+  "src/config.ts",
+  "src/crypto.ts",
+  "src/errors.test.ts",
+  "src/errors.ts",
+  "src/graphql/client.test.ts",
+  "src/graphql/client.ts",
+  "src/graphql/errors.ts",
+  "src/graphql/generated.ts",
+  "src/graphql/operations/add-report-comment.graphql",
+  "src/graphql/operations/add-triage-comment.graphql",
+  "src/graphql/operations/agent-approvals.graphql",
+  "src/graphql/operations/assign-report.graphql",
+  "src/graphql/operations/check-duplicates.graphql",
+  "src/graphql/operations/fragments/certificate.graphql",
+  "src/graphql/operations/fragments/disclosure.graphql",
+  "src/graphql/operations/fragments/program.graphql",
+  "src/graphql/operations/fragments/report.graphql",
+  "src/graphql/operations/get-leaderboard.graphql",
+  "src/graphql/operations/get-my-kyc-status.graphql",
+  "src/graphql/operations/get-my-profile.graphql",
+  "src/graphql/operations/get-org-report-stats.graphql",
+  "src/graphql/operations/get-org-report.graphql",
+  "src/graphql/operations/get-program-stats.graphql",
+  "src/graphql/operations/get-program-terms.graphql",
+  "src/graphql/operations/get-program.graphql",
+  "src/graphql/operations/get-report.graphql",
+  "src/graphql/operations/get-researcher-profile.graphql",
+  "src/graphql/operations/get-taxonomy.graphql",
+  "src/graphql/operations/grade-report.graphql",
+  "src/graphql/operations/list-badges.graphql",
+  "src/graphql/operations/list-my-certificates.graphql",
+  "src/graphql/operations/list-my-organizations.graphql",
+  "src/graphql/operations/list-my-reports.graphql",
+  "src/graphql/operations/list-notifications.graphql",
+  "src/graphql/operations/list-org-certificates.graphql",
+  "src/graphql/operations/list-org-programs.graphql",
+  "src/graphql/operations/list-org-reports.graphql",
+  "src/graphql/operations/lookups.graphql",
+  "src/graphql/operations/mark-notifications-read.graphql",
+  "src/graphql/operations/raise-appeal.graphql",
+  "src/graphql/operations/save-disclosure-draft.graphql",
+  "src/graphql/operations/search-programs.graphql",
+  "src/graphql/operations/search.graphql",
+  "src/graphql/operations/submit-report.graphql",
+  "src/graphql/operations/update-my-profile.graphql",
+  "src/graphql/operations/update-report-status.graphql",
+  "src/graphql/operations/verify-certificate.graphql",
+  "src/http.ts",
+  "src/index.ts",
+  "src/instructions.ts",
+  "src/logger.test.ts",
+  "src/logger.ts",
+  "src/lru.ts",
+  "src/rate-limit.test.ts",
+  "src/rate-limit.ts",
+  "src/scopes.ts",
+  "src/server.ts",
+  "src/tools/add-report-comment.test.ts",
+  "src/tools/add-report-comment.ts",
+  "src/tools/add-triage-comment.test.ts",
+  "src/tools/add-triage-comment.ts",
+  "src/tools/api-surface.fields.json",
+  "src/tools/api-surface.test.ts",
+  "src/tools/approval-url.test.ts",
+  "src/tools/approval-url.ts",
+  "src/tools/approval.test.ts",
+  "src/tools/approval.ts",
+  "src/tools/assign-report.test.ts",
+  "src/tools/assign-report.ts",
+  "src/tools/check-duplicates.test.ts",
+  "src/tools/check-duplicates.ts",
+  "src/tools/define-tool.test.ts",
+  "src/tools/define-tool.ts",
+  "src/tools/get-leaderboard.test.ts",
+  "src/tools/get-leaderboard.ts",
+  "src/tools/get-my-kyc-status.test.ts",
+  "src/tools/get-my-kyc-status.ts",
+  "src/tools/get-my-profile.test.ts",
+  "src/tools/get-my-profile.ts",
+  "src/tools/get-org-report-stats.test.ts",
+  "src/tools/get-org-report-stats.ts",
+  "src/tools/get-org-report.test.ts",
+  "src/tools/get-org-report.ts",
+  "src/tools/get-program-stats.test.ts",
+  "src/tools/get-program-stats.ts",
+  "src/tools/get-program-terms.test.ts",
+  "src/tools/get-program-terms.ts",
+  "src/tools/get-program.test.ts",
+  "src/tools/get-program.ts",
+  "src/tools/get-report.test.ts",
+  "src/tools/get-report.ts",
+  "src/tools/get-researcher-profile.test.ts",
+  "src/tools/get-researcher-profile.ts",
+  "src/tools/get-taxonomy.test.ts",
+  "src/tools/get-taxonomy.ts",
+  "src/tools/grade-report.test.ts",
+  "src/tools/grade-report.ts",
+  "src/tools/index.ts",
+  "src/tools/json-schema.test.ts",
+  "src/tools/json-schema.ts",
+  "src/tools/list-badges.test.ts",
+  "src/tools/list-badges.ts",
+  "src/tools/list-my-certificates.test.ts",
+  "src/tools/list-my-certificates.ts",
+  "src/tools/list-my-organizations.test.ts",
+  "src/tools/list-my-organizations.ts",
+  "src/tools/list-my-reports.test.ts",
+  "src/tools/list-my-reports.ts",
+  "src/tools/list-notifications.test.ts",
+  "src/tools/list-notifications.ts",
+  "src/tools/list-org-certificates.test.ts",
+  "src/tools/list-org-certificates.ts",
+  "src/tools/list-org-programs.test.ts",
+  "src/tools/list-org-programs.ts",
+  "src/tools/list-org-reports.test.ts",
+  "src/tools/list-org-reports.ts",
+  "src/tools/mark-notifications-read.test.ts",
+  "src/tools/mark-notifications-read.ts",
+  "src/tools/raise-appeal.test.ts",
+  "src/tools/raise-appeal.ts",
+  "src/tools/registry.test.ts",
+  "src/tools/save-disclosure-draft.test.ts",
+  "src/tools/save-disclosure-draft.ts",
+  "src/tools/search-programs.test.ts",
+  "src/tools/search-programs.ts",
+  "src/tools/search.test.ts",
+  "src/tools/search.ts",
+  "src/tools/shared/account.ts",
+  "src/tools/shared/adjudication.ts",
+  "src/tools/shared/certificate.ts",
+  "src/tools/shared/comment.ts",
+  "src/tools/shared/common.ts",
+  "src/tools/shared/disclosure.ts",
+  "src/tools/shared/program.ts",
+  "src/tools/shared/report-ref.ts",
+  "src/tools/shared/report.ts",
+  "src/tools/shared/request-id.test.ts",
+  "src/tools/shared/request-id.ts",
+  "src/tools/shared/taxonomy.ts",
+  "src/tools/shared/viewer.ts",
+  "src/tools/shared/write-retry.test.ts",
+  "src/tools/shared/write-retry.ts",
+  "src/tools/submit-report.test.ts",
+  "src/tools/submit-report.ts",
+  "src/tools/update-my-profile.test.ts",
+  "src/tools/update-my-profile.ts",
+  "src/tools/update-report-status.test.ts",
+  "src/tools/update-report-status.ts",
+  "src/tools/verify-certificate.test.ts",
+  "src/tools/verify-certificate.ts",
+  "src/transports/hosted.test.ts",
+  "src/transports/hosted.ts",
+  "src/transports/http-app.test.ts",
+  "src/transports/http-app.ts",
+  "src/transports/http-server.test.ts",
+  "src/transports/http-server.ts",
+  "src/transports/stdio.test.ts",
+  "src/transports/stdio.ts",
+  "src/untrusted.test.ts",
+  "src/untrusted.ts",
+  "src/version.ts",
+  "test/e2e/stdio.test.ts",
+  "test/helpers/fake-authorization-server.ts",
+  "test/helpers/fake-graphql.ts",
+  "test/helpers/jwt.ts",
+  "test/helpers/memory-store.ts",
+  "test/helpers/report-fixtures.ts",
+  "test/helpers/sample-args.ts",
+  "test/helpers/tool-harness.ts",
+  "test/integration/mcp-in-memory.test.ts",
+  "tsconfig.build.json",
+  "tsconfig.json",
+  "vitest.config.ts"
+ ]
+}
