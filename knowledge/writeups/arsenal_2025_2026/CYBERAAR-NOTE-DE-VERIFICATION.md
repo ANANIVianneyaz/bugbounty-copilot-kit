@@ -296,6 +296,38 @@ contenu à l'entrée, et la CSP bloquerait de toute façon l'exécution inline. 
 ouvert est **le fichier lui-même** (avatar / pièce jointe) servi sur leur origine → en cours de test.
 
 
+### L'upload d'avatar : une chaîne de défense en profondeur (contrôle exemplaire) ★
+
+| Étape | Mesure | Lecture |
+|---|---|---|
+| types acceptés | `image/png,image/jpeg,image/webp` (le `accept` du client) ; un `text/html`, un SVG, un `.js` → **`{"error":"invalid_type"}`** | filtre serveur sur le **type déclaré + octets magiques** |
+| dimensions / taille | un PNG **1×1 valide** → `invalid_type` ; un vrai **PNG 400×400** → `{"success":true}` | contrôle de dimension (le client n'impose qu'une taille max de 4 Mo) |
+| **nom de fichier** | un fichier nommé `x.html` dont les octets commencent par un en-tête PNG → **accepté** | le filtre porte sur le **contenu**, pas sur l'extension |
+| **traitement serveur** | le fichier servi fait **1 124 octets, PNG propre avec IEND** → **mon payload HTML ajouté a été supprimé** | le serveur **ré-encode l'image** (crop/resize) → impossible de planquer du HTML/JS |
+| **stockage** | `content-disposition: inline; filename=Mv1aFmuVFWSW3zukLKHdgw.png` | le nom d'origine est **remplacé par un identifiant aléatoire** à extension fixe `.png` |
+| **en-têtes de service** | `content-type: image/png` · `x-content-type-options: nosniff` · **`content-security-policy: default-src 'none'; sandbox`** | même servi en HTML, le fichier est **sandboxé sans script** |
+
+→ **chaîne XSS brisée à 4 niveaux indépendants** (type sniffé, contenu ré-encodé, nom aléatoire + extension
+imposée, `nosniff` + CSP `sandbox`). L'upload d'avatar n'est **pas exploitable**. C'est un pipeline
+d'upload nettement plus solide que la moyenne.
+
+L'API publique du profil (`GET /api/aarme/hacker/<handle>`) n'expose que : `avatar` (booléen), `country`,
+`game` (badges, points, acceptés) — **ni email, ni KYC, ni sanctions, ni `profile_url`** ; un pseudo
+inexistant → `404 {"error":"not_found"}` uniforme.
+
+### Injection CRLF dans les formulaires (actif Standard) — test en cours
+
+| Champ | Résultat |
+|---|---|
+| `email` (contact/apply) | `{"error":"invalid_email"}` → l'adresse est validée → **pas d'injection possible par l'en-tête `To:`** |
+| `name`, `subject`, `message` (contact) | `{"success":true}` → l'API **accepte** la charge `\r\nBcc: …` (et le délai de 2,7-4,8 s confirme que l'e-mail part) |
+| `org`, `message` (apply) | en attente (plafond dédié) |
+
+**Preuve attendue** : si le `Bcc` injecté avait été pris, la notification du vendor serait partie **aussi**
+vers `bbtest4926@maxxspace.com` (ma boîte mail) → **elle n'y est pas** → l'injection n'a pas pris. Vérification
+complémentaire demandée au chercheur (contrôle de la boîte Gmail + « afficher l'original »).
+
+
 ---
 
 *Chaque ligne de ce document renvoie à une mesure reproductible (scripts + journaux dans le kit).*
