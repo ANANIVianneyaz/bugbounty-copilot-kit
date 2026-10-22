@@ -328,6 +328,29 @@ vers `bbtest4926@maxxspace.com` (ma boîte mail) → **elle n'y est pas** → l'
 complémentaire demandée au chercheur (contrôle de la boîte Gmail + « afficher l'original »).
 
 
+### RÉSULTAT : la seule anomalie de la campagne — injection CRLF dans les e-mails de notification ★
+
+| Test | Résultat | Lecture |
+|---|---|---|
+| `POST /api/contact` avec `name` = `Test CyberAar\r\nBcc: …` | **200 `{"success":true}`** | la charge est **acceptée telle quelle** |
+| latence de l'envoi | 2,7-4,8 s (contre 0,2-0,3 s pour un simple 400 de validation) | **l'e-mail part bien** (aller-retour SMTP) |
+| **accusé de réception reçu** | commence par « **Bonjour,** » **sans le nom** | **le `\r\n` a coupé la ligne** → la valeur est insérée **brute** dans le corps de l'e-mail (ni échappée, ni nettoyée, ni refusée) |
+| copie `Bcc` reçue dans ma boîte | **aucune** | l'injection **n'atteint pas (ou n'atteint plus) un en-tête** de l'e-mail de l'équipe |
+| `email` avec CRLF | `400 {"error":"invalid_email"}` | l'adresse est validée → pas d'injection par l'en-tête `To:` |
+| `POST /api/apply` (proposition d'organisation) | en file d'attente (plafond dédié) | idem à tester |
+
+**Verdict** : c'est un **CWE-93 (injection CRLF)** réel, reproductible, dans un formulaire public, avec
+un impact mesuré = **déformation du contenu de l'e-mail de l'équipe** (l'attaquant peut y ajouter des
+lignes arbitraires : faux `From:`, fausse signature, faux liens, faux avis de sécurité → **hameçonnage
+du personnel de triage** dans un canal perçu comme interne) + **accusé de réception malformé**.
+CVSS v4.0 : `UI:P` → **5,3** ; `UI:N` → **6,9** ; impact métier **4/10** → score final CyberAar
+**4,6 à 5,3 (Moyenne)**, classe Standard.
+**Deux vérifications restent à faire par le vendor** (elles peuvent relever la sévérité) : (a) l'e-mail
+reçu par l'équipe contient-il un en-tête injecté ? (« afficher l'original ») ; (b) le message est-il
+affiché dans une interface web de CyberAar (→ XSS stocké sur l'actif *Plateforme AarMe*, classe Critique) ?
+→ **rapport PDF rédigé** (5 pages) avec l'annexe des ~20 contrôles vérifiés conformes.
+
+
 ---
 
 *Chaque ligne de ce document renvoie à une mesure reproductible (scripts + journaux dans le kit).*
