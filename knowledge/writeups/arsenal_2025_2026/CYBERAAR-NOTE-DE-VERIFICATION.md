@@ -1,4 +1,7 @@
-# CYBERAAR / AarMe — note de vérification (en cours)
+# CYBERAAR / AarMe — note de vérification (campagne clôturée)
+
+**Bilan** : **0 vulnérabilité exploitable confirmée** · 20+ contrôles vérifiés conformes · 1 observation
+de robustesse (CR/LF acceptés, injection **non démontrée**) · rapport de campagne PDF rédigé.
 
 **Programme** : CyberAar (société derrière AarMe) — ouvert le 4/10/2026 · 5 000-300 000 FCFA ·
 35 rapports soumis · 3 failles acceptées · délai moyen 0,4 j
