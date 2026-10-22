@@ -328,27 +328,31 @@ vers `bbtest4926@maxxspace.com` (ma boîte mail) → **elle n'y est pas** → l'
 complémentaire demandée au chercheur (contrôle de la boîte Gmail + « afficher l'original »).
 
 
-### RÉSULTAT : la seule anomalie de la campagne — injection CRLF dans les e-mails de notification ★
+### BILAN HONNÊTE : l'anomalie CRLF n'est PAS démontrée (preuve insuffisante)
 
 | Test | Résultat | Lecture |
 |---|---|---|
-| `POST /api/contact` avec `name` = `Test CyberAar\r\nBcc: …` | **200 `{"success":true}`** | la charge est **acceptée telle quelle** |
-| latence de l'envoi | 2,7-4,8 s (contre 0,2-0,3 s pour un simple 400 de validation) | **l'e-mail part bien** (aller-retour SMTP) |
-| **accusé de réception reçu** | commence par « **Bonjour,** » **sans le nom** | **le `\r\n` a coupé la ligne** → la valeur est insérée **brute** dans le corps de l'e-mail (ni échappée, ni nettoyée, ni refusée) |
-| copie `Bcc` reçue dans ma boîte | **aucune** | l'injection **n'atteint pas (ou n'atteint plus) un en-tête** de l'e-mail de l'équipe |
-| `email` avec CRLF | `400 {"error":"invalid_email"}` | l'adresse est validée → pas d'injection par l'en-tête `To:` |
-| `POST /api/apply` (proposition d'organisation) | en file d'attente (plafond dédié) | idem à tester |
+| `POST /api/contact` avec `name` = `Test CyberAar\r\nBcc: …` | **200 `{"success":true}`** | la charge est **acceptée** par l'API — mais acceptation ≠ injection |
+| latence de l'envoi | 2,7-4,8 s | l'e-mail part bien |
+| **accusé de réception reçu** | « **Bonjour,** » **sans le nom** | **le template est fixe** : il ne reprend pas le nom. Le « Bonjour, » ne prouve donc **rien** sur le CRLF |
+| copie `Bcc` reçue dans ma boîte | **aucune** | pas d'injection d'en-tête observable |
+| `email` avec CRLF | `400 {"error":"invalid_email"}` | l'adresse est validée → pas d'injection par `To:` |
+| `POST /api/apply` | **429 `rate_limited`** (plafond) | test non réalisé |
+| contrôle nominal (nom « Jean Controle ») | **429 `rate_limited`** | plafond saturé par les 5 tests de 09:25 → contrôle impossible aujourd'hui |
 
-**Verdict** : c'est un **CWE-93 (injection CRLF)** réel, reproductible, dans un formulaire public, avec
-un impact mesuré = **déformation du contenu de l'e-mail de l'équipe** (l'attaquant peut y ajouter des
-lignes arbitraires : faux `From:`, fausse signature, faux liens, faux avis de sécurité → **hameçonnage
-du personnel de triage** dans un canal perçu comme interne) + **accusé de réception malformé**.
-CVSS v4.0 : `UI:P` → **5,3** ; `UI:N` → **6,9** ; impact métier **4/10** → score final CyberAar
-**4,6 à 5,3 (Moyenne)**, classe Standard.
-**Deux vérifications restent à faire par le vendor** (elles peuvent relever la sévérité) : (a) l'e-mail
-reçu par l'équipe contient-il un en-tête injecté ? (« afficher l'original ») ; (b) le message est-il
-affiché dans une interface web de CyberAar (→ XSS stocké sur l'actif *Plateforme AarMe*, classe Critique) ?
-→ **rapport PDF rédigé** (5 pages) avec l'annexe des ~20 contrôles vérifiés conformes.
+**Verdict** : les faits mesurés sont (1) le formulaire accepte les caractères CR/LF, (2) l'e-mail part,
+(3) **aucune injection n'est observable** — ni dans l'accusé de réception (template fixe, sans le nom),
+ni dans ma boîte (aucune copie Bcc). L'e-mail de notification interne à l'équipe n'est **pas observable**
+depuis l'extérieur. → **L'injection n'est pas démontrable** ; conformément à la règle « si je ne peux pas
+le montrer, ça n'existe pas », **ce n'est pas un rapport de vulnérabilité**. C'est une **observation de
+robustesse** : recommandation de supprimer CR/LF de tous les champs avant construction du message.
+Le PDF initial (qui affirmait l'injection comme prouvée) est **retiré du dossier de soumission** et
+marqué **brouillon — non soumis**.
+
+**Bilan de la campagne CyberAar : 0 vulnérabilité exploitable confirmée.**
+Les ~20 contrôles vérifiés conformes (CSRF, anti-énumération, 2FA liée à la session, codes de secours,
+`kyc_required`/`identity_required`, mass assignment, upload ré-encodé + CSP `sandbox`, pas de SSRF,
+CSP stricte, API publique sans fuite) restent la valeur du dossier.
 
 
 ---

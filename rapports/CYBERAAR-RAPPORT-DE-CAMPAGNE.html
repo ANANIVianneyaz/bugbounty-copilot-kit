@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<title>CyberAar / AarMe — Rapport de campagne</title>
+<style>
+@page { size: A4; margin: 16mm 15mm; }
+body { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 10pt; line-height: 1.5; color: #16202c; }
+h1 { font-size: 17pt; margin: 0 0 2mm; color: #0b1b2b; }
+h2 { font-size: 12.5pt; margin: 7mm 0 2mm; padding-bottom: 1mm; border-bottom: 1.4pt solid #0b1b2b; color: #0b1b2b; }
+h3 { font-size: 11pt; margin: 4mm 0 1.5mm; color: #123; }
+p, li { margin: 0 0 2mm; }
+code, pre { font-family: "DejaVu Sans Mono", monospace; font-size: 8.6pt; background: #f4f6f8; }
+pre { padding: 2.5mm 3mm; border-left: 2.5pt solid #4a6; white-space: pre-wrap; word-break: break-all; }
+table { border-collapse: collapse; width: 100%; margin: 2mm 0 3mm; font-size: 8.8pt; }
+th, td { border: 0.6pt solid #b9c2cc; padding: 1.5mm 2mm; text-align: left; vertical-align: top; }
+th { background: #eef2f6; font-weight: bold; }
+.meta { background: #f4f6f8; border: 0.6pt solid #b9c2cc; padding: 3mm; margin-bottom: 4mm; font-size: 9.2pt; }
+.tag { display: inline-block; padding: 0.6mm 2.2mm; background: #e6f4ea; border: 0.6pt solid #2e7d4f; font-weight: bold; }
+.warn { display: inline-block; padding: 0.6mm 2.2mm; background: #fff4d6; border: 0.6pt solid #b8860b; font-weight: bold; }
+.ok { color: #0a6b2f; font-weight: bold; }
+.no { color: #a11; font-weight: bold; }
+.small { font-size: 8.4pt; color: #4a5560; }
+</style></head><body>
+
+<h1>Rapport de campagne — CyberAar / AarMe</h1>
+<div class="meta">
+<b>Chercheur</b> : William_root · <code>@william_root</code> · <b>ID</b> : <code>AMR-Y6ABV5</code> · vianney24lechancelier@gmail.com<br>
+<b>Date</b> : 22 octobre 2026 · <b>Programme</b> : CyberAar / AarMe (bug bounty)<br>
+<b>Périmètre testé</b> : <code>aarme.cyberaar.io</code> (Critique) · <code>cyberaar.io/api/*</code> (Standard) · <code>cyberaar.io</code> + <code>www.cyberaar.io</code> (Standard)<br>
+<b>Résultat</b> : <span class="tag">0 vulnérabilité exploitable confirmée</span> · 20+ contrôles vérifiés conformes · 1 observation de robustesse (non soumise comme vulnérabilité)
+</div>
+
+<h2>1. Résumé exécutif</h2>
+<p>La campagne a couvert la surface publique et la surface authentifiée des trois actifs du programme :
+cartographie des endpoints, formulaires publics, comptes, sessions, double authentification, codes de
+secours, upload, profils publics, API de données et soumission de rapport. <b>Aucune vulnérabilité
+exploitable n'a été confirmée.</b></p>
+<p>Les défenses mesurées sont solides et cohérentes : validation stricte des entrées, sessions liées au
+facteur de double authentification, cloisonnement des données sensibles derrière l'identité validée
+(KYC), ré-encodage des images, CSP stricte, absence de SSRF, réponses uniformes contre l'énumération de
+comptes. Une seule anomalie de robustesse a été observée (acceptation de caractères CR/LF dans les
+formulaires), mais <b>son exploitation n'a pas pu être démontrée</b> : elle est donc documentée comme
+recommandation de durcissement, pas comme vulnérabilité.</p>
+<p><b>Aucune donnée réelle n'a été modifiée ou supprimée. Aucun test de déni de service, aucune
+ingénierie sociale, aucun scan automatisé non accompagné de PoC.</b> Les tests ont utilisé des comptes
+créés pour la campagne, avec des adresses appartenant au chercheur, et le plafond de débit de la
+plateforme a été respecté (une requête par test, espacée).</p>
+
+<h2>2. Périmètre et méthode</h2>
+<table>
+<tr><th>Actif</th><th>Classe</th><th>Surface explorée</th></tr>
+<tr><td><code>aarme.cyberaar.io</code></td><td>Critique (58,3/100)</td><td>Pages publiques, compte, sessions, 2FA, codes de secours, profil, upload d'avatar, API publique du hacker, API de soumission (lecture du script client)</td></tr>
+<tr><td><code>cyberaar.io/api/*</code></td><td>Standard (28,3/100)</td><td><code>/api/contact</code>, <code>/api/apply</code> (formulaires publics)</td></tr>
+<tr><td><code>cyberaar.io</code> + <code>www</code></td><td>Standard (11,7/100)</td><td>En-têtes, CSP, HSTS, <code>security.txt</code>, pages de divulgation</td></tr>
+</table>
+<p>Méthode : cartographie manuelle et scripts ciblés (53 sondes), observation des réponses et des
+latences, test des contrôles d'accès avec deux comptes de test (dont un sans 2FA), upload de fichiers
+polyglottes, écouteur hors bande (OOB) pour détecter un rappel serveur, et lecture du script client de
+soumission pour comprendre les prérequis. Chaque affirmation de ce rapport renvoie à une mesure
+reproductible (scripts et journaux conservés dans le dossier de campagne).</p>
+
+<h2>3. Contrôles vérifiés conformes</h2>
+<table>
+<tr><th>Contrôle</th><th>Mesure</th></tr>
+<tr><td>CSRF sur les POST publics</td><td><code>Origin</code>/<code>Referer</code> same-origin exigé ; sans → <code>403 forbidden</code>.</td></tr>
+<tr><td>Adresses jetables</td><td>Refusées (<code>disposable_email</code>).</td></tr>
+<tr><td>Énumération de comptes (login)</td><td>Message unique <code>invalid_credentials</code>, que le compte existe ou non ; pas d'oracle de timing (257-304 ms vs 283-284 ms).</td></tr>
+<tr><td>Réinitialisation de mot de passe</td><td>Réponse unique <code>{"success":true}</code> sur 5 adresses (existantes ou non) → pas d'énumération.</td></tr>
+<tr><td>Confirmation d'adresse</td><td><code>{"error":"invalid_token"}</code> uniforme, même avec le mot de passe correct → la preuve de propriété est exigée.</td></tr>
+<tr><td>Double authentification</td><td>Le code TOTP n'est accepté que lié à la session de l'étape précédente (un <code>totp</code> seul est ignoré) ; cookie <code>Secure; HttpOnly; SameSite=Lax</code>.</td></tr>
+<tr><td>Codes de secours</td><td>Exigent le mot de passe courant <b>et</b> un TOTP vivant ; avec le vrai mot de passe + un faux TOTP → <code>invalid_code</code>, aucun code divulgué.</td></tr>
+<tr><td>Cloisonnement KYC</td><td><code>/account/report/payout</code> → <code>403 kyc_required</code> ; <code>/api/aarme/attachment</code> → <code>403 identity_required</code>.</td></tr>
+<tr><td>Mass assignment</td><td>Champs inconnus ignorés (<code>nothing_to_update</code>) sur le profil ; <code>invalid_input</code> sur les formulaires ; les champs de privilège sont rejetés.</td></tr>
+<tr><td>Validation des champs publics</td><td><code>invalid_name</code> / <code>invalid_country</code> : aucune balise HTML injectable dans le profil public (3 payloads testés).</td></tr>
+<tr><td>Upload d'avatar</td><td>Type sniffé (<code>image/png,jpeg,webp</code>) ; PNG 1×1 refusé, vrai 400×400 accepté ; polyglotte PNG+HTML acceptée mais <b>ré-encodée</b> (payload supprimé) ; nom remplacé par un aléatoire <code>.png</code> ; servi <code>image/png</code> + <code>nosniff</code> + <code>CSP: default-src 'none'; sandbox</code>.</td></tr>
+<tr><td>SSRF</td><td>Le champ <code>profile</code> (seule URL acceptée) n'est jamais récupéré par le serveur, ni à l'inscription ni au rendu du profil (0 requête sortante observée sur l'écouteur OOB).</td></tr>
+<tr><td>XSS stocké public</td><td>CSP stricte sans <code>'unsafe-inline'</code> en <code>script-src</code> ; les champs publics rejettent le HTML ; aucun gestionnaire d'événement en attribut ne s'exécute.</td></tr>
+<tr><td>En-têtes de sécurité</td><td>CSP stricte, HSTS <code>preload</code>, <code>X-Frame-Options: DENY</code>, <code>nosniff</code>, <code>frame-ancestors 'none'</code>, <code>object-src 'none'</code>, <code>base-uri 'self'</code>.</td></tr>
+<tr><td>API publique du profil</td><td><code>GET /api/aarme/hacker/&lt;handle&gt;</code> n'expose que <code>avatar</code> (booléen), <code>country</code>, <code>game</code> — ni email, ni KYC, ni sanctions, ni URL de profil ; pseudo inexistant → <code>404 not_found</code> uniforme.</td></tr>
+<tr><td>Surface API</td><td>11 endpoints sur AarMe (dont 3 publics), 2 sur l'API formulaires, 30 endpoints de compte ; verbes corrects (<code>PATCH</code> profil, <code>DELETE</code> en-tête/avatar) ; pas de route d'administration exposée.</td></tr>
+<tr><td>Plafond de débit</td><td>Plafond d'entrée 60/min (300/min avec l'en-tête chercheur) + plafond dédié aux formulaires, à fenêtre longue → <code>429 rate_limited</code> mesuré.</td></tr>
+<tr><td>Pot de miel</td><td>Champ <code>hp</code> absorbé en silence (<code>200 success</code> sans création).</td></tr>
+</table>
+
+<h2>4. Observation de robustesse : caractères CR/LF dans les formulaires</h2>
+<p><b>Ce qui est mesuré :</b> les champs <code>name</code>, <code>subject</code> et <code>message</code> de
+<code>POST /api/contact</code> acceptent des caractères <code>\r\n</code> et renvoient
+<code>200 {"success":true}</code> ; l'e-mail de notification part (latence 2,7-4,8 s). Le champ
+<code>email</code>, lui, est validé (<code>400 invalid_email</code>).</p>
+<p><b>Ce qui n'est pas démontré :</b> l'accusé de réception reçu par l'expéditeur est un <b>modèle
+fixe</b> — il ne reprend pas le nom (« Bonjour, » sans le nom), donc il ne permet pas d'observer une
+injection. Aucune copie <code>Bcc</code> n'est arrivée dans la boîte de test. L'e-mail de notification
+interne à l'équipe n'est pas observable depuis l'extérieur. <b>L'injection n'est donc pas démontrable</b>
+et n'est pas soumise comme vulnérabilité.</p>
+<p><b>Recommandation :</b> supprimer systématiquement les caractères CR/LF de tous les champs fournis
+par l'utilisateur avant toute construction de message :</p>
+<pre>const clean = (v) =&gt; String(v ?? '').replace(/[\r\n]+/g, ' ').trim();</pre>
+<p class="small">Si l'équipe constate dans sa propre boîte un en-tête injecté (ligne <code>Bcc:</code>,
+<code>Content-Type:</code>, <code>Subject:</code> replié) ou des lignes arbitraires dans le corps de la
+notification, l'observation devient une injection CRLF (CWE-93) et peut être re-qualifiée.</p>
+
+<h2>5. Observations diverses</h2>
+<table>
+<tr><th>Observation</th><th>Lecture</th></tr>
+<tr><td><code>admin.aarme.cyberaar.io</code> résout vers <code>10.9.0.10</code> (RFC1918)</td><td>Divulgation d'adressage interne de faible portée ; l'hôte est injoignable depuis Internet et aucun SSRF ne permet de l'atteindre (le serveur ne récupère aucune URL). Pas d'exploitation.</td></tr>
+<tr><td><code>X-AarMe-Researcher</code> : <code>eligible:false</code> pour un compte non vérifié</td><td>Conforme : l'en-tête est réservé aux comptes à identité validée + 2FA ; il porte le trafic de 60 à 300/min. Ne pas le forger (réponse <code>invalid_researcher_header</code> + signalement SOC).</td></tr>
+<tr><td>Plafond des formulaires</td><td>Le plafond est bien appliqué (<code>429 rate_limited</code>) ; il a limité la campagne à une requête par test, espacée. C'est un contrôle, pas un défaut.</td></tr>
+<tr><td>Soumission de rapport</td><td>Exige une identité validée (KYC) : le bouton « Soumettre » est masqué et l'upload de la pièce jointe renvoie <code>identity_required</code>. Contrainte du programme, pas une vulnérabilité.</td></tr>
+</table>
+
+<h2>6. Pistes testées et écartées</h2>
+<table>
+<tr><th>Piste</th><th>Motif d'exclusion</th></tr>
+<tr><td>SSRF via l'URL de profil</td><td>Aucune récupération d'URL par le serveur (0 requête OOB).</td></tr>
+<tr><td>XSS stocké dans le profil public</td><td>Validation serveur du nom et du pays + CSP sans <code>'unsafe-inline'</code>.</td></tr>
+<tr><td>XSS via l'avatar (polyglotte image/HTML)</td><td>Contenu ré-encodé, renommé, servi <code>image/png</code> avec <code>nosniff</code> et CSP <code>sandbox</code>.</td></tr>
+<tr><td>Énumération de comptes</td><td>Messages et latences uniformes sur le login et le reset.</td></tr>
+<tr><td>Fuite de données par l'API publique</td><td>Aucun champ sensible exposé (avatar, pays, jeu).</td></tr>
+<tr><td>IDOR sur les objets de compte</td><td>Les endpoints de données sensibles sont protégés par session et/ou identité validée ; les identifiants publics ne donnent accès à rien.</td></tr>
+<tr><td>Contournement de la 2FA</td><td>Le TOTP est lié à la session ; les codes de secours exigent le mot de passe courant + un TOTP vivant.</td></tr>
+<tr><td>Injection CRLF → Bcc</td><td>Charge acceptée mais aucune copie Bcc reçue ; accusé de réception à template fixe → non démontré (voir §4).</td></tr>
+</table>
+
+<h2>7. Limites</h2>
+<ul>
+<li><code>admin.aarme.cyberaar.io</code> résout vers une adresse privée : le rendu de l'interface de triage n'a pas pu être observé.</li>
+<li>La soumission de rapport et l'upload de pièce jointe exigent une identité validée (KYC) : le flux complet de soumission n'a pas été exécuté.</li>
+<li>L'e-mail de notification interne à l'équipe n'est pas observable depuis l'extérieur ; l'observation CRLF reste donc non qualifiée.</li>
+<li>Aucune donnée réelle n'a été consultée, modifiée ou supprimée ; aucun test de disponibilité n'a été réalisé.</li>
+</ul>
+
+<h2>8. Conclusion</h2>
+<p>La plateforme CyberAar / AarMe présente un niveau de maturité élevé sur la surface testée :
+validation stricte, sessions liées à la 2FA, cloisonnement KYC, upload ré-encodé et sandboxé, CSP
+stricte, absence de SSRF et réponses uniformes contre l'énumération. <b>Aucune vulnérabilité exploitable
+n'a été confirmée.</b> La seule anomalie observée (acceptation de CR/LF dans les formulaires) est une
+recommandation de durcissement : elle n'a pas d'impact démontré et n'est pas soumise comme
+vulnérabilité.</p>
+<p class="small">Les scripts, journaux et captures de la campagne sont conservés dans le dossier de
+campagne ; chaque ligne de ce rapport renvoie à une mesure reproductible.</p>
+
+</body></html>
